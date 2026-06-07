@@ -4,58 +4,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- ====================================================================
-       GUARD: neutralize Cloudflare "challenge-platform" (cdn-cgi)
-       script that some browsers inject when a page is saved from a
-       Cloudflare-protected site. On file:// it 404s (ERR_FILE_NOT_FOUND)
-       and spams the console. Block any attempt to load
-       /cdn-cgi/.../jsd/main.js so the console stays clean and the
-       app (map/lightbox) keeps working. Harmless when not present.
-       ==================================================================== -->
-       
+  <meta name="theme-color" content="#0b1923" />
+  <meta name="color-scheme" content="dark" />
   <script>
+    /* Early, ES5-compatible performance bootstrap.
+       Adds .perf-lite before CSS is parsed when the device is likely low-end,
+       Data Saver is enabled, or the user chooses ?lite=1 / saved Lite Mode. */
     (function () {
       try {
-        var BAD = /cdn-cgi\/challenge-platform/i;
+        var nav = window.navigator || {};
+        var conn = nav.connection || nav.mozConnection || nav.webkitConnection || null;
+        var qs = window.location.search || '';
+        var stored = null;
+        try { stored = window.localStorage && localStorage.getItem('bmkgPerfMode'); } catch (_) {}
 
-        // Block dynamic script creation
-        var origCreate = Document.prototype.createElement;
-        Document.prototype.createElement = function (tag) {
-          var el = origCreate.apply(this, arguments);
-          if (el && String(tag).toLowerCase() === 'script') {
-            try {
-              var srcDesc = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src');
-              if (srcDesc && srcDesc.set) {
-                Object.defineProperty(el, 'src', {
-                  configurable: true,
-                  get: function () { return srcDesc.get.call(this); },
-                  set: function (v) {
-                    if (BAD.test(String(v))) return; 
-                    srcDesc.set.call(this, v);
-                  }
-                });
-              }
-            } catch (_) {}
+        var forcedLite = /(?:[?&])lite=1(?:&|$)/.test(qs) || stored === 'lite';
+        var forcedFull = /(?:[?&])lite=0(?:&|$)/.test(qs) || stored === 'full';
+        var weakMemory = nav.deviceMemory && nav.deviceMemory <= 2;
+        var weakCpu = nav.hardwareConcurrency && nav.hardwareConcurrency <= 2;
+        var saveData = conn && conn.saveData;
+        var slowNet = conn && /(^|-)2g$|slow-2g/i.test(conn.effectiveType || '');
+        var oldAndroid = /Android\s(?:4|5|6)\./i.test(nav.userAgent || '');
+        var lite = !forcedFull && (forcedLite || weakMemory || weakCpu || saveData || slowNet || oldAndroid);
+
+        window.__BMKG_PERF_LITE = !!lite;
+        if (lite && document.documentElement.className.indexOf('perf-lite') < 0) {
+          document.documentElement.className += (document.documentElement.className ? ' ' : '') + 'perf-lite';
+        }
+
+        window.bmkgSetPerfMode = function (mode) {
+          try {
+            if (mode) localStorage.setItem('bmkgPerfMode', mode);
+            else localStorage.removeItem('bmkgPerfMode');
+          } catch (_) {}
+          window.location.reload();
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+          var btn = document.getElementById('liteModeBtn');
+          if (!btn) return;
+          var isLite = document.documentElement.className.indexOf('perf-lite') >= 0;
+          btn.setAttribute('aria-pressed', isLite ? 'true' : 'false');
+          btn.setAttribute('title', isLite ? 'Mode ringan aktif — klik untuk kembali ke mode penuh' : 'Mode ringan nonaktif — klik untuk mode HP low-end');
+          btn.innerHTML = '<span class="lite-toggle-dot" aria-hidden="true"></span><span class="lite-toggle-text">' + (isLite ? 'Mode Ringan: Aktif' : 'Mode Ringan: Nonaktif') + '</span>';
+          if (isLite) {
+            if (btn.className.indexOf('is-active') < 0) btn.className += ' is-active';
+          } else {
+            btn.className = btn.className.replace(/\bis-active\b/g, '').replace(/\s{2,}/g, ' ').replace(/^\s+|\s+$/g, '');
           }
-          return el;
-        };
-
-        // Block document.write injection
-        var origWrite = document.write;
-        document.write = function (h) {
-          if (BAD.test(h)) return;
-          origWrite.apply(this, arguments);
-        };
-
-        // Observe and remove injected scripts
-        var obs = new MutationObserver(function(ms) {
-          ms.forEach(function(m) {
-            m.addedNodes.forEach(function(n) {
-              if (n.tagName === 'SCRIPT' && BAD.test(n.src)) n.remove();
-            });
-          });
+          btn.onclick = function () { window.bmkgSetPerfMode(isLite ? 'full' : 'lite'); };
         });
-        obs.observe(document.documentElement, { childList: true, subtree: true });
       } catch (_) {}
     })();
   </script>
@@ -63,10 +61,6 @@
   <title>
     Peringatan Dini Cuaca BMKG — Kepri
   </title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="dns-prefetch" href="https://www.bmkg.go.id" />
   <link rel="dns-prefetch" href="https://nowcasting.bmkg.go.id" />
 
@@ -87,9 +81,14 @@
 :root {
   --accent: #009DFF9D;
   --danger: #ff453a;
+  --red: #ff453a;
   --safe: #34d399;
   --warn: #fbbf24;
   --purple: #a78bfa;
+  --text-primary: #f0fbfa;
+  --text-tertiary: rgba(186, 214, 216, 0.62);
+  --fx: 50%;
+  --fy: 50%;
 
   /* Golden Ratio (by Euclid, Pythagoras, Phidias, Leonardo Fibonacci, & Martin Ohm) Typography — base 14px × φ 1.618 */
   --fs-xs: 8.65px;
@@ -150,7 +149,8 @@ body::before {
 }
 
 /* ── Zoom Modal / Lightbox ── */
-body.zoom-open {
+body.zoom-open,
+body.modal-open {
   overflow: hidden;
   touch-action: none;
 }
@@ -1958,91 +1958,13 @@ body::after {
   /* Subtle physical lift on hover */
 }
 
-/* ── Image Modal ── */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 999999;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
 
-.modal-overlay.active {
-  display: flex;
-  opacity: 1;
-}
 
-.modal-content {
-  max-width: 100%;
-  max-height: 90vh;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-  transform: scale(0.95);
-  transition: transform 0.3s ease;
-}
 
-.modal-overlay.active .modal-content {
-  transform: scale(1);
-}
-
-.modal-close {
-  position: absolute;
-  top: 24px;
-  right: 32px;
-  font-size: 42px;
-  color: rgba(255, 255, 255, 0.7);
-  font-weight: 300;
-  cursor: pointer;
-  line-height: 1;
-  z-index: 10;
-  transition: color 0.2s, transform 0.2s;
-}
-
-.modal-close:hover {
-  color: var(--danger);
-  transform: scale(1.1);
-}
-
-/* Small box design to keep the information layout neat and visually appealing */
-.info-box {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  border: 1px solid #e0e0e0;
-  padding: 15px;
-  border-radius: 8px;
-  max-width: 450px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.waktu-terbit {
-  font-size: 14px;
-  color: #333333;
-  margin-bottom: 10px;
-  font-weight: 500;
-}
-
-.kredit-bmkg {
-  font-size: 11px;
-  color: #777777;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-top: 1px dashed #cccccc;
-  padding-top: 8px;
-  margin-top: 8px;
-}
 
 /* --- TEAL LIQUID GLASS MODAL STYLING --- */
 
 
-/* Teal Glowing Blobs behind the glass card */
 .liquid-blob-1, .liquid-blob-2 {
   position: absolute;
   width: 450px;
@@ -2052,45 +1974,41 @@ body::after {
   z-index: 1;
   opacity: 0.6;
   pointer-events: none;
+  will-change: transform;
 }
 
 .liquid-blob-1 {
-  background: radial-gradient(circle, rgba(0, 230, 255, 0.8) 0%, rgba(0, 180, 255, 0.5) 100%);
-  /* Primary Cyan accent blob */
+  background: radial-gradient(circle, rgba(0, 230, 255, 0.8), rgba(0, 180, 255, 0.5));
   top: 15%;
   left: 20%;
   animation: liquidFloat 10s ease-in-out infinite alternate;
-  will-change: transform;
 }
 
 .liquid-blob-2 {
-  background: radial-gradient(circle, rgba(0, 168, 150, 0.8) 0%, rgba(0, 120, 100, 0.5) 100%);
-  /* Depth Teal accent blob */
+  background: radial-gradient(circle, rgba(0, 168, 150, 0.8), rgba(0, 120, 100, 0.5));
   bottom: 15%;
   right: 20%;
   animation: liquidFloat 10s ease-in-out infinite alternate-reverse 2s;
-  will-change: transform;
 }
 
-/* Crisp dark system close button on dark card */
 .close-modal-btn {
-  color: #fff;
   position: absolute;
   top: 20px;
   right: 20px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.1);
-  /* Muted button base */
   width: 30px;
   height: 30px;
+  border: 0;
   border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font: 600 16px/1 inherit;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .close-modal-btn:hover {
@@ -2098,58 +2016,22 @@ body::after {
   transform: scale(1.08);
 }
 
-/* Typography inside Glass */
 .modal-box h3 {
-  margin-top: 0;
+  margin: 0 0 8px;
   font-size: 27px;
   font-weight: 800;
   letter-spacing: -0.6px;
   color: #fff;
-  /* Bright white title */
-  margin-bottom: 8px;
 }
 
 .modal-box p {
   font-size: 15px;
   line-height: 1.52;
   color: rgba(255, 255, 255, 0.7);
-  /* Slightly muted system white */
   margin-bottom: 22px;
 }
 
-/* Credits Items Structured Cleanly */
-.credits-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.credits-list li {
-  font-size: 14px;
-  padding: 16px 18px;
-  margin-bottom: 11px;
-  background: rgba(255, 255, 255, 0.08);
-  /* Transparent layered glass items */
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-}
-
-.credits-list li strong {
-  color: #fff;
-  /* Bright white primary provider */
-  font-weight: 700;
-  font-size: 15px;
-}
-
-.credits-list li span {
-  font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.6);
-  /* Muted system white details */
-  margin-top: 2px;
-}
+/* Credits list — see "CREDITS LIST & CLICKABLE LINK STYLING" below */
 
 /* Fluid Keyframes Animations */
 @keyframes iosFadeIn {
@@ -2194,25 +2076,14 @@ body::after {
   display: none;
   position: fixed;
   z-index: 10005;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-
-  /* Dark-blueish tint like BMKG Fancybox */
+  inset: 0;
+  overflow: auto;
   background-color: rgba(15, 23, 42, 0.55);
-
-  /* Strong blur behind the entire screen */
   backdrop-filter: blur(24px) saturate(160%);
   -webkit-backdrop-filter: blur(24px) saturate(160%);
-
   isolation: isolate;
-  will-change: backdrop-filter;
-
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   animation: iosFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: none;
   /* Controlled via JS switching to 'flex' */
   flex-direction: column;
   justify-content: center;
@@ -2222,17 +2093,11 @@ body::after {
 
 /* --- CREDIT MODAL --- */
 .credit-modal {
-  display: none;
-  position: fixed;
   z-index: 10000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
   background-color: rgba(4, 10, 24, 0.65);
   backdrop-filter: blur(30px) saturate(160%);
   -webkit-backdrop-filter: blur(30px) saturate(160%);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   animation: iosFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -2250,25 +2115,19 @@ body::after {
   overflow-y: auto;
   padding: 40px;
   border-radius: 34px;
-  box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow:
-    inset 0 1.5px 0px rgba(255, 255, 255, 0.3),
-    0 20px 50px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.3), 0 20px 50px rgba(0, 0, 0, 0.4);
   color: #fff;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   animation: iosScaleUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .modal-box h2, .modal-box .modal-title {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-weight: 700;
   letter-spacing: -0.3px;
 }
 
-.modal-box p, .modal-box span, .modal-box div {
+.modal-box, .modal-box p, .modal-box span, .modal-box div {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  letter-spacing: 0.1px;
 }
 
 /* ── LIQUID GLASS iOS 26 ACTION SHEET ──
@@ -2278,27 +2137,24 @@ body::after {
   position: relative;
   width: 100%;
   max-width: 420px;
-
-  /* Frosted translucent dark glass */
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 38%, rgba(255, 255, 255, 0.02) 100%),
     rgba(18, 24, 34, 0.55);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
-
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-top-color: rgba(255, 255, 255, 0.32);
   border-radius: 32px;
   padding: 0;
   overflow: hidden;
-
-  /* Liquid-glass floating depth + inner gloss */
   box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.55),
     0 8px 30px rgba(0, 229, 255, 0.12),
     inset 0 1.5px 0 rgba(255, 255, 255, 0.35),
     inset 0 -1px 0 rgba(0, 0, 0, 0.25);
-
   color: #f1f5f9;
   box-sizing: border-box;
   animation: bmkgPopIn 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -2402,7 +2258,8 @@ body::after {
   display: flex;
   flex-direction: column;
   gap: 9px;
-  max-height: 320px;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   padding: 16px 16px 8px;
   scrollbar-width: thin;
@@ -2460,14 +2317,12 @@ body::after {
 
 .map-option-item:active {
   transform: translateY(0) scale(0.99);
-  background: linear-gradient(180deg, rgba(0, 229, 255, 0.22) 0%, rgba(0, 229, 255, 0.08) 100%);
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.22), rgba(0, 229, 255, 0.08));
 }
 
-.map-option-item:hover span {
-  color: #ffffff;
-}
+.map-option-item:hover span { color: #fff; }
 
-/* ── App icon (glassy color box matching the map brand) ── */
+/* ── App icon ── */
 .map-icon-wrapper {
   width: 42px;
   height: 42px;
@@ -2527,6 +2382,7 @@ body::after {
 /* ── "Close" button (frosted glass) ── */
 .maps-cancel-btn {
   display: block;
+  flex-shrink: 0;
   width: calc(100% - 32px);
   margin: 4px 16px 18px;
   padding: 14px 16px;
@@ -2564,6 +2420,7 @@ body::after {
 
   .maps-action-sheet {
     max-width: 100%;
+    max-height: 85vh;
     border-radius: 32px 32px 0 0;
     animation: bmkgSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -2610,42 +2467,29 @@ body::after {
   text-decoration: underline;
 }
 
-/* Animation Specifications */
-@keyframes iosSlideUp {
-  from {
-    transform: translate(-50%, 30px);
-    opacity: 0;
-  }
 
-  to {
-    transform: translate(-50%, 0);
-    opacity: 1;
-  }
-}
 
 
 /* --- CREDITS LIST & CLICKABLE LINK STYLING --- */
 .credits-list {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
   margin: 0;
 }
 
 .credits-list li {
+  font-size: 14px;
   margin-bottom: 11px;
   background: rgba(255, 255, 255, 0.08);
-  /* Transparent layered glass items */
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease-in-out;
 }
 
-/* Elegant iOS-style lift effect when hovering over the card item */
 .credits-list li:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(0, 230, 255, 0.5);
-  /* Glowing cyan border outline on hover */
   transform: translateY(-2px);
 }
 
@@ -2677,6 +2521,36 @@ body::after {
   /* Muted system white details */
   margin-top: 4px;
   line-height: 1.4;
+}
+
+
+/* ── INTERACTION FOCUS POLISH ── */
+.cta-btn:focus-visible,
+.map-zoom-btn:focus-visible,
+.maps-coordinates-trigger:focus-visible,
+.footer:focus-visible,
+.map-option-item:focus-visible,
+.maps-cancel-btn:focus-visible,
+.zoom-tool-btn:focus-visible,
+.zoom-nav:focus-visible,
+.zoom-thumb:focus-visible,
+.close-modal-btn:focus-visible,
+.back-to-top:focus-visible,
+.lite-toggle:focus-visible {
+  outline: 2px solid rgba(154, 245, 234, 0.88);
+  outline-offset: 3px;
+}
+
+.map-container:focus-visible {
+  outline: 2px solid rgba(154, 245, 234, 0.88);
+  outline-offset: 3px;
+}
+
+.maps-coordinates-trigger,
+.footer,
+.map-container,
+.map-zoom-btn {
+  -webkit-tap-highlight-color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3046,14 +2920,12 @@ body::after {
       letter-spacing: .2em !important;
     }
 
-    .warn-title,
-    #dc .warn-title,
-    #dc .warn-title[style] {
+    .warn-title {
       width: 100%;
       margin-inline: auto !important;
       text-align: center !important;
       align-self: center !important;
-      max-width: 12.2ch !important;
+      max-width: 20ch !important;
       font-size: clamp(30px, 7.2vw, 45px) !important;
       line-height: 0.94 !important;
       letter-spacing: -0.068em !important;
@@ -3279,6 +3151,9 @@ body::after {
 
     .maps-action-sheet {
       max-width: 432px !important;
+      max-height: calc(100vh - 32px) !important;
+      display: flex !important;
+      flex-direction: column !important;
       border-radius: 34px !important;
     }
 
@@ -3315,7 +3190,8 @@ body::after {
     .maps-options-grid {
       padding: 14px !important;
       gap: 10px !important;
-      max-height: 332px !important;
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
     }
 
     .map-option-item {
@@ -3447,6 +3323,7 @@ body::after {
 
       .maps-action-sheet {
         border-radius: 30px !important;
+        max-height: 85vh !important;
       }
 
       .map-container {
@@ -3466,8 +3343,592 @@ body::after {
       }
     }
 
+
     /* ============================================================
-       #  "KEMBALI KE ATAS" — Liquid-Glass Pill (matches site DNA)
+       # FULL MODE PREMIUM POLISH — Liquid Glass iOS 26 Feel
+       # Only for capable devices. perf-lite overrides below remove
+       # these effects on low-end phones.
+       ============================================================ */
+    html:not(.perf-lite) .app {
+      filter: drop-shadow(0 34px 70px rgba(0,0,0,0.14));
+    }
+
+    html:not(.perf-lite) .hdr,
+    html:not(.perf-lite) #mainCard,
+    html:not(.perf-lite) .glass-card,
+    html:not(.perf-lite) .footer,
+    html:not(.perf-lite) .maps-action-sheet,
+    html:not(.perf-lite) .modal-box {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.055) 20%, rgba(255,255,255,0.025) 100%),
+        radial-gradient(140% 110% at 0% 0%, rgba(245,255,253,0.12), transparent 28%),
+        radial-gradient(100% 120% at 95% 0%, rgba(154,245,234,0.16), transparent 38%),
+        radial-gradient(120% 120% at 100% 100%, rgba(137,191,255,0.09), transparent 42%),
+        linear-gradient(145deg, rgba(29, 67, 82, 0.86) 0%, rgba(13, 25, 36, 0.92) 100%) !important;
+      border-top-color: rgba(245,255,253,0.34) !important;
+      border-left-color: rgba(245,255,253,0.18) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        inset 0 -1px 0 rgba(0,0,0,0.20),
+        0 28px 72px rgba(0,0,0,0.34),
+        0 16px 42px rgba(73,199,201,0.12),
+        0 0 0 1px rgba(154,245,234,0.055) !important;
+    }
+
+    html:not(.perf-lite) .glass-card {
+      transform: translateZ(0);
+    }
+
+    html:not(.perf-lite) .glass-card.w-glow {
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        inset 0 -1px 0 rgba(0,0,0,0.22),
+        0 28px 80px rgba(0,0,0,0.36),
+        0 16px 46px rgba(255,69,58,0.12),
+        0 0 0 1px rgba(255,128,120,0.08) !important;
+    }
+
+    html:not(.perf-lite) .hdr-title,
+    html:not(.perf-lite) .warn-title,
+    html:not(.perf-lite) .maps-modal-header h4,
+    html:not(.perf-lite) .modal-box h3 {
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+    }
+
+    html:not(.perf-lite) .cta-btn.primary {
+      position: relative;
+      isolation: isolate;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.38), rgba(255,255,255,0.0) 42%),
+        linear-gradient(135deg, #f5fffd 0%, #defcf8 25%, #9af5ea 56%, #71e7ff 82%, #89bfff 100%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.62),
+        inset 0 -1px 0 rgba(0,0,0,0.12),
+        0 18px 38px rgba(73,199,201,0.20),
+        0 8px 20px rgba(0,0,0,0.16) !important;
+    }
+
+    html:not(.perf-lite) .cta-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.68),
+        0 24px 48px rgba(73,199,201,0.24),
+        0 10px 24px rgba(0,0,0,0.18) !important;
+    }
+
+    html:not(.perf-lite) .map-container,
+    html:not(.perf-lite) .sta-banner,
+    html:not(.perf-lite) .wpill,
+    html:not(.perf-lite) .time-pill,
+    html:not(.perf-lite) .disclaimer-note,
+    html:not(.perf-lite) .refresh-chip,
+    html:not(.perf-lite) .map-option-item {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.035)),
+        radial-gradient(115% 110% at 0% 0%, rgba(154,245,234,0.12), transparent 38%),
+        rgba(18, 40, 54, 0.52) !important;
+      border-top-color: rgba(245,255,253,0.24) !important;
+    }
+
+    html:not(.perf-lite) .map-container img,
+    html:not(.perf-lite) .zoom-media {
+      box-shadow: 0 18px 45px rgba(0,0,0,0.28), 0 0 0 1px rgba(255,255,255,0.06) !important;
+    }
+
+    @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+      html:not(.perf-lite) .hdr,
+      html:not(.perf-lite) #mainCard,
+      html:not(.perf-lite) .glass-card,
+      html:not(.perf-lite) .footer,
+      html:not(.perf-lite) .maps-action-sheet,
+      html:not(.perf-lite) .modal-box,
+      html:not(.perf-lite) .lite-toggle {
+        -webkit-backdrop-filter: blur(52px) saturate(190%) contrast(1.02) !important;
+        backdrop-filter: blur(52px) saturate(190%) contrast(1.02) !important;
+      }
+    }
+
+    /* Full-mode luxury layer: extra depth, aurora, specular glass, and
+       refined micro-interactions. All selectors are guarded with
+       html:not(.perf-lite), so low-end mode keeps the simplified render path. */
+    @keyframes premiumAuroraDrift {
+      0% { background-position: 0% 0%, 100% 0%, 50% 0%, 0% 100%, 50% 50%; }
+      50% { background-position: 18% 6%, 82% 10%, 58% 0%, 8% 92%, 50% 50%; }
+      100% { background-position: 0% 0%, 100% 0%, 50% 0%, 0% 100%, 50% 50%; }
+    }
+
+    @keyframes premiumGlassPulse {
+      0%, 100% { filter: drop-shadow(0 28px 58px rgba(0,0,0,0.16)); }
+      50% { filter: drop-shadow(0 34px 76px rgba(73,199,201,0.18)); }
+    }
+
+    @keyframes premiumEdgeSweep {
+      0% { transform: translateX(-120%) rotate(8deg); opacity: 0; }
+      18% { opacity: .62; }
+      42% { opacity: .22; }
+      100% { transform: translateX(140%) rotate(8deg); opacity: 0; }
+    }
+
+    @keyframes premiumHaloBreath {
+      0%, 100% { opacity: .34; transform: scale(1); }
+      50% { opacity: .62; transform: scale(1.045); }
+    }
+
+    html:not(.perf-lite) body {
+      background:
+        radial-gradient(1100px 620px at 50% -10%, rgba(245,255,253,0.16), transparent 36%),
+        radial-gradient(900px 680px at 12% 4%, rgba(154,245,234,0.18), transparent 42%),
+        radial-gradient(820px 720px at 94% 10%, rgba(137,191,255,0.14), transparent 38%),
+        radial-gradient(780px 660px at 8% 96%, rgba(198,184,255,0.09), transparent 36%),
+        linear-gradient(180deg, #14515b 0%, #103e4d 25%, #102d3d 58%, #07131d 100%) !important;
+      background-size: 120% 120%, 120% 120%, 120% 120%, 120% 120%, 100% 100%;
+      animation: premiumAuroraDrift 18s ease-in-out infinite;
+    }
+
+    html:not(.perf-lite) body::before {
+      width: 820px !important;
+      height: 820px !important;
+      opacity: .72 !important;
+      filter: blur(115px) saturate(140%) !important;
+      mix-blend-mode: screen;
+    }
+
+    html:not(.perf-lite) body::after {
+      width: 760px !important;
+      height: 760px !important;
+      opacity: .58 !important;
+      filter: blur(125px) saturate(130%) !important;
+      mix-blend-mode: screen;
+    }
+
+    html:not(.perf-lite) .app {
+      position: relative;
+      isolation: isolate;
+      animation: premiumGlassPulse 7.5s ease-in-out infinite;
+    }
+
+    html:not(.perf-lite) .app::before,
+    html:not(.perf-lite) .app::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      z-index: -1;
+      border-radius: 44px;
+    }
+
+    html:not(.perf-lite) .app::before {
+      inset: 34px -28px 40px;
+      background:
+        radial-gradient(60% 34% at 50% 0%, rgba(245,255,253,0.16), transparent 72%),
+        radial-gradient(45% 38% at 100% 18%, rgba(154,245,234,0.16), transparent 72%),
+        radial-gradient(48% 40% at 0% 78%, rgba(137,191,255,0.10), transparent 72%);
+      filter: blur(24px);
+      animation: premiumHaloBreath 6.8s ease-in-out infinite;
+    }
+
+    html:not(.perf-lite) .app::after {
+      inset: -10px -16px;
+      border: 1px solid rgba(245,255,253,0.08);
+      background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent 38%, rgba(154,245,234,0.025));
+      mask-image: linear-gradient(180deg, rgba(0,0,0,.9), transparent 92%);
+      -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.9), transparent 92%);
+    }
+
+    html:not(.perf-lite) .hdr::after,
+    html:not(.perf-lite) .glass-card::after,
+    html:not(.perf-lite) .footer::after,
+    html:not(.perf-lite) .maps-action-sheet::after,
+    html:not(.perf-lite) .modal-box::after {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.16) 0%, transparent 26%),
+        radial-gradient(42% 52% at 8% 0%, rgba(245,255,253,0.13), transparent 78%),
+        radial-gradient(48% 55% at 92% 3%, rgba(154,245,234,0.18), transparent 78%),
+        radial-gradient(36% 48% at 100% 92%, rgba(137,191,255,0.09), transparent 82%),
+        linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.045) 42%, transparent 58%) !important;
+      mix-blend-mode: screen;
+    }
+
+    html:not(.perf-lite) .glass-card::before,
+    html:not(.perf-lite) .hdr::before,
+    html:not(.perf-lite) .footer::before,
+    html:not(.perf-lite) .maps-action-sheet::before,
+    html:not(.perf-lite) .modal-box::before {
+      height: 2px !important;
+      background: linear-gradient(90deg, transparent 0%, rgba(245,255,253,0.82) 24%, rgba(154,245,234,0.95) 52%, rgba(137,191,255,0.66) 74%, transparent 100%) !important;
+      filter: blur(.35px) !important;
+      opacity: .9;
+    }
+
+    html:not(.perf-lite) .glass-card {
+      transition: transform 320ms cubic-bezier(.16,1,.3,1), box-shadow 320ms ease !important;
+    }
+
+    html:not(.perf-lite) .glass-card:hover {
+      transform: translateY(-3px) translateZ(0);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.28),
+        inset 0 -1px 0 rgba(0,0,0,0.22),
+        0 34px 92px rgba(0,0,0,0.38),
+        0 22px 58px rgba(73,199,201,0.16),
+        0 0 0 1px rgba(154,245,234,0.08) !important;
+    }
+
+    html:not(.perf-lite) .glass-card.w-glow {
+      animation: premiumHaloBreath 5.2s ease-in-out infinite;
+    }
+
+    html:not(.perf-lite) .sta-icon,
+    html:not(.perf-lite) .map-icon-wrapper,
+    html:not(.perf-lite) .zoom-generated-logo {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.24), rgba(255,255,255,0.045)),
+        radial-gradient(circle at 38% 18%, rgba(245,255,253,0.32), transparent 34%),
+        rgba(154,245,234,0.10) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.34),
+        0 12px 26px rgba(73,199,201,0.14),
+        0 4px 14px rgba(0,0,0,0.18) !important;
+    }
+
+    html:not(.perf-lite) .wpill,
+    html:not(.perf-lite) .time-pill,
+    html:not(.perf-lite) .refresh-chip,
+    html:not(.perf-lite) .disclaimer-note,
+    html:not(.perf-lite) .spill,
+    html:not(.perf-lite) .sta-code {
+      transition: transform 220ms cubic-bezier(.16,1,.3,1), border-color 220ms ease, box-shadow 220ms ease !important;
+    }
+
+    html:not(.perf-lite) .wpill:hover,
+    html:not(.perf-lite) .time-pill:hover,
+    html:not(.perf-lite) .refresh-chip:hover,
+    html:not(.perf-lite) .disclaimer-note:hover,
+    html:not(.perf-lite) .spill:hover,
+    html:not(.perf-lite) .sta-code:hover {
+      transform: translateY(-1px);
+      border-color: rgba(154,245,234,0.30) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.20),
+        0 14px 28px rgba(0,0,0,0.16),
+        0 8px 22px rgba(73,199,201,0.10) !important;
+    }
+
+    html:not(.perf-lite) .cta-btn::after {
+      content: "";
+      position: absolute;
+      inset: -45% -35%;
+      pointer-events: none;
+      background: linear-gradient(105deg, transparent 34%, rgba(255,255,255,0.36) 48%, transparent 62%);
+      transform: translateX(-120%) rotate(8deg);
+      opacity: 0;
+    }
+
+    html:not(.perf-lite) .cta-btn:hover::after {
+      animation: premiumEdgeSweep 1.1s cubic-bezier(.16,1,.3,1);
+    }
+
+    html:not(.perf-lite) .map-container {
+      transition: transform 260ms cubic-bezier(.16,1,.3,1), box-shadow 260ms ease !important;
+    }
+
+    html:not(.perf-lite) .map-container:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        0 22px 50px rgba(0,0,0,0.24),
+        0 12px 32px rgba(73,199,201,0.12) !important;
+    }
+
+    html:not(.perf-lite) .warn-title,
+    html:not(.perf-lite) .hdr-title {
+      filter: drop-shadow(0 12px 28px rgba(154,245,234,0.12));
+    }
+
+    html:not(.perf-lite) .sdot {
+      box-shadow:
+        0 0 0 4px rgba(154,245,234,0.08),
+        0 0 18px rgba(154,245,234,0.42) !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html:not(.perf-lite) body,
+      html:not(.perf-lite) .app,
+      html:not(.perf-lite) .glass-card.w-glow {
+        animation: none !important;
+      }
+    }
+
+    /* ===============================================================
+       # LOW-END / PERF-LITE OVERRIDES
+       # Aggressive rendering simplification for older or weak phones.
+       # Activated automatically by the early bootstrap or manually by
+       # the floating "Mode Ringan" button / ?lite=1.
+       =============================================================== */
+    .lite-toggle {
+      position: fixed;
+      left: 14px;
+      bottom: 14px;
+      z-index: 9998;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 9px 14px 9px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(245, 255, 253, 0.20);
+      border-top-color: rgba(245, 255, 253, 0.38);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.045)),
+        radial-gradient(120% 120% at 0% 0%, rgba(154,245,234,0.18), transparent 42%),
+        rgba(15, 27, 40, 0.66);
+      -webkit-backdrop-filter: blur(22px) saturate(165%);
+      backdrop-filter: blur(22px) saturate(165%);
+      color: rgba(240,251,250,0.82);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        inset 0 -1px 0 rgba(0,0,0,0.16),
+        0 12px 30px rgba(0,0,0,0.26),
+        0 8px 24px rgba(73,199,201,0.10);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
+      transition: transform 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .lite-toggle::before {
+      content: "";
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,255,253,0.72), rgba(154,245,234,0.66), transparent);
+      pointer-events: none;
+    }
+
+    .lite-toggle:hover {
+      transform: translateY(-1px);
+      color: #f5fffd;
+      border-color: rgba(154,245,234,0.32);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.28),
+        0 16px 34px rgba(0,0,0,0.28),
+        0 12px 30px rgba(73,199,201,0.15);
+    }
+
+    .lite-toggle-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(137,191,255,0.68);
+      box-shadow: 0 0 0 4px rgba(137,191,255,0.09), 0 0 12px rgba(137,191,255,0.22);
+      flex: 0 0 9px;
+    }
+
+    .lite-toggle.is-active,
+    .lite-toggle[aria-pressed="true"] {
+      color: #f5fffd;
+      border-color: rgba(154,245,234,0.38);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.20), rgba(255,255,255,0.055)),
+        radial-gradient(125% 120% at 0% 0%, rgba(154,245,234,0.26), transparent 44%),
+        rgba(18, 52, 64, 0.78);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.28),
+        0 14px 32px rgba(0,0,0,0.28),
+        0 0 0 1px rgba(154,245,234,0.08),
+        0 12px 30px rgba(154,245,234,0.18);
+    }
+
+    .lite-toggle.is-active .lite-toggle-dot,
+    .lite-toggle[aria-pressed="true"] .lite-toggle-dot {
+      background: #9af5ea;
+      box-shadow: 0 0 0 4px rgba(154,245,234,0.13), 0 0 16px rgba(154,245,234,0.5);
+    }
+
+    .lite-toggle:focus-visible {
+      outline: 2px solid rgba(154,245,234,0.85);
+      outline-offset: 2px;
+    }
+
+    html.perf-lite,
+    html.perf-lite body {
+      background: #0b1923 !important;
+      color: #f0fbfa !important;
+      text-rendering: optimizeSpeed !important;
+    }
+
+    html.perf-lite *,
+    html.perf-lite *::before,
+    html.perf-lite *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+
+    html.perf-lite body::before,
+    html.perf-lite body::after,
+    html.perf-lite .card-orb,
+    html.perf-lite .scan-line,
+    html.perf-lite .lg-burst,
+    html.perf-lite .lg-ring,
+    html.perf-lite .lg-blob,
+    html.perf-lite .lg-sparkle,
+    html.perf-lite .lg-flash,
+    html.perf-lite .liquid-blob-1,
+    html.perf-lite .liquid-blob-2,
+    html.perf-lite .map-overlay,
+    html.perf-lite .zoom-thumbs,
+    html.perf-lite .zoom-help,
+    html.perf-lite .zoom-nav,
+    html.perf-lite .zoom-toolbar,
+    html.perf-lite .back-to-top svg {
+      display: none !important;
+    }
+
+    html.perf-lite .wrapper {
+      padding: 8px !important;
+    }
+
+    html.perf-lite .app {
+      max-width: 520px !important;
+      gap: 8px !important;
+      filter: none !important;
+    }
+
+    html.perf-lite .hdr,
+    html.perf-lite #mainCard,
+    html.perf-lite .glass-card,
+    html.perf-lite .sta-banner,
+    html.perf-lite .footer,
+    html.perf-lite .modal-box,
+    html.perf-lite .maps-action-sheet,
+    html.perf-lite .map-container,
+    html.perf-lite .wpill,
+    html.perf-lite .time-pill,
+    html.perf-lite .cta-btn,
+    html.perf-lite .refresh-chip,
+    html.perf-lite .spill,
+    html.perf-lite .disclaimer-note,
+    html.perf-lite .map-error-state,
+    html.perf-lite .zoom-main,
+    html.perf-lite .zoom-modal {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      filter: none !important;
+      background: #102331 !important;
+      border-color: rgba(154,245,234,0.18) !important;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.22) !important;
+      contain: layout paint style !important;
+    }
+
+    html.perf-lite .glass-card::before,
+    html.perf-lite .glass-card::after,
+    html.perf-lite .hdr::before,
+    html.perf-lite .hdr::after,
+    html.perf-lite .footer::before,
+    html.perf-lite .footer::after,
+    html.perf-lite .modal-box::before,
+    html.perf-lite .modal-box::after,
+    html.perf-lite .maps-action-sheet::before,
+    html.perf-lite .maps-action-sheet::after,
+    html.perf-lite .zoom-main::before,
+    html.perf-lite .zoom-main::after,
+    html.perf-lite .wpill::before,
+    html.perf-lite .cta-btn::before,
+    html.perf-lite .disclaimer-note::before,
+    html.perf-lite .map-icon-wrapper::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    html.perf-lite #mainCard,
+    html.perf-lite .glass-card {
+      padding: 12px !important;
+      border-radius: 20px !important;
+    }
+
+    html.perf-lite .hdr,
+    html.perf-lite .footer,
+    html.perf-lite .sta-banner,
+    html.perf-lite .map-container {
+      border-radius: 18px !important;
+    }
+
+    html.perf-lite .warn-title,
+    html.perf-lite #dc .warn-title,
+    html.perf-lite #dc .warn-title[style] {
+      color: #9af5ea !important;
+      background: none !important;
+      -webkit-background-clip: initial !important;
+      background-clip: initial !important;
+      filter: none !important;
+      font-size: clamp(28px, 8vw, 38px) !important;
+      line-height: 1 !important;
+      letter-spacing: -0.045em !important;
+    }
+
+    html.perf-lite .map-container img {
+      max-height: 240px !important;
+      transform: none !important;
+    }
+
+    html.perf-lite .map-container:hover img,
+    html.perf-lite .cta-btn:hover,
+    html.perf-lite .footer:hover,
+    html.perf-lite .map-option-item:hover,
+    html.perf-lite .zoom-thumb:hover {
+      transform: none !important;
+    }
+
+    html.perf-lite .zoom-modal.active {
+      display: none !important;
+    }
+
+    html.perf-lite .back-to-top {
+      right: 10px !important;
+      bottom: 58px !important;
+      padding: 9px 12px !important;
+      min-height: 36px !important;
+    }
+
+    html.perf-lite .lite-toggle {
+      left: 10px !important;
+      bottom: 10px !important;
+      min-height: 38px !important;
+      padding: 8px 12px 8px 10px !important;
+      background: #173446 !important;
+      color: #f5fffd !important;
+      border-color: rgba(154,245,234,0.26) !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.22) !important;
+      transform: none !important;
+    }
+
+    html.perf-lite .lite-toggle::before {
+      display: none !important;
+    }
+
+    html.perf-lite .lite-toggle-dot {
+      background: #9af5ea !important;
+      box-shadow: 0 0 8px rgba(154,245,234,0.28) !important;
+    }
+
+    html.legacy-lite .zoom-modal,
+    html.legacy-lite .back-to-top {
+      display: none !important;
+    }
+
+
+    /* ============================================================
+       #  "KEMBALI KE ATAS" — Liquid-Glass Pill 
        #  Palette: --accent cyan + rgba(0,229,255) glow, white rim,
        #  inset highlight, blur+saturate backdrop. Same recipe as
        #  the rest of the UI (glass-card / chips).
@@ -3574,6 +4035,12 @@ body::after {
 
 <body>
 
+<noscript>
+  <div style="padding:16px;color:#fff;background:#0b1923;text-align:center;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;">
+    Aplikasi ini membutuhkan JavaScript untuk menampilkan data peringatan dini BMKG. Mohon aktifkan JavaScript pada browser Anda.
+  </div>
+</noscript>
+
 <!-- ==============================================================
      #  "KEMBALI KE ATAS" — Back-to-Top Pill Button (BMKG style)
      #  Floating, fixed bottom-right. Revealed via JS after scroll.
@@ -3596,6 +4063,15 @@ body::after {
   <span>Kembali ke atas</span>
 
 </button>
+
+<button
+  type="button"
+  id="liteModeBtn"
+  class="lite-toggle"
+  aria-label="Aktifkan atau nonaktifkan mode ringan"
+  aria-pressed="false"
+  title="Mode ringan untuk HP low-end"
+><span class="lite-toggle-dot" aria-hidden="true"></span><span class="lite-toggle-text">Mode Ringan: Nonaktif</span></button>
 
 <!-- ==============================================================
      #  BMKG INFOGRAPHIC GALLERY LIGHTBOX
@@ -3629,7 +4105,7 @@ body::after {
               <rect x="13" y="13" width="8" height="8" rx="1.5"></rect>
             </svg>
           </button>
-          <button class="zoom-tool-btn zoom-close" id="zoomCloseBtn" type="button" title="Close" aria-label="Close" onclick="closeZoom()">
+          <button class="zoom-tool-btn zoom-close" id="zoomCloseBtn" type="button" title="Close" aria-label="Close">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M6 6l12 12"></path>
               <path d="M18 6 6 18"></path>
@@ -3708,7 +4184,7 @@ body::after {
         <div class="hdr-right">
           <div class="spill">
             <span class="sdot" id="sdot" style="background:#555;"></span>
-            <span class="stxt" id="stxt">MEMULAI...</span>
+            <span class="stxt" id="stxt" aria-live="polite">MEMULAI...</span>
           </div>
         </div>
       </div>
@@ -3726,7 +4202,7 @@ body::after {
             </div>
             <div class="sta-sub">
               Batam, Kepulauan Riau ·
-              <span id="trigger-maps-menu" class="maps-coordinates-trigger"> 01°07' LU, 104°06' BT
+              <span id="trigger-maps-menu" class="maps-coordinates-trigger" role="button" tabindex="0" aria-haspopup="dialog"> 01°07' LU, 104°06' BT
               </span>
             </div>
           </div>
@@ -3738,53 +4214,53 @@ body::after {
         <!-- ============================================================
              #                "Open in Maps" MODAL                      #
              ============================================================ -->
-          <div id="maps-selector-modal" class="maps-modal-overlay">
-          <div class="maps-action-sheet">
+          <div id="maps-selector-modal" class="maps-modal-overlay" aria-hidden="true">
+          <div class="maps-action-sheet" role="dialog" aria-modal="true" aria-labelledby="maps-modal-title" aria-describedby="maps-modal-desc">
             <div class="maps-modal-header">
-              <h4>
+              <h4 id="maps-modal-title">
                 Buka di Peta
               </h4>
-              <p>
+              <p id="maps-modal-desc">
                 Pilih platform navigasi yang ingin Anda gunakan
               </p>
             </div>
             <div class="maps-options-grid">
-              <a href="https://maps.google.com/?q=1.119590,104.113316" target="_blank" class="map-option-item">
+              <a href="https://maps.google.com/?q=1.119590,104.113316" target="_blank" rel="noopener noreferrer" class="map-option-item" referrerpolicy="no-referrer">
                 <div class="map-icon-wrapper" style="background: #35e026;">
                   🗺️
                 </div>
                 <span> Google Maps
                 </span>
               </a>
-              <a href="https://maps.apple.com/?q=1.119590,104.113316" target="_blank" class="map-option-item">
+              <a href="https://maps.apple.com/?q=1.119590,104.113316" target="_blank" rel="noopener noreferrer" class="map-option-item" referrerpolicy="no-referrer">
                 <div class="map-icon-wrapper" style="background: #000000;">
                   🍎
                 </div>
                 <span> Apple Maps
                 </span>
               </a>
-              <a href="https://waze.com/ul?ll=1.119590,104.113316&navigate=yes" target="_blank" class="map-option-item">
+              <a href="https://waze.com/ul?ll=1.119590,104.113316&navigate=yes" target="_blank" rel="noopener noreferrer" class="map-option-item" referrerpolicy="no-referrer">
                 <div class="map-icon-wrapper" style="background: #33ccff;">
                   🚙
                 </div>
                 <span> Waze Navigation
                 </span>
               </a>
-              <a href="https://www.bing.com/maps?ss=ypid.YN7214BB8C518D8844" target="_blank" class="map-option-item">
+              <a href="https://www.bing.com/maps?ss=ypid.YN7214BB8C518D8844" target="_blank" rel="noopener noreferrer" class="map-option-item" referrerpolicy="no-referrer">
                 <div class="map-icon-wrapper" style="background: #00809d;">
                   🌐
                 </div>
                 <span> Bing Maps
                 </span>
               </a>
-              <a href="https://id.maptons.com/p/5926493793" target="_blank" class="map-option-item">
+              <a href="https://id.maptons.com/p/5926493793" target="_blank" rel="noopener noreferrer" class="map-option-item" referrerpolicy="no-referrer">
                 <div class="map-icon-wrapper" style="background: #ff5722;">
                   📍
                 </div>
                 <span> Maptons
                 </span>
               </a>
-              <a href="https://www.openstreetmap.org/way/60754286" target="_blank" class="map-option-item">
+              <a href="https://www.openstreetmap.org/way/60754286" target="_blank" rel="noopener noreferrer" class="map-option-item" referrerpolicy="no-referrer">
                 <div class="map-icon-wrapper" style="background: #7fc97f;">
                   🗺️
                 </div>
@@ -3792,20 +4268,20 @@ body::after {
                 </span>
               </a>
             </div>
-            <button id="close-maps-menu" class="maps-cancel-btn">
+            <button id="close-maps-menu" class="maps-cancel-btn" type="button">
               Tutup
             </button>
           </div>
         </div>
 
-        <div id="dc">
+        <div id="dc" aria-live="polite">
           <div class="scan-line">
           </div>
-          <div class="sync-bar" id="syncBar">
+          <div class="sync-bar" id="syncBarInitial">
           </div>
-          <div class="refresh-timer" id="refreshTimer">
+          <div class="refresh-timer" id="refreshTimerInitial">
           </div>
-          <div class="loading-wrap">
+          <div class="loading-wrap" role="status" aria-live="polite">
             <div class="loading-icon">
               🛰️
             </div>
@@ -3813,55 +4289,54 @@ body::after {
               Sinkronisasi...
             </div>
            </div>
-         S</div>
+         </div>
         </div>
 
       <div style="display:flex;align-items:center;justify-content:center;">
         <div class="refresh-chip">
           <span class="refresh-icon"> ↻
           </span>
-          <span id="refreshChipText"> MENYINKRONKAN DATA...
+          <span id="refreshChipText" aria-live="polite"> MENYINKRONKAN DATA...
           </span>
         </div>
       </div>
 
       <!-- Credit footer — click to open the "Data Providers" modal -->
-        <div class="footer" id="trigger-credit-modal">
+        <div class="footer" id="trigger-credit-modal" role="button" tabindex="0" aria-haspopup="dialog">
         © Badan Meteorologi, Klimatologi, dan Geofisika Indonesia
       </div>
 
       <!-- Data-provider credit modal -->
-        <div id="thankyou-modal" class="credit-modal">
+        <div id="thankyou-modal" class="credit-modal" aria-hidden="true">
         <div class="liquid-blob-1">
         </div>
         <div class="liquid-blob-2">
         </div>
-        <div class="modal-box">
-          <span class="close-modal-btn" id="close-credit-modal"> ✕
-          </span>
-          <h3>
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="credit-modal-title" aria-describedby="credit-modal-desc">
+          <button type="button" class="close-modal-btn" id="close-credit-modal" aria-label="Tutup modal kredit">✕</button>
+          <h3 id="credit-modal-title">
             Kredit penyedia data
           </h3>
-          <p>
+          <p id="credit-modal-desc">
             Data pada situs ini diambil & diolah dari layanan data beserta platform resmi sebagai berikut:
           </p>
           <ul class="credits-list">
             <li>
-              <a href="https://nowcasting.bmkg.go.id/nowcast" target="_blank" class="credit-link"> <strong> BMKG Nowcast API
+              <a href="https://nowcasting.bmkg.go.id/nowcast" target="_blank" rel="noopener noreferrer" class="credit-link" referrerpolicy="no-referrer"> <strong> BMKG Nowcast API
                 </strong>
                 <span> Sumber data resmi pemerintah Indonesia untuk peringatan dini cuaca dan nowcasting real-time (0 sampai 6 jam ke depan)
                 </span>
               </a>
             </li>
             <li>
-              <a href="https://fonts.google.com" target="_blank" class="credit-link"> <strong> Google Fonts & Icons
+              <a href="https://fonts.google.com" target="_blank" rel="noopener noreferrer" class="credit-link" referrerpolicy="no-referrer"> <strong> Google Fonts & Icons
                 </strong>
                 <span> Layanan tipografi web dan aset antarmuka untuk desain dan pengembangan web dari Google.
                 </span>
               </a>
             </li>
             <li>
-              <a href="https://allorigins.win" target="_blank" class="credit-link"> <strong> Public Data Proxies
+              <a href="https://allorigins.win" target="_blank" rel="noopener noreferrer" class="credit-link" referrerpolicy="no-referrer"> <strong> Public Data Proxies
                 </strong>
                 <span> Layanan proxy CORS gratis untuk mengambil data dari berbagai domain atau situs web langsung melalui kode JavaScript frontend tanpa terhambat batasan keamanan browser.
                 </span>
@@ -3875,7 +4350,7 @@ body::after {
       </div>
     </div>
 
-    <script>
+    <script type="module">
 /* ============================================================
    #  MAIN JS  —  Fetch BMKG RSS + render the warning card
    #  - initSync()        : entry point + 5-minute auto-polling
@@ -3887,8 +4362,9 @@ body::after {
    CONFIG
 ══════════════════════════════════════════ */
 // Variable Examples
+const PERF_LITE_MODE = document.documentElement.classList.contains('perf-lite');
 const RSS = 'https://www.bmkg.go.id/alerts/nowcast/id/rss.xml';
-const INFOGRAFIS = 'https://nowcasting.bmkg.go.id/infografis/CKR/2026/05/16/infografis.jpg';
+const INFOGRAFIS = buildInfografisUrl();
 
 /* Fallback removed as requested */
 const PROXIES = [{
@@ -3914,7 +4390,7 @@ const PROXIES = [{
   }
 ];
 
-const FETCH_TIMEOUT_MS = 14000;
+const FETCH_TIMEOUT_MS = PERF_LITE_MODE ? 9000 : 14000;
 
 let infografisUrl = '';
 let zoomImgUrl = '';
@@ -3989,81 +4465,61 @@ function nowHHMM() {
 }
 
 function translateDate(dateStr) {
-  // Return a dash fallback if the date string is empty or undefined
   if (!dateStr) return '—';
 
-  // Mapping dictionary to translate English short day names to full Indonesian days
-  const daysIndo = {
-    'Sun': 'Minggu',
-    'Mon': 'Senin',
-    'Tue': 'Selasa',
-    'Wed': 'Rabu',
-    'Thu': 'Kamis',
-    'Fri': 'Jumat',
-    'Sat': 'Sabtu'
+  const raw = String(dateStr).trim();
+  const monthIndex = {
+    Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Mei: 4, Jun: 5,
+    Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
+    Januari: 0, Februari: 1, Maret: 2, April: 3, Juni: 5,
+    Juli: 6, Agustus: 7, September: 8, Oktober: 9, November: 10, Desember: 11
   };
 
-  // Mapping dictionary to convert short month names to full Indonesian month names
-  const monthsIndo = {
-    'Jan': 'Januari',
-    'Feb': 'Februari',
-    'Mar': 'Maret',
-    'Apr': 'April',
-    'May': 'Mei',
-    'Mei': 'Mei',
-    'Jun': 'Juni',
-    'Jul': 'Juli',
-    'Aug': 'Agustus',
-    'Sep': 'September',
-    'Oct': 'Oktober',
-    'Nov': 'November',
-    'Dec': 'Desember'
-  };
+  let parsed = new Date(raw);
 
-  // Split the input string by any whitespace to eliminate irregular spacing issues
-  // Expected split array format: ["Sun,", "17", "Mei", "2026", "04:15:37", "+0000"]
-  const parts = dateStr.trim().split(/\s+/);
+  // Robust parser for RSS-like strings, e.g.:
+  // "Sun, 17 May 2026 04:15:37 +0000" or "17 Mei 2026 04:15:37 +0000".
+  const match = raw.match(/(?:[A-Za-z]+,\s*)?(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(?:([+-])(\d{2})(\d{2})|GMT|UTC|Z)?/i);
 
-  // Fallback safety check: if the format is unexpected, return the original string
-  if (parts.length < 5) return dateStr;
+  if (match) {
+    const day = Number(match[1]);
+    const monthName = match[2];
+    const month = monthIndex[monthName] ?? monthIndex[monthName.slice(0, 3)];
+    const year = Number(match[3]);
+    const hour = Number(match[4]);
+    const minute = Number(match[5]);
+    const second = Number(match[6] || 0);
 
-  // Extract the day name and strip away the trailing comma (e.g., "Sun," -> "Sun")
-  const dayEnglish = parts[0].replace(',', '');
-  const dayResult = daysIndo[dayEnglish] || dayEnglish;
-
-  // Extract standard date components
-  const dateNum = parts[1];
-  const monthEnglish = parts[2];
-  const monthResult = monthsIndo[monthEnglish] || monthEnglish;
-  const yearNum = parts[3];
-  const rawTime = parts[4];
-
-  // --- TIMEZONE CONVERSION: UTC (+0000) TO WIB (+0700) ---
-  // Extract hours, minutes, and seconds from the time segment
-  const timeParts = rawTime.split(':');
-  if (timeParts.length === 3) {
-    let hours = parseInt(timeParts[0], 10);
-    const minutes = timeParts[1];
-    const seconds = timeParts[2];
-
-    // Add 7 hours to shift from UTC to WIB timezone
-    hours = hours + 7;
-
-    // If hours exceed 23, wrap it around to match a 24-hour clock cycle
-    if (hours >= 24) {
-      hours = hours - 24;
+    if (Number.isInteger(month)) {
+      let utcMs = Date.UTC(year, month, day, hour, minute, second);
+      if (match[7] && match[8] && match[9]) {
+        const sign = match[7] === '+' ? 1 : -1;
+        const offsetMinutes = sign * (Number(match[8]) * 60 + Number(match[9]));
+        utcMs -= offsetMinutes * 60000;
+      }
+      parsed = new Date(utcMs);
     }
-
-    // Pad single-digit hours with a leading zero (e.g., 4 becomes "04")
-    const formattedHours = hours.toString().padStart(2, '0');
-    const finalWIBTime = `${formattedHours}:${minutes}:${seconds}`;
-
-    // Construct and return the fully polished, properly spaced Indonesian standard date string
-    return `${dayResult}, ${dateNum} ${monthResult} ${yearNum} ${finalWIBTime} WIB`;
   }
 
-  // Secondary fallback in case time parsing fails
-  return dateStr;
+  if (Number.isNaN(parsed.getTime())) return raw;
+
+  const parts = new Intl.DateTimeFormat('id-ID', {
+    timeZone: 'Asia/Jakarta',
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    hourCycle: 'h23'
+  }).formatToParts(parsed).reduce((acc, part) => {
+    if (part.type !== 'literal') acc[part.type] = part.value;
+    return acc;
+  }, {});
+
+  return `${parts.weekday}, ${parts.day} ${parts.month} ${parts.year} ${parts.hour}:${parts.minute}:${parts.second} WIB`;
 }
 
 // Build today's infografis URL for Kepri (CKR station)
@@ -4142,7 +4598,7 @@ function renderLoading() {
   document.getElementById('refreshChipText').textContent = 'MENYINKRONKAN DATA...';
   document.getElementById('mainCard').classList.remove('w-glow');
   document.getElementById('dc').innerHTML =
-    '<div class="loading-wrap">' +
+    '<div class="loading-wrap" role="status" aria-live="polite">' +
     '<div class="scan-line"></div>' +
     '<div class="sync-bar" id="syncBar"></div>' +
     '<div class="refresh-timer" id="refreshTimer"></div>' +
@@ -4218,8 +4674,10 @@ function renderWarning(title, desc, link, lastBuild) {
 
   const displayTitle = title || 'Peringatan Cuaca';
   galleryRequestToken += 1;
-  setLightboxSlides(buildWarningFallbackSlides(previewUrl, displayTitle, textFix, lastBuild), 0);
-  hydrateWarningGallery(link, displayTitle, textFix, lastBuild, previewUrl);
+  if (!PERF_LITE_MODE) {
+    setLightboxSlides(buildWarningFallbackSlides(previewUrl, displayTitle, textFix, lastBuild), 0);
+    hydrateWarningGallery(link, displayTitle, textFix, lastBuild, previewUrl);
+  }
 
   // --- HIGHLIGHT AFFECTED REGION + BUILD TIME-RANGE PILL ---
   // Escape first so we can safely inject <strong> markup into the description.
@@ -4274,27 +4732,27 @@ function renderWarning(title, desc, link, lastBuild) {
   document.getElementById('dc').innerHTML = `
     ${pills}
     <span class="warn-label">⚠ Peringatan Dini Aktif</span>
-    <div class="warn-title" style="color:#ff453a;">${displayTitle}</div>
+    <div class="warn-title" style="color:#ff453a;">${escHtml(displayTitle)}</div>
     ${timePill}
     <div class="desc-text desc-scroll">${descHtml}</div>
 
     <div class="map-section">
         <div class="map-label">
           Infografis Wilayah Terdampak
-          <span class="map-zoom-btn" onclick="openZoom('${previewUrl}')" title="Perbesar peta">
+          <span class="map-zoom-btn" role="button" tabindex="0" title="Perbesar peta">
             ⛶ Perbesar
           </span>
         </div>
-        <div class="map-container" onclick="openZoom('${previewUrl}')">
-          <img id="mapPreviewImg" src="${previewUrl}" alt="Infografis Cuaca Kepri" loading="lazy" onerror="this.parentElement.outerHTML=mapErrorHTML()" />
+        <div class="map-container" role="button" tabindex="0" aria-label="Perbesar infografis wilayah terdampak">
+          <img id="mapPreviewImg" src="${previewUrl}" alt="Infografis Cuaca Kepri" loading="lazy" decoding="async" fetchpriority="low" onerror="this.parentElement.outerHTML=mapErrorHTML()" />
           <div class="map-overlay"></div>
         </div>
      </div>
 
-      <a href="${escHtml(link)}" target="_blank" rel="noopener" class="cta-btn primary">
+      <a href="${safeUrl(link)}" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">
         <span>🗺</span> Lihat Peta Radar
       </a>
-      <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener" class="cta-btn ghost">
+      <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn ghost" referrerpolicy="no-referrer">
         📡 Buka Nowcasting Real-Time
       </a>
 
@@ -4320,7 +4778,9 @@ function renderSafe(lastBuild) {
   galleryRequestToken += 1;
   infografisUrl = infUrl;
   zoomImgUrl = infUrl;
-  setLightboxSlides(buildSafeSlides(lastBuild), 0);
+  if (!PERF_LITE_MODE) {
+    setLightboxSlides(buildSafeSlides(lastBuild), 0);
+  }
 
   document.getElementById('mainCard').classList.remove('w-glow');
 
@@ -4341,7 +4801,7 @@ function renderSafe(lastBuild) {
       </div>
     </div>
 
-    <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener" class="cta-btn primary">
+    <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">
       <span>📡</span> Buka Radar Real-Time
     </a>
   `;
@@ -4362,7 +4822,7 @@ function renderError() {
     <div class="warn-title" style="color:#ff453a;">✕ Gagal Memuat Data</div>
     <div class="desc-text">Tidak dapat menjangkau server BMKG pada saat ini. Silahkan periksa koneksi internet Anda, lalu coba lagi.</div>
     <div class="btn-row">
-      <button onclick="location.reload()" class="cta-btn btn-error" data-cta="1">
+      <button type="button" class="cta-btn btn-error" data-cta="1" data-action="reload">
         <span>↺</span><span>Coba Lagi</span>
       </button>
     </div>
@@ -4383,7 +4843,7 @@ function mapErrorHTML() {
       <span style="font-size:28px;">🌐</span>
       <span>Infografis belum tersedia hari ini</span>
       <span style="font-size:9px;opacity:0.5;">Coba lagi nanti atau buka radar real-time</span>
-      <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener" class="cta-btn primary">
+      <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">
       <span>📡</span> Buka Radar Real-Time
     </a>
     </div>`;
@@ -4397,7 +4857,19 @@ window.closeZoom = closeZoom;
 function escHtml(s) {
   return String(s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function safeUrl(url, fallback) {
+  const fallbackUrl = fallback || '#';
+  try {
+    const parsed = new URL(String(url || ''), window.location.href);
+    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+      return escHtml(parsed.href);
+    }
+  } catch (_) {}
+  return escHtml(fallbackUrl);
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -4746,6 +5218,17 @@ function goToLightboxSlide(index, opts) {
 }
 
 function openZoom(urlOrIndex) {
+  if (PERF_LITE_MODE) {
+    let target = '';
+    if (typeof urlOrIndex === 'string') {
+      target = urlOrIndex;
+    } else if (typeof urlOrIndex === 'number' && lightboxState.slides[urlOrIndex]) {
+      target = lightboxState.slides[urlOrIndex].src || lightboxState.slides[urlOrIndex].previewUrl || '';
+    }
+    if (target) window.open(target, '_blank', 'noopener,noreferrer');
+    return;
+  }
+
   if (!lightboxState.slides.length) {
     setLightboxSlides(buildSafeSlides(''), 0);
   }
@@ -4882,6 +5365,7 @@ function toggleLightboxZoom() {
 }
 
 function hydrateWarningGallery(alertLink, title, bodyText, lastBuild, fallbackUrl) {
+  if (PERF_LITE_MODE) return;
   const meta = parseAlertAssetMeta(alertLink);
   if (!meta) return;
 
@@ -4937,6 +5421,7 @@ slideshowBtnEl.addEventListener('click', toggleLightboxSlideshow);
 thumbsBtnEl.addEventListener('click', toggleLightboxThumbs);
 zoomPrevBtnEl.addEventListener('click', () => goToLightboxSlide(lightboxState.currentIndex - 1));
 zoomNextBtnEl.addEventListener('click', () => goToLightboxSlide(lightboxState.currentIndex + 1));
+document.getElementById('zoomCloseBtn')?.addEventListener('click', closeZoom);
 
 zoomThumbStripEl.addEventListener('click', function(e) {
   const btn = e.target.closest('[data-slide-index]');
@@ -5095,13 +5580,11 @@ window.addEventListener('resize', function() {
   applyLightboxTransform();
 });
 
-window.openZoom = openZoom;
-window.closeZoom = closeZoom;
-
 /* ─────────────────────────────────────────────────────────
           EASTER EGG — iOS 26 Liquid Glass Burst
   ───────────────────────────────────────────────────────── */
 function triggerLiquidGlass(el) {
+  if (PERF_LITE_MODE) return;
   const burst = document.getElementById('lgBurst');
   const rect = el.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
@@ -5176,10 +5659,33 @@ function addRipple(el, rect, cx, cy) {
 }
 
 // Attach easter egg to ALL future .cta-btn clicks
+// Also centralizes small dynamic actions so inline handlers are not needed.
 document.addEventListener('click', function(e) {
   const btn = e.target.closest('.cta-btn');
   if (btn) {
     triggerLiquidGlass(btn);
+  }
+
+  const reloadBtn = e.target.closest('[data-action="reload"]');
+  if (reloadBtn) {
+    e.preventDefault();
+    location.reload();
+    return;
+  }
+
+  const zoomTrigger = e.target.closest('.map-zoom-btn, .map-container');
+  if (zoomTrigger && document.getElementById('dc')?.contains(zoomTrigger)) {
+    e.preventDefault();
+    openZoom(zoomImgUrl || infografisUrl || buildInfografisUrl());
+  }
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const zoomTrigger = e.target.closest?.('.map-zoom-btn, .map-container');
+  if (zoomTrigger && document.getElementById('dc')?.contains(zoomTrigger)) {
+    e.preventDefault();
+    openZoom(zoomImgUrl || infografisUrl || buildInfografisUrl());
   }
 });
 
@@ -5263,23 +5769,71 @@ const glassModal = document.getElementById("thankyou-modal");
 const openModalTrigger = document.getElementById("trigger-credit-modal");
 const closeModalTrigger = document.getElementById("close-credit-modal");
 
+const focusableSelector = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+
+function isModalVisible(modal) {
+  return !!(modal && modal.style.display && modal.style.display !== 'none');
+}
+
+function syncModalScrollLock() {
+  const mapsOpen = typeof mapsModal !== 'undefined' && isModalVisible(mapsModal);
+  const creditOpen = isModalVisible(glassModal);
+  document.body.classList.toggle('modal-open', mapsOpen || creditOpen);
+}
+
+function trapModalFocus(event, modal) {
+  if (!modal || event.key !== 'Tab') return;
+  const focusable = Array.from(modal.querySelectorAll(focusableSelector))
+    .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+  if (!focusable.length) return;
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+function openCreditModal() {
+  if (!glassModal) return;
+  glassModal.style.display = "block";
+  glassModal.setAttribute("aria-hidden", "false");
+  syncModalScrollLock();
+  setTimeout(() => closeModalTrigger && closeModalTrigger.focus(), 0);
+}
+
+function closeCreditModal() {
+  if (!glassModal) return;
+  glassModal.style.display = "none";
+  glassModal.setAttribute("aria-hidden", "true");
+  syncModalScrollLock();
+  if (openModalTrigger) openModalTrigger.focus();
+}
+
 // Event Listener: Open the modal on footer activation
 // Triggers the modal's display when the designated footer area is clicked.
-openModalTrigger.addEventListener("click", function() {
-  glassModal.style.display = "block";
+openModalTrigger.addEventListener("click", openCreditModal);
+openModalTrigger.addEventListener("keydown", function(event) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    openCreditModal();
+  }
 });
 
 // Event Listener: Close the modal smoothly via cross click
 // Allows the user to dismiss the modal by clicking the (X) button.
-closeModalTrigger.addEventListener("click", function() {
-  glassModal.style.display = "none";
-});
+closeModalTrigger.addEventListener("click", closeCreditModal);
 
 // Event Listener: Close modal instantly if user hits the ambient blurred space outside the card
 // Provides an alternative dismissal method by clicking the blurred area outside the content box.
 window.addEventListener("click", function(event) {
   if (event.target === glassModal) {
-    glassModal.style.display = "none";
+    closeCreditModal();
   }
 });
 
@@ -5296,22 +5850,57 @@ if (glassModal && glassModal.parentNode !== document.body) {
   document.body.appendChild(glassModal);
 }
 
+function openMapsModal() {
+  if (!mapsModal) return;
+  mapsModal.style.display = "flex";
+  mapsModal.setAttribute("aria-hidden", "false");
+  syncModalScrollLock();
+  setTimeout(() => closeMapsBtn && closeMapsBtn.focus(), 0);
+}
+
+function closeMapsModal() {
+  if (!mapsModal) return;
+  mapsModal.style.display = "none";
+  mapsModal.setAttribute("aria-hidden", "true");
+  syncModalScrollLock();
+  if (openMapsBtn) openMapsBtn.focus();
+}
+
 // Event: Open maps menu (Switching from 'block' to 'flex' layout activation)
 openMapsBtn.addEventListener("click", function(e) {
   e.preventDefault();
-  mapsModal.style.display = "flex";
+  openMapsModal();
+});
+openMapsBtn.addEventListener("keydown", function(event) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    openMapsModal();
+  }
 });
 
 // Event: Dismiss sheet via close button activation
-closeMapsBtn.addEventListener("click", function() {
-  mapsModal.style.display = "none";
-});
+closeMapsBtn.addEventListener("click", closeMapsModal);
 
 // Event: Close sheet if user triggers the ambient blur space outside the modal box
 window.addEventListener("click", function(event) {
   if (event.target === mapsModal) {
-    mapsModal.style.display = "none";
+    closeMapsModal();
   }
+});
+
+window.addEventListener("keydown", function(event) {
+  if (event.key === "Tab") {
+    if (mapsModal && mapsModal.style.display === "flex") {
+      trapModalFocus(event, mapsModal);
+    } else if (glassModal && glassModal.style.display === "block") {
+      trapModalFocus(event, glassModal);
+    }
+    return;
+  }
+
+  if (event.key !== "Escape") return;
+  if (mapsModal && mapsModal.style.display === "flex") closeMapsModal();
+  if (glassModal && glassModal.style.display === "block") closeCreditModal();
 });
 
 /* ══════════════════════════════════════════
@@ -5324,7 +5913,7 @@ initSync(0);
 // Auto-refresh for every 5 minutes.
 setInterval(function() {
   initSync(0);
-}, 300000);
+}, PERF_LITE_MODE ? 600000 : 300000);
 
 /* ═════════════════════════════════════════════
 "KEMBALI KE ATAS" — Liquid-glass pill controller
@@ -5390,11 +5979,122 @@ setInterval(function() {
 })();
 
       </script>
+
+    <script nomodule>
+      /* LEGACY / LOW-END NOMODULE FALLBACK
+         ES5 only. Old browsers ignore type="module" and run this compact
+         renderer instead, so the page still loads on old Android/WebView. */
+      (function () {
+        try {
+          var html = document.documentElement;
+          if (html.className.indexOf('perf-lite') < 0) html.className += (html.className ? ' ' : '') + 'perf-lite';
+          if (html.className.indexOf('legacy-lite') < 0) html.className += ' legacy-lite';
+
+          var RSS = 'https://www.bmkg.go.id/alerts/nowcast/id/rss.xml';
+          var PROXIES = [
+            RSS,
+            'https://api.allorigins.win/raw?url=' + encodeURIComponent(RSS),
+            'https://corsproxy.io/?' + encodeURIComponent(RSS)
+          ];
+
+          function byId(id) { return document.getElementById(id); }
+          function esc(s) {
+            return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+          }
+          function setText(id, value) { var el = byId(id); if (el) el.innerHTML = esc(value); }
+          function setStatus(text, ok) {
+            setText('stxt', text);
+            var dot = byId('sdot');
+            if (dot) {
+              dot.style.background = ok ? '#9af5ea' : '#ff453a';
+              dot.style.boxShadow = 'none';
+            }
+          }
+          function nowHHMM() {
+            var d = new Date();
+            return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+          }
+          function renderBasic(title, desc, link, active) {
+            var dc = byId('dc');
+            var card = byId('mainCard');
+            if (!dc) return;
+            if (card) card.className = active ? 'glass-card w-glow' : 'glass-card';
+            setStatus(active ? ('LIVE: ' + nowHHMM()) : 'TIDAK ADA', true);
+            setText('refreshChipText', 'MODE RINGAN · DIPERBARUI ' + nowHHMM() + ' WIB');
+            if (!active) {
+              dc.innerHTML = '<div class="pills-row"><span class="wpill p-safe">✅ Kondisi Aman</span></div>' +
+                '<span class="warn-label">Status Wilayah</span>' +
+                '<div class="warn-title">Kondusif</div>' +
+                '<div class="desc-text desc-text--oneline">Tidak ada peringatan dini cuaca pada wilayah Kep. Riau saat ini.</div>' +
+                '<a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">📡 Buka Radar Real-Time</a>';
+              return;
+            }
+            dc.innerHTML = '<div class="pills-row"><span class="wpill p-warn">⚠️ Peringatan Aktif</span></div>' +
+              '<span class="warn-label">Mode Ringan · Peringatan Dini Aktif</span>' +
+              '<div class="warn-title">' + esc(title || 'Peringatan Cuaca') + '</div>' +
+              '<div class="desc-text">' + esc(desc || 'Ada peringatan dini cuaca untuk wilayah Kepulauan Riau. Mohon pantau informasi resmi BMKG.') + '</div>' +
+              '<a href="' + esc(link || 'https://nowcasting.bmkg.go.id') + '" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">🗺 Lihat Peta Radar</a>' +
+              '<a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn ghost" referrerpolicy="no-referrer">📡 Buka Nowcasting Real-Time</a>';
+          }
+          function renderError() {
+            setStatus('MODE RINGAN', false);
+            setText('refreshChipText', 'MODE RINGAN · DATA BELUM TERAMBIL');
+            var dc = byId('dc');
+            if (dc) dc.innerHTML = '<span class="warn-label">Mode Ringan</span>' +
+              '<div class="warn-title">Pantau BMKG</div>' +
+              '<div class="desc-text">Perangkat/browser ini terlalu lama memuat data otomatis. Silakan buka radar resmi BMKG melalui tombol berikut.</div>' +
+              '<a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">📡 Buka Nowcasting BMKG</a>';
+          }
+          function xhr(url, done) {
+            var x = new XMLHttpRequest();
+            var timer = setTimeout(function () { try { x.abort(); } catch (e) {} done(new Error('timeout')); }, 9000);
+            x.onreadystatechange = function () {
+              if (x.readyState !== 4) return;
+              clearTimeout(timer);
+              if (x.status >= 200 && x.status < 300 && x.responseText) done(null, x.responseText);
+              else done(new Error('http'));
+            };
+            try { x.open('GET', url, true); x.send(null); } catch (e) { clearTimeout(timer); done(e); }
+          }
+          function parseAndRender(xml) {
+            var doc = new DOMParser().parseFromString(xml, 'text/xml');
+            var items = doc.getElementsByTagName('item');
+            var found = null, i;
+            for (i = 0; i < items.length; i++) {
+              var tEl = items[i].getElementsByTagName('title')[0];
+              var title = tEl && (tEl.textContent || tEl.innerText || '');
+              if (title.indexOf('Kep. Riau') >= 0) {
+                var dEl = items[i].getElementsByTagName('description')[0];
+                var lEl = items[i].getElementsByTagName('link')[0];
+                found = {
+                  title: title,
+                  desc: dEl ? (dEl.textContent || dEl.innerText || '') : '',
+                  link: lEl ? (lEl.textContent || lEl.innerText || '') : 'https://nowcasting.bmkg.go.id'
+                };
+                break;
+              }
+            }
+            if (found) renderBasic(found.title, found.desc.replace(/<[^>]*>/g, ''), found.link, true);
+            else renderBasic('', '', '', false);
+          }
+          function tryFetch(i) {
+            if (i >= PROXIES.length) { renderError(); return; }
+            xhr(PROXIES[i], function (err, xml) {
+              if (err || !xml || xml.indexOf('<html') >= 0) { tryFetch(i + 1); return; }
+              try { parseAndRender(xml); } catch (e) { tryFetch(i + 1); }
+            });
+          }
+
+          setStatus('MODE RINGAN...', true);
+          setText('refreshChipText', 'MODE RINGAN · MENYINKRONKAN DATA...');
+          tryFetch(0);
+        } catch (e) {}
+      })();
+    </script>
     <script>
       // -------------------- End of application sentinel --------------------
       (function () { /* no-op end-of-applicaation sentinel */ })();
     </script>
-    </div> <!-- /.wrapper -->
-  
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a05e201eaddb8207',t:'MTc4MDQ4MzcwNg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0662ef2cc063bdd',t:'MTc4MDU2ODIwMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a066c10b4809a0bc',t:'MTc4MDU3NDE4NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    </div> <!-- /.wrapper --></body>
 </html>

@@ -1,22 +1,30 @@
 <div align="center">
 
-# 🌩️ Peringatan Dini Cuaca BMKG — Kepri
+# 🌩️ Peringatan Dini Cuaca BMKG — Kep. Riau
 
-![License](https://img.shields.io/badge/License-MIT-cba6f7?style=for-the-badge&labelColor=302D41)
-&nbsp;
-![Web](https://img.shields.io/badge/Platform-Web-89b4fa?style=for-the-badge&labelColor=1e2030)
-&nbsp;
-![BMKG](https://img.shields.io/badge/Data-BMKG-a6e3a1?style=for-the-badge&labelColor=1f3701)
-&nbsp;
-![GitHub Pages](https://img.shields.io/badge/Hosted-GitHub_Pages-f5c2e7?style=for-the-badge&labelColor=561f3a)
+#### Pantau peringatan dini cuaca Kepulauan Riau secara real-time. Data resmi BMKG, dibalut desain Liquid Glass ala iOS yang bersih dan ringan. 🌩️⚡
 
-### Pantau peringatan dini cuaca Kepulauan Riau, tampilan kaca ala iOS, data langsung dari BMKG. ⛅
+<br/>
 
-[Buka Website](https://peringatandinicuacakepri.github.io) • [Fitur](#-fitur) • [Tampilan](#-tampilan) • [Bantuan](#-bantuan) • [Sumber Data](#-sumber-data)
+[![Stars](https://img.shields.io/github/stars/peringatandinicuacakepri/peringatandinicuacakepri.github.io?style=for-the-badge&color=ffb5a0&labelColor=561f0f&logo=github)](https://github.com/peringatandinicuacakepri/peringatandinicuacakepri.github.io/stargazers)
+&nbsp;
+[![Last Commit](https://img.shields.io/github/last-commit/peringatandinicuacakepri/peringatandinicuacakepri.github.io?style=for-the-badge&color=b1d18a&labelColor=1f3701)](https://github.com/peringatandinicuacakepri/peringatandinicuacakepri.github.io/commits)
+&nbsp;
+[![License](https://img.shields.io/github/license/peringatandinicuacakepri/peringatandinicuacakepri.github.io?style=for-the-badge&color=cba6f7&labelColor=302D41)](LICENSE)
+
+[![BMKG](https://img.shields.io/badge/Data-BMKG-a6e3a1?style=for-the-badge&labelColor=1f3701)](https://nowcasting.bmkg.go.id)
+&nbsp;
+[![Web](https://img.shields.io/badge/Platform-Web-89b4fa?style=for-the-badge&labelColor=1e2030)](https://peringatandinicuacakepri.github.io)
+&nbsp;
+[![GitHub Pages](https://img.shields.io/badge/Hosted-GitHub_Pages-f5c2e7?style=for-the-badge&labelColor=561f3a&logo=github)](https://pages.github.com)
+
+<br/>
+
+### 🌐 [Buka Website](https://peringatandinicuacakepri.github.io) &nbsp;•&nbsp; [✨ Fitur](#-fitur) &nbsp;•&nbsp; [📸 Tampilan](#-tampilan) &nbsp;•&nbsp; [🛟 Bantuan](#-bantuan) &nbsp;•&nbsp; [📊 Sumber Data](#-sumber-data)
 
 </div>
 
----
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## 👋 Sekilas
 
@@ -24,7 +32,7 @@ Halaman ini saya bikin biar ngecek peringatan dini cuaca di **Kepulauan Riau** j
 
 Datanya ditarik otomatis dari layanan resmi BMKG (area pantauan **Stasiun Meteorologi Hang Nadim, Batam**), jadi yang muncul itu info terbaru. Halamannya juga sengaja dibikin ringan supaya tetap lancar di HP yang udah agak tua.
 
----
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## 📸 Tampilan
 
@@ -39,7 +47,7 @@ Datanya ditarik otomatis dari layanan resmi BMKG (area pantauan **Stasiun Meteor
 
 **🧭 Pilih peta favoritmu**
 
-![Buka di Peta](screenshots/03-buka-di-peta.png)
+<img src="screenshots/03-buka-di-peta.png" alt="Buka di Peta" width="520"/>
 
 <br/>
 
@@ -51,7 +59,7 @@ Datanya ditarik otomatis dari layanan resmi BMKG (area pantauan **Stasiun Meteor
 
 </div>
 
----
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## ✨ Fitur
 
@@ -62,12 +70,20 @@ Datanya ditarik otomatis dari layanan resmi BMKG (area pantauan **Stasiun Meteor
 - 🔍 **Infografis interaktif** — bisa di-zoom, geser pakai panah, tutup pakai ESC
 - 🧭 **Lihat lokasi di peta** — koordinat stasiun bisa langsung dibuka di aplikasi peta yang biasa kamu pakai
 - 📱 **Responsif** — rapi di HP mungil sampai monitor lebar
-- 🛡️ **Tahan banting** — punya jalur cadangan kalau sumber utama lagi error
 - ♿ **Ramah aksesibilitas** — dilengkapi atribut `aria` untuk pembaca layar
 
----
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## ⚙️ Cara Kerjanya
+
+```mermaid
+flowchart LR
+    A[📡 Feed RSS BMKG] --> B[⚙️ Diolah di browser]
+    B --> C[💎 Kartu peringatan + infografis]
+    C --> D[🔄 Cek ulang tiap beberapa menit]
+    A -. kalau gagal .-> E[🛡️ Proxy cadangan]
+    E --> B
+```
 
 1. Halaman menarik feed peringatan dini (RSS) dari BMKG.
 2. Isinya diolah jadi kartu peringatan rapi plus infografis wilayah terdampak.
@@ -76,7 +92,7 @@ Datanya ditarik otomatis dari layanan resmi BMKG (area pantauan **Stasiun Meteor
 
 Semuanya jalan di browser kamu (HTML, CSS, JavaScript biasa), tanpa server khusus.
 
----
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## 🛟 Bantuan
 
@@ -110,7 +126,7 @@ Buat perangkat berspesifikasi rendah. Mode ini mematikan efek berat seperti blur
 Butuh. Halaman ini ambil data cuaca secara langsung, jadi perlu koneksi internet buat nampilin info terbaru.
 </details>
 
----
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## 📊 Sumber Data
 
@@ -127,29 +143,36 @@ Koordinat stasiun yang dipakai ada di sekitar `1.119590, 104.113316` (Batam, Kep
 
 > ⚠️ Data cuaca milik **Badan Meteorologi, Klimatologi, dan Geofisika (BMKG)**. Halaman ini cuma menampilkan ulang, bukan sumber resmi.
 
----
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## 🛠️ Dibangun Dengan
 
+<div align="center">
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+&nbsp;
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+&nbsp;
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
+</div>
+
 HTML, CSS, dan JavaScript polos (tanpa framework), semuanya muat dalam satu berkas `index.html`, dan di-hosting gratis lewat GitHub Pages.
 
----
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## 🤝 Kontribusi
 
 Nemu bug atau punya ide? Mampir aja ke [Issues](https://github.com/peringatandinicuacakepri/peringatandinicuacakepri.github.io/issues). Masukan sekecil apa pun saya terima dengan senang hati. Kalau suka sama proyek ini, kasih ⭐ juga boleh banget, lumayan buat penyemangat.
 
----
-
 ## ✉️ Kontak
 
 Ada pertanyaan atau masukan? Silakan buka [Issues di GitHub](https://github.com/peringatandinicuacakepri/peringatandinicuacakepri.github.io/issues).
 
----
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 <div align="center">
 
-Dibuat oleh **Jeremi Totti Manalu** 
-(#-peringatan-dini-cuaca-bmkg--kepri)
+Dibuat dengan ❤️ oleh **Jeremi Totti Manalu**
 
 </div>

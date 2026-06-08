@@ -9,7 +9,7 @@
   <script>
     /* Early, ES5-compatible performance bootstrap.
        Adds .perf-lite before CSS is parsed when the device is likely low-end,
-       Data Saver is enabled, or the user chooses ?lite=1 / saved Lite Mode. */
+       Data Saver is enabled, or the user typed ?lite=1 / switch to Lite Mode. */
     (function () {
       try {
         var nav = window.navigator || {};
@@ -66,11 +66,11 @@
 
   <style>
 
-/* ============================================================
-   #  MAIN CSS  —  BMKG Kepri Weather Early-Warning
-   #  Organized per section: reset, layout, glass card,
-   #  "Open in Maps" modal (BMKG style), animations, etc.
-   ============================================================ */
+/* ===========================================================
+     #  MAIN CSS  —  BMKG Kepri Weather Early-Warning
+     #  Organized per section: reset, layout, glass card,
+     #  "Open in Maps" modal (BMKG style), animations, etc.
+   =========================================================== */
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -1259,8 +1259,7 @@ body.modal-open {
   margin-bottom: 13px;
 }
 
-/* Keeps "Banjir Lokal" + "Jarak Pandang Berkurang" glued side-by-side as one
-   wrapping unit so the row stays symmetric. */
+
 .pill-pair {
   display: inline-flex;
   flex-wrap: wrap;
@@ -1271,7 +1270,6 @@ body.modal-open {
 .wpill {
   display: inline-flex;
   align-items: center;
-  /* Golden-ratio scaled up (×φ ≈ 1.618)*/
   gap: 6px;
   font-size: 12.1px;
   font-weight: 700;
@@ -1412,10 +1410,6 @@ body.modal-open {
   margin-bottom: 16px;
 }
 
-/* Single-line variant — used by renderSafe() so the short status sentence
-   never wraps. Font shrinks gracefully on narrow phones via clamp(),
-   floor at 8px so it stays readable. text-align:center keeps it nicely
-   placed under the "Kondusif" headline. */
 .desc-text--oneline {
   font-size: clamp(8px, 2.4vw, 14px);
   white-space: nowrap;
@@ -1427,7 +1421,6 @@ body.modal-open {
   display: none;
 }
 
-/* Bolded affected region inside the description (after "khususnya di ...") */
 .desc-region {
   font-weight: 800;
   color: #ffffff;
@@ -1904,9 +1897,7 @@ body::after {
 .refresh-icon {
   font-size: 10px;
   display: inline-block;
-  /* needed so transform: rotate() works consistently */
   transform-origin: 50% 50%;
-  /* rotation pivot at the center of the icon */
   line-height: 1;
 }
 
@@ -1953,18 +1944,11 @@ body::after {
 .footer:hover {
   background: rgba(255, 255, 255, 0.18);
   color: #009DFF9D;
-  /* Cyan teal glow */
   transform: translateY(-2px);
-  /* Subtle physical lift on hover */
+  
 }
 
-
-
-
-
 /* --- TEAL LIQUID GLASS MODAL STYLING --- */
-
-
 .liquid-blob-1, .liquid-blob-2 {
   position: absolute;
   width: 450px;
@@ -2032,8 +2016,7 @@ body::after {
 }
 
 /* Credits list — see "CREDITS LIST & CLICKABLE LINK STYLING" below */
-
-/* Fluid Keyframes Animations */
+              /* Fluid Keyframes Animations */
 @keyframes iosFadeIn {
   from {
     opacity: 0;
@@ -2067,11 +2050,8 @@ body::after {
 }
 
 /* --- MAPS SELECTOR MODAL & ACTION SHEET STYLING ---
-   Style: mimics the BMKG website design (Fancybox lightbox + light/sky-blue theme).
-   Light-blue accent, strong blur behind, clean white sheet with
-   rounded corners, signature BMKG-colored icons. */
-
-/* ── LIQUID BLUR OVERLAY ── */
+   Style: mimics the BMKG website design (Fancybox lightbox + light/sky-blue theme).*/
+          /* ── LIQUID BLUR OVERLAY ── */
 .maps-modal-overlay, .credit-modal {
   display: none;
   position: fixed;
@@ -2130,7 +2110,7 @@ body::after {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* ── LIQUID GLASS iOS 26 ACTION SHEET ──
+  /* ── LIQUID GLASS iOS 26 ACTION SHEET ──
    Translucent dark glass panel, frosted blur, soft inner highlights,
    floating depth shadow and a subtle cyan ambient glow. */
 .maps-action-sheet {
@@ -2179,8 +2159,7 @@ body::after {
 .maps-modal-header {
   position: relative;
   text-align: center;
-  /* Horizontal padding reduced from 24px → 16px to give the single-line
-     subtitle more breathing room on narrow phones. */
+  flex: 0 0 auto;
   padding: 30px 16px 24px;
   background:
     radial-gradient(120% 120% at 50% -20%, rgba(0, 229, 255, 0.22) 0%, rgba(0, 229, 255, 0) 55%),
@@ -2240,15 +2219,14 @@ body::after {
 }
 
 .maps-modal-header p {
-  margin: 0;
-  /* Single-line subtitle — fits any viewport down to ~320px without
-     ellipsis. Font scales smoothly via clamp(); slightly tighter
-     tracking lets the 44-char sentence fit on narrow phones. */
+  margin: 0 auto;
   font-size: clamp(9px, 2.6vw, 12.5px);
   font-weight: 500;
   color: rgba(255, 255, 255, 0.72);
   letter-spacing: -0.005em;
   white-space: nowrap;
+  text-align: center;
+  max-width: 100%;
   position: relative;
   z-index: 1;
 }
@@ -2593,7 +2571,7 @@ body::after {
         radial-gradient(120% 100% at 0% 0%, rgba(154,245,234,0.12), transparent 36%),
         radial-gradient(88% 100% at 100% 0%, rgba(113,231,255,0.08), transparent 40%),
         linear-gradient(145deg, rgba(31, 67, 83, 0.86), rgba(19, 39, 53, 0.9));
-      --title-gradient: linear-gradient(180deg, var(--brand-ice) 0%, var(--brand-mist) 36%, var(--brand-aqua) 64%, var(--brand-cyan) 86%, var(--brand-sky) 100%);
+      --title-gradient: linear-gradient(to bottom right, var(--brand-ice) 0%, var(--brand-mist) 40%, var(--brand-aqua) 50%, var(--brand-cyan) 60%, var(--brand-sky) 100%);
       --accent-gradient: linear-gradient(135deg, var(--brand-ice) 0%, var(--brand-mist) 26%, var(--brand-aqua) 58%, var(--brand-cyan) 82%, var(--brand-sky) 100%);
       --capsule-gradient:
         linear-gradient(180deg, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.035) 100%),
@@ -2932,6 +2910,7 @@ body::after {
       background: var(--title-gradient) !important;
       -webkit-background-clip: text !important;
       background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
       color: transparent !important;
       text-shadow: none !important;
       filter: drop-shadow(0 8px 20px rgba(73,199,201,0.08));
@@ -2956,9 +2935,6 @@ body::after {
       color: var(--brand-text-soft) !important;
     }
 
-    /* Keep the single-line variant from being overridden to 12.9px:
-       on narrow screens we need it to shrink so the sentence fits
-       on one line without ellipsis. */
     .desc-text--oneline {
       font-size: clamp(8px, 2.4vw, 14px) !important;
       line-height: 1.5 !important;
@@ -3158,9 +3134,8 @@ body::after {
     }
 
     .maps-modal-header {
-      /* Horizontal padding tightened (22 → 14) so the single-line
-         subtitle fits without ellipsis on narrow phones. */
       padding: 22px 14px 14px !important;
+      flex: 0 0 auto !important;
       text-align: center !important;
       background:
         linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025)),
@@ -3183,8 +3158,10 @@ body::after {
     .maps-modal-header p {
       color: var(--brand-text-soft) !important;
       font-size: 13.2px !important;
-      max-width: 28ch;
+      max-width: 100%;
       margin: 0 auto !important;
+      text-align: center !important;
+      white-space: nowrap !important;
     }
 
     .maps-options-grid {
@@ -3346,8 +3323,7 @@ body::after {
 
     /* ============================================================
        # FULL MODE PREMIUM POLISH — Liquid Glass iOS 26 Feel
-       # Only for capable devices. perf-lite overrides below remove
-       # these effects on low-end phones.
+       # Only for capable devices.
        ============================================================ */
     html:not(.perf-lite) .app {
       filter: drop-shadow(0 34px 70px rgba(0,0,0,0.14));
@@ -3449,8 +3425,7 @@ body::after {
       }
     }
 
-    /* Full-mode luxury layer: extra depth, aurora, specular glass, and
-       refined micro-interactions. All selectors are guarded with
+    /* Full-mode luxury layer All selectors are guarded with
        html:not(.perf-lite), so low-end mode keeps the simplified render path. */
     @keyframes premiumAuroraDrift {
       0% { background-position: 0% 0%, 100% 0%, 50% 0%, 0% 100%, 50% 50%; }
@@ -3662,8 +3637,6 @@ body::after {
     /* ===============================================================
        # LOW-END / PERF-LITE OVERRIDES
        # Aggressive rendering simplification for older or weak phones.
-       # Activated automatically by the early bootstrap or manually by
-       # the floating "Mode Ringan" button / ?lite=1.
        =============================================================== */
     .lite-toggle {
       position: fixed;
@@ -3802,6 +3775,11 @@ body::after {
       filter: none !important;
     }
 
+    /* ──────────────────────────────────────────────────────────────
+           LITE-MODE "FAUX LIQUID GLASS" (iOS 26 style) ()
+           No backdrop-filter, no animations, no filters — only cheap
+           layered gradients + inset highlight shadows. 
+       ────────────────────────────────────────────────────────────── */
     html.perf-lite .hdr,
     html.perf-lite #mainCard,
     html.perf-lite .glass-card,
@@ -3822,9 +3800,18 @@ body::after {
       -webkit-backdrop-filter: none !important;
       backdrop-filter: none !important;
       filter: none !important;
-      background: #102331 !important;
-      border-color: rgba(154,245,234,0.18) !important;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.22) !important;
+      /* Mimic Full mode: Full blurs a teal gradient bg behind a faint white overlay (~0.08). It also stays light on low-end GPUs while reading as the same luminous glass. */
+      background:
+        radial-gradient(130% 90% at 50% -14%, rgba(190,240,245,0.13) 0%, rgba(190,240,245,0) 56%),
+        linear-gradient(180deg, rgba(255,255,255,0.085) 0%, rgba(255,255,255,0.03) 44%, rgba(255,255,255,0.012) 100%),
+        linear-gradient(160deg, #1a3e4b 0%, #143140 60%, #0f2835 100%) !important;
+      border-color: rgba(255,255,255,0.13) !important;
+      border-top-color: rgba(255,255,255,0.28) !important;
+      /* Inset top sheen + bottom shade = the glass edge; soft drop shadow. */
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        inset 0 -1px 0 rgba(0,0,0,0.28),
+        0 6px 18px rgba(0,0,0,0.30) !important;
       contain: layout paint style !important;
     }
 
@@ -3848,6 +3835,42 @@ body::after {
       content: none !important;
     }
 
+    /* Re-enable the bright top-gloss line + inner specular on the big panels. */
+    html.perf-lite .glass-card::before,
+    html.perf-lite #mainCard::before,
+    html.perf-lite .hdr::before,
+    html.perf-lite .footer::before,
+    html.perf-lite .modal-box::before,
+    html.perf-lite .maps-action-sheet::before {
+      display: block !important;
+      content: "" !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 6% !important;
+      right: 6% !important;
+      height: 1.5px !important;
+      filter: none !important;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.42) 35%, rgba(0,229,255,0.5) 60%, rgba(255,255,255,0.22) 82%, transparent 100%) !important;
+      pointer-events: none !important;
+      z-index: 4 !important;
+    }
+
+    html.perf-lite .glass-card::after,
+    html.perf-lite #mainCard::after,
+    html.perf-lite .hdr::after,
+    html.perf-lite .modal-box::after {
+      display: block !important;
+      content: "" !important;
+      position: absolute !important;
+      inset: 0 !important;
+      filter: none !important;
+      background:
+        linear-gradient(150deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 45%),
+        radial-gradient(ellipse at 85% -10%, rgba(0,229,255,0.10) 0%, rgba(0,229,255,0) 62%) !important;
+      pointer-events: none !important;
+      z-index: 0 !important;
+    }
+
     html.perf-lite #mainCard,
     html.perf-lite .glass-card {
       padding: 12px !important;
@@ -3864,10 +3887,12 @@ body::after {
     html.perf-lite .warn-title,
     html.perf-lite #dc .warn-title,
     html.perf-lite #dc .warn-title[style] {
-      color: #9af5ea !important;
-      background: none !important;
-      -webkit-background-clip: initial !important;
-      background-clip: initial !important;
+      background: var(--title-gradient) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      color: transparent !important;
+      text-shadow: none !important;
       filter: none !important;
       font-size: clamp(28px, 8vw, 38px) !important;
       line-height: 1 !important;
@@ -3896,6 +3921,18 @@ body::after {
       bottom: 58px !important;
       padding: 9px 12px !important;
       min-height: 36px !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      background:
+        radial-gradient(130% 95% at 50% -18%, rgba(0,229,255,0.16) 0%, rgba(0,229,255,0) 62%),
+        linear-gradient(180deg, rgba(255,255,255,0.085), rgba(255,255,255,0.025)),
+        linear-gradient(160deg, #143140, #0f2835) !important;
+      border-color: rgba(255,255,255,0.15) !important;
+      border-top-color: rgba(255,255,255,0.28) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.20),
+        inset 0 -1px 0 rgba(0,0,0,0.26),
+        0 5px 16px rgba(0,0,0,0.30) !important;
     }
 
     html.perf-lite .lite-toggle {
@@ -3921,6 +3958,79 @@ body::after {
       box-shadow: 0 0 8px rgba(154,245,234,0.28) !important;
     }
 
+    /* ── Faux-glass for the interactive bits (map rows / icons / buttons) */
+    html.perf-lite .map-option-item,
+    html.perf-lite .maps-cancel-btn {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.035) 100%),
+        rgba(24,48,62,0.85) !important;
+      border-color: rgba(255,255,255,0.14) !important;
+      border-top-color: rgba(255,255,255,0.30) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        inset 0 -1px 0 rgba(0,0,0,0.22),
+        0 2px 8px rgba(0,0,0,0.20) !important;
+    }
+
+    /* Hover lift on rows*/
+    html.perf-lite .map-option-item:hover {
+      background:
+        linear-gradient(180deg, rgba(0,229,255,0.14) 0%, rgba(0,229,255,0.04) 100%),
+        rgba(24,48,62,0.9) !important;
+      border-color: rgba(0,229,255,0.34) !important;
+    }
+    html.perf-lite .map-option-item:hover span { color: #fff !important; }
+    html.perf-lite .maps-cancel-btn:hover {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.05) 100%),
+        rgba(24,48,62,0.9) !important;
+      border-color: rgba(255,255,255,0.26) !important;
+      color: #fff !important;
+    }
+
+    /* Pressing a row gives an instant cyan glass tint. */
+    html.perf-lite .map-option-item:active {
+      background:
+        linear-gradient(180deg, rgba(0,229,255,0.20) 0%, rgba(0,229,255,0.06) 100%),
+        rgba(16,35,49,0.92) !important;
+      border-color: rgba(0,229,255,0.40) !important;
+    }
+
+    html.perf-lite .map-icon-wrapper {
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,0.45),
+        inset 0 -1px 0 rgba(0,0,0,0.22),
+        0 3px 9px rgba(0,0,0,0.30) !important;
+    }
+
+    html.perf-lite .map-icon-wrapper::before {
+      display: block !important;
+      content: "" !important;
+      position: absolute !important;
+      top: 0 !important; left: 0 !important; right: 0 !important;
+      height: 50% !important;
+      background: linear-gradient(180deg, rgba(255,255,255,0.40), rgba(255,255,255,0)) !important;
+      pointer-events: none !important;
+    }
+
+    /* The Mode-Ringan toggle pill itself also gets the faux-glass treatment. */
+    html.perf-lite .lite-toggle {
+      background:
+        radial-gradient(130% 95% at 50% -18%, rgba(154,245,234,0.12) 0%, rgba(154,245,234,0) 62%),
+        linear-gradient(180deg, rgba(255,255,255,0.085), rgba(255,255,255,0.025)),
+        linear-gradient(160deg, #143140, #0f2835) !important;
+      border-color: rgba(255,255,255,0.15) !important;
+      border-top-color: rgba(255,255,255,0.28) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.20),
+        inset 0 -1px 0 rgba(0,0,0,0.26),
+        0 5px 16px rgba(0,0,0,0.30) !important;
+    }
+
     html.legacy-lite .zoom-modal,
     html.legacy-lite .back-to-top {
       display: none !important;
@@ -3928,9 +4038,7 @@ body::after {
 
 
     /* ============================================================
-       #  "KEMBALI KE ATAS" — Liquid-Glass Pill 
-       #  Palette: --accent cyan + rgba(0,229,255) glow, white rim,
-       #  inset highlight, blur+saturate backdrop. Same recipe as
+       #  "KEMBALI KE ATAS" — Liquid-Glass Pill. Same recipe as
        #  the rest of the UI (glass-card / chips).
        ============================================================ */
     .back-to-top {
@@ -4351,22 +4459,17 @@ body::after {
     </div>
 
     <script type="module">
-/* ============================================================
-   #  MAIN JS  —  Fetch BMKG RSS + render the warning card
-   #  - initSync()        : entry point + 5-minute auto-polling
-   #  - renderLoading/Warning/Safe/Error: view states
-   #  - Lightbox / gallery: infographic zoom modal
-   #  - startSpin/stopSpin: ↻ icon animation control
-   ============================================================ */
-/* ══════════════════════════════════════════
-   CONFIG
-══════════════════════════════════════════ */
+/* ===============================================================
+   #    MAIN JS  —  Fetch BMKG RSS + render the warning card
+   #    - initSync()        : entry point + 5-minute auto-polling
+   #    - renderLoading/Warning/Safe/Error: view states
+   #    - Lightbox / gallery: infographic zoom modal
+   #    - startSpin/stopSpin: ↻ icon animation control
+   =============================================================== */
 // Variable Examples
 const PERF_LITE_MODE = document.documentElement.classList.contains('perf-lite');
 const RSS = 'https://www.bmkg.go.id/alerts/nowcast/id/rss.xml';
 const INFOGRAFIS = buildInfografisUrl();
-
-/* Fallback removed as requested */
 const PROXIES = [{
     url: '',
     json: false,
@@ -4874,7 +4977,7 @@ function safeUrl(url, fallback) {
 
 /* ─────────────────────────────────────────────────────────
      ZOOM MODAL / BMKG-STYLE LIGHTBOX
-  ───────────────────────────────────────────────────────── */
+  ────────────────────────────────────────────────────────── */
 const lightboxState = {
   slides: [],
   currentIndex: 0,
@@ -5922,9 +6025,6 @@ setInterval(function() {
   var btn = document.getElementById("backToTopBtn");
   if (!btn) return;
 
-  /* ---- Visibility: IntersectionObserver on a 1px sentinel ----
-     Cheaper than scroll handlers — browser fires only when the
-     top-of-page sentinel enters/leaves viewport. */
   var sentinel = document.createElement("div");
   sentinel.setAttribute("aria-hidden", "true");
   sentinel.style.cssText =
@@ -5977,7 +6077,6 @@ setInterval(function() {
 
   btn.addEventListener("click", scrollToTop);
 })();
-
       </script>
 
     <script nomodule>
@@ -5996,7 +6095,6 @@ setInterval(function() {
             'https://api.allorigins.win/raw?url=' + encodeURIComponent(RSS),
             'https://corsproxy.io/?' + encodeURIComponent(RSS)
           ];
-
           function byId(id) { return document.getElementById(id); }
           function esc(s) {
             return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -6096,5 +6194,7 @@ setInterval(function() {
       // -------------------- End of application sentinel --------------------
       (function () { /* no-op end-of-applicaation sentinel */ })();
     </script>
-    </div> <!-- /.wrapper --></body>
+    </div> <!-- /.wrapper --><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+  </body>
+
 </html>

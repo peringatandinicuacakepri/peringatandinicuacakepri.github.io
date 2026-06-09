@@ -42,28 +42,49 @@
 
         document.addEventListener('DOMContentLoaded', function () {
           var btn = document.getElementById('liteModeBtn');
-          if (!btn) return;
-          var isLite = document.documentElement.className.indexOf('perf-lite') >= 0;
-          btn.setAttribute('aria-pressed', isLite ? 'true' : 'false');
-          btn.setAttribute('title', isLite ? 'Mode ringan aktif — klik untuk kembali ke mode penuh' : 'Mode ringan nonaktif — klik untuk mode HP low-end');
-          btn.innerHTML = '<span class="lite-toggle-dot" aria-hidden="true"></span><span class="lite-toggle-text">' + (isLite ? 'Mode Ringan: Aktif' : 'Mode Ringan: Nonaktif') + '</span>';
-          if (isLite) {
-            if (btn.className.indexOf('is-active') < 0) btn.className += ' is-active';
-          } else {
-            btn.className = btn.className.replace(/\bis-active\b/g, '').replace(/\s{2,}/g, ' ').replace(/^\s+|\s+$/g, '');
+          if (btn) {
+            var isLite = document.documentElement.className.indexOf('perf-lite') >= 0;
+            btn.setAttribute('aria-pressed', isLite ? 'true' : 'false');
+            btn.setAttribute('title', isLite ? 'Mode ringan aktif — klik untuk kembali ke mode penuh' : 'Mode ringan nonaktif — klik untuk mode HP low-end');
+            btn.innerHTML = '<span class="lite-toggle-dot" aria-hidden="true"></span><span class="lite-toggle-text">' + (isLite ? 'Mode Ringan: Aktif' : 'Mode Ringan: Nonaktif') + '</span>';
+            if (isLite) {
+              if (btn.className.indexOf('is-active') < 0) btn.className += ' is-active';
+            } else {
+              btn.className = btn.className.replace(/\bis-active\b/g, '').replace(/\s{2,}/g, ' ').replace(/^\s+|\s+$/g, '');
+            }
+            btn.onclick = function () { window.bmkgSetPerfMode(isLite ? 'full' : 'lite'); };
           }
-          btn.onclick = function () { window.bmkgSetPerfMode(isLite ? 'full' : 'lite'); };
         });
       } catch (_) {}
     })();
   </script>
 
   <title>
-    Peringatan Dini Cuaca BMKG — Kepri
+    Peringatan Dini Cuaca BMKG — Kep. Riau
   </title>
+  <meta name="description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://peringatandinicuacakepri.github.io/" />
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Peringatan Dini Cuaca BMKG — Kepri" />
+  <meta property="og:description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
+  <meta property="og:image" content="https://peringatandinicuacakepri.github.io/og-image.png" />
+  <meta property="og:type" content="website" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <!-- Responsive & Mobile Web App Capabilities -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <!-- Preloading and Preconnecting -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800;900&display=swap" as="style" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800;900&display=swap" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🌤️</text></svg>" />
   <link rel="dns-prefetch" href="https://www.bmkg.go.id" />
   <link rel="dns-prefetch" href="https://nowcasting.bmkg.go.id" />
-
   <style>
 
 /* ===========================================================
@@ -78,6 +99,29 @@
   padding: 0;
 }
 
+/* --- Skip to Main Content Link --- */
+.skip-to-main {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: #009DFF;
+  color: #fff !important;
+  padding: 12px 20px;
+  z-index: 10000;
+  text-decoration: none;
+  font-weight: 800;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 157, 255, 0.4);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: top 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.skip-to-main:focus-visible, .skip-to-main:focus {
+  top: 16px;
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
 :root {
   --accent: #009DFF9D;
   --danger: #ff453a;
@@ -86,28 +130,24 @@
   --warn: #fbbf24;
   --purple: #a78bfa;
   --text-primary: #f0fbfa;
-  --text-tertiary: rgba(186, 214, 216, 0.62);
+  --text-tertiary: rgba(195, 218, 220, 0.85);
   --fx: 50%;
   --fy: 50%;
 
-  /* Golden Ratio (by Euclid, Pythagoras, Phidias, Leonardo Fibonacci, & Martin Ohm) Typography — base 14px × φ 1.618 */
-  --fs-xs: 8.65px;
-  /* 14 ÷ φ */
-  --fs-sm: 14px;
-  --fs-base: 14px;
-  --fs-md: 22.65px;
-  /* 14 × φ */
-  --fs-lg: 36.65px;
-  /* 22.65 × φ */
-  --fs-xl: 59.3px;
-  /* 36.65 × φ */
+  /* Modern Standard Typography Scales for high legibility */
+  --fs-xs: 11px;
+  --fs-sm: 13px;
+  --fs-base: 15px;
+  --fs-md: 18px;
+  --fs-lg: 28px;
+  --fs-xl: 42px;
   --r-main: 40px;
   --r-pill: 100px;
 }
 
 html, body {
   min-height: 100vh;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: #000;
   color: #fff;
   overflow-x: hidden;
@@ -2000,7 +2040,7 @@ body::after {
   transform: scale(1.08);
 }
 
-.modal-box h3 {
+.modal-box h2 {
   margin: 0 0 8px;
   font-size: 27px;
   font-weight: 800;
@@ -2062,7 +2102,7 @@ body::after {
   backdrop-filter: blur(24px) saturate(160%);
   -webkit-backdrop-filter: blur(24px) saturate(160%);
   isolation: isolate;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   animation: iosFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   /* Controlled via JS switching to 'flex' */
   flex-direction: column;
@@ -2077,7 +2117,7 @@ body::after {
   background-color: rgba(4, 10, 24, 0.65);
   backdrop-filter: blur(30px) saturate(160%);
   -webkit-backdrop-filter: blur(30px) saturate(160%);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   animation: iosFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -2107,7 +2147,7 @@ body::after {
 }
 
 .modal-box, .modal-box p, .modal-box span, .modal-box div {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
   /* ── LIQUID GLASS iOS 26 ACTION SHEET ──
@@ -2207,7 +2247,7 @@ body::after {
   z-index: 1;
 }
 
-.maps-modal-header h4 {
+.maps-modal-header h2 {
   margin: 0 0 5px;
   font-size: 20px;
   font-weight: 800;
@@ -2749,8 +2789,8 @@ body::after {
     .credit-link strong,
     .zoom-caption-meta,
     .zoom-generated-summary-badge,
-    .maps-modal-header h4,
-    .modal-box h3 {
+    .maps-modal-header h2,
+    .modal-box h2 {
       color: var(--brand-aqua) !important;
     }
 
@@ -3095,8 +3135,8 @@ body::after {
       border-radius: 34px !important;
     }
 
-    .modal-box h3,
-    .maps-modal-header h4 {
+    .modal-box h2,
+    .maps-modal-header h2 {
       background: var(--title-gradient) !important;
       -webkit-background-clip: text !important;
       background-clip: text !important;
@@ -3104,7 +3144,7 @@ body::after {
       text-shadow: none !important;
     }
 
-    .modal-box h3 {
+    .modal-box h2 {
       font-size: clamp(28px, 4vw, 42px) !important;
       line-height: 0.98 !important;
       letter-spacing: -0.05em !important;
@@ -3148,7 +3188,7 @@ body::after {
       display: none !important;
     }
 
-    .maps-modal-header h4 {
+    .maps-modal-header h2 {
       font-size: clamp(24px, 4vw, 36px) !important;
       letter-spacing: -0.05em !important;
       line-height: 0.98 !important;
@@ -3366,8 +3406,8 @@ body::after {
 
     html:not(.perf-lite) .hdr-title,
     html:not(.perf-lite) .warn-title,
-    html:not(.perf-lite) .maps-modal-header h4,
-    html:not(.perf-lite) .modal-box h3 {
+    html:not(.perf-lite) .maps-modal-header h2,
+    html:not(.perf-lite) .modal-box h2 {
       letter-spacing: -0.055em;
       text-wrap: balance;
     }
@@ -3659,7 +3699,7 @@ body::after {
       -webkit-backdrop-filter: blur(22px) saturate(165%);
       backdrop-filter: blur(22px) saturate(165%);
       color: rgba(240,251,250,0.82);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       font-size: 12px;
       font-weight: 800;
       letter-spacing: 0.01em;
@@ -3757,10 +3797,6 @@ body::after {
     html.perf-lite .liquid-blob-1,
     html.perf-lite .liquid-blob-2,
     html.perf-lite .map-overlay,
-    html.perf-lite .zoom-thumbs,
-    html.perf-lite .zoom-help,
-    html.perf-lite .zoom-nav,
-    html.perf-lite .zoom-toolbar,
     html.perf-lite .back-to-top svg {
       display: none !important;
     }
@@ -3912,8 +3948,15 @@ body::after {
       transform: none !important;
     }
 
+    /* Enable Zoom Modal in Lite Mode as well */
     html.perf-lite .zoom-modal.active {
-      display: none !important;
+      display: flex !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    html.perf-lite .zoom-slide {
+      opacity: 1 !important;
+      transform: none !important;
     }
 
     html.perf-lite .back-to-top {
@@ -4063,7 +4106,7 @@ body::after {
       backdrop-filter: blur(22px) saturate(165%);
 
       color: #eaf6ff;
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       font-size: 14px;
       font-weight: 600;
       line-height: 1;
@@ -4143,9 +4186,11 @@ body::after {
 
 <body>
 
+<a href="#mainCard" class="skip-to-main">Lompati ke konten utama (Skip to main content)</a>
+
 <noscript>
-  <div style="padding:16px;color:#fff;background:#0b1923;text-align:center;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;">
-    Aplikasi ini membutuhkan JavaScript untuk menampilkan data peringatan dini BMKG. Mohon aktifkan JavaScript pada browser Anda.
+  <div style="padding:16px;color:#fff;background:#0b1923;text-align:center;font-family:'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;line-height:1.5;">
+    Aplikasi ini membutuhkan JavaScript untuk menampilkan data peringatan dini cuaca dari BMKG. Mohon aktifkan JavaScript pada browser Anda.
   </div>
 </noscript>
 
@@ -4275,7 +4320,7 @@ body::after {
     <div class="wrapper">
     <div class="app">
       <!-- Header: month/year · title · status pill -->
-        <div class="hdr">
+        <header class="hdr">
         <div class="hdr-left">
           <span class="hdr-month" id="monthYear"> 2026
           </span>
@@ -4295,9 +4340,9 @@ body::after {
             <span class="stxt" id="stxt" aria-live="polite">MEMULAI...</span>
           </div>
         </div>
-      </div>
+      </header>
       <!-- Main glass card — content is rendered by JS inside #dc -->
-        <div class="glass-card" id="mainCard">
+        <main class="glass-card" id="mainCard" tabindex="-1">
         <div class="card-orb">
         </div>
         <div class="sta-banner">
@@ -4310,7 +4355,7 @@ body::after {
             </div>
             <div class="sta-sub">
               Batam, Kepulauan Riau ·
-              <span id="trigger-maps-menu" class="maps-coordinates-trigger" role="button" tabindex="0" aria-haspopup="dialog"> 01°07' LU, 104°06' BT
+              <span id="trigger-maps-menu" class="maps-coordinates-trigger" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Koordinat stasiun. Klik untuk membuka menu pilihan navigasi peta."> 01°07' LU, 104°06' BT
               </span>
             </div>
           </div>
@@ -4325,9 +4370,9 @@ body::after {
           <div id="maps-selector-modal" class="maps-modal-overlay" aria-hidden="true">
           <div class="maps-action-sheet" role="dialog" aria-modal="true" aria-labelledby="maps-modal-title" aria-describedby="maps-modal-desc">
             <div class="maps-modal-header">
-              <h4 id="maps-modal-title">
+              <h2 id="maps-modal-title">
                 Buka di Peta
-              </h4>
+              </h2>
               <p id="maps-modal-desc">
                 Pilih platform navigasi yang ingin Anda gunakan
               </p>
@@ -4376,7 +4421,7 @@ body::after {
                 </span>
               </a>
             </div>
-            <button id="close-maps-menu" class="maps-cancel-btn" type="button">
+            <button id="close-maps-menu" class="maps-cancel-btn" type="button" aria-label="Tutup menu navigasi peta">
               Tutup
             </button>
           </div>
@@ -4397,8 +4442,8 @@ body::after {
               Sinkronisasi...
             </div>
            </div>
-         </div>
-        </div>
+          </div>
+         </main>
 
       <div style="display:flex;align-items:center;justify-content:center;">
         <div class="refresh-chip">
@@ -4410,9 +4455,9 @@ body::after {
       </div>
 
       <!-- Credit footer — click to open the "Data Providers" modal -->
-        <div class="footer" id="trigger-credit-modal" role="button" tabindex="0" aria-haspopup="dialog">
+        <footer class="footer" id="trigger-credit-modal" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Lihat detail kredit penyedia data">
         © Badan Meteorologi, Klimatologi, dan Geofisika Indonesia
-      </div>
+      </footer>
 
       <!-- Data-provider credit modal -->
         <div id="thankyou-modal" class="credit-modal" aria-hidden="true">
@@ -4422,9 +4467,9 @@ body::after {
         </div>
         <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="credit-modal-title" aria-describedby="credit-modal-desc">
           <button type="button" class="close-modal-btn" id="close-credit-modal" aria-label="Tutup modal kredit">✕</button>
-          <h3 id="credit-modal-title">
+          <h2 id="credit-modal-title">
             Kredit penyedia data
-          </h3>
+          </h2>
           <p id="credit-modal-desc">
             Data pada situs ini diambil & diolah dari layanan data beserta platform resmi sebagai berikut:
           </p>
@@ -4446,7 +4491,7 @@ body::after {
             <li>
               <a href="https://allorigins.win" target="_blank" rel="noopener noreferrer" class="credit-link" referrerpolicy="no-referrer"> <strong> Public Data Proxies
                 </strong>
-                <span> Layanan proxy CORS gratis untuk mengambil data dari berbagai domain atau situs web langsung melalui kode JavaScript frontend tanpa terhambat batasan keamanan browser.
+                <span> Layanan proxy CORS gratis untuk mengambil data dari berbagai situs web langsung melalui kode JavaScript tanpa terhambat batasan keamanan browser.
                 </span>
               </a>
             </li>
@@ -4577,9 +4622,7 @@ function translateDate(dateStr) {
     Januari: 0, Februari: 1, Maret: 2, April: 3, Juni: 5,
     Juli: 6, Agustus: 7, September: 8, Oktober: 9, November: 10, Desember: 11
   };
-
   let parsed = new Date(raw);
-
   // Robust parser for RSS-like strings, e.g.:
   // "Sun, 17 May 2026 04:15:37 +0000" or "17 Mei 2026 04:15:37 +0000".
   const match = raw.match(/(?:[A-Za-z]+,\s*)?(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(?:([+-])(\d{2})(\d{2})|GMT|UTC|Z)?/i);
@@ -4592,7 +4635,6 @@ function translateDate(dateStr) {
     const hour = Number(match[4]);
     const minute = Number(match[5]);
     const second = Number(match[6] || 0);
-
     if (Number.isInteger(month)) {
       let utcMs = Date.UTC(year, month, day, hour, minute, second);
       if (match[7] && match[8] && match[9]) {
@@ -4605,7 +4647,6 @@ function translateDate(dateStr) {
   }
 
   if (Number.isNaN(parsed.getTime())) return raw;
-
   const parts = new Intl.DateTimeFormat('id-ID', {
     timeZone: 'Asia/Jakarta',
     weekday: 'long',
@@ -4621,7 +4662,6 @@ function translateDate(dateStr) {
     if (part.type !== 'literal') acc[part.type] = part.value;
     return acc;
   }, {});
-
   return `${parts.weekday}, ${parts.day} ${parts.month} ${parts.year} ${parts.hour}:${parts.minute}:${parts.second} WIB`;
 }
 
@@ -4658,14 +4698,12 @@ function buildPills(raw) {
     lo.includes('hujan dengan intensitas sedang hingga lebat') ||
     lo.includes('intensitas sedang hingga lebat') ||
     lo.includes('sedang hingga lebat');
-
   if (hasStorm) {
     out += pill('p-storm', '⛈️ Hujan Lebat & Petir');
   } else {
     if (hasLebat) out += pill('p-rain', '🌧️ Hujan Lebat');
     if (hasPetir) out += pill('p-danger', '⚡ Petir/Kilat');
   }
-
   if (hasModerateToHeavyRain) out += pill('p-rainmix', '🌦️ Hujan intensitas Sedang–Lebat');
   if (hasRingan) out += pill('p-lrain', '☁️💧 Hujan Ringan');
   if (lo.includes('angin kencang') || (lo.includes('angin') && lo.includes('kencang'))) out += pill('p-wind', '💨 Angin Kencang');
@@ -4680,10 +4718,8 @@ function buildPills(raw) {
   if (hasBanjir) pairGroup += pill('p-danger', '🌊 Banjir Lokal');
   if (hasJarakPandang) pairGroup += pill('p-fog', '🎃 Jarak Pandang Berkurang');
   if (pairGroup) out += '<span class="pill-pair">' + pairGroup + '</span>';
-
   if (lo.includes('puting beliung') || lo.includes('tornado')) out += pill('p-storm', '🌪️ Puting Beliung');
   if (lo.includes('jalan licin') || lo.includes('licin')) out += pill('p-warn', '🚗 Jalan Licin');
-
   if (!out) out = pill('p-info', '📡 Citra Satelit');
   return '<div class="pills-row">' + out + '</div>';
 }
@@ -4695,9 +4731,7 @@ function pill(cls, label) {
 function renderLoading() {
   galleryRequestToken += 1;
   setStatus('loading', 'MENGHUBUNGKAN...');
-
   startSpin();
-
   document.getElementById('refreshChipText').textContent = 'MENYINKRONKAN DATA...';
   document.getElementById('mainCard').classList.remove('w-glow');
   document.getElementById('dc').innerHTML =
@@ -4712,14 +4746,20 @@ function renderLoading() {
 
 function renderWarning(title, desc, link, lastBuild) {
   setStatus('live', 'LIVE: ' + nowHHMM());
-
   stopSpin();
-
   document.getElementById('refreshChipText').textContent = `DIPERBARUI ${nowHHMM()} WIB`;
-
   const previewUrl = buildPreviewImageUrl(link);
   infografisUrl = previewUrl;
   zoomImgUrl = previewUrl;
+
+  // Preload previewUrl above the fold
+  if (previewUrl) {
+    const pl = document.createElement('link');
+    pl.rel = 'preload';
+    pl.as = 'image';
+    pl.href = previewUrl;
+    document.head.appendChild(pl);
+  }
 
   document.getElementById('mainCard').classList.add('w-glow');
 
@@ -4777,10 +4817,8 @@ function renderWarning(title, desc, link, lastBuild) {
 
   const displayTitle = title || 'Peringatan Cuaca';
   galleryRequestToken += 1;
-  if (!PERF_LITE_MODE) {
-    setLightboxSlides(buildWarningFallbackSlides(previewUrl, displayTitle, textFix, lastBuild), 0);
-    hydrateWarningGallery(link, displayTitle, textFix, lastBuild, previewUrl);
-  }
+  setLightboxSlides(buildWarningFallbackSlides(previewUrl, displayTitle, textFix, lastBuild), 0);
+  hydrateWarningGallery(link, displayTitle, textFix, lastBuild, previewUrl);
 
   // --- HIGHLIGHT AFFECTED REGION + BUILD TIME-RANGE PILL ---
   // Escape first so we can safely inject <strong> markup into the description.
@@ -4881,12 +4919,9 @@ function renderSafe(lastBuild) {
   galleryRequestToken += 1;
   infografisUrl = infUrl;
   zoomImgUrl = infUrl;
-  if (!PERF_LITE_MODE) {
-    setLightboxSlides(buildSafeSlides(lastBuild), 0);
-  }
+  setLightboxSlides(buildSafeSlides(lastBuild), 0);
 
   document.getElementById('mainCard').classList.remove('w-glow');
-
   document.getElementById('dc').innerHTML = `
        <div class="pills-row"> 
       ${pill('p-info', '📡 Citra Satelit')}
@@ -4910,20 +4945,28 @@ function renderSafe(lastBuild) {
   `;
 }
 
-function renderError() {
+function renderError(errorType) {
+  errorType = errorType || 'NETWORK';
+  const messages = {
+    'CORS': 'Koneksi terblokir proxy — coba refresh atau gunakan radar BMKG',
+    'TIMEOUT': 'Server BMKG merespons lambat, coba lagi beberapa saat',
+    'NETWORK': 'Periksa koneksi internet Anda atau coba lagi beberapa saat'
+  };
+  const detailedMsg = messages[errorType] || messages['NETWORK'];
+
   galleryRequestToken += 1;
   setStatus('error', 'Koneksi Bermasalah');
 
   stopSpin();
 
-  document.getElementById('refreshChipText').textContent = 'KONEKSI GAGAL';
+  document.getElementById('refreshChipText').textContent = `KONEKSI GAGAL (${errorType})`;
   document.getElementById('mainCard').classList.remove('w-glow');
 
   document.getElementById('dc').innerHTML = `
 
-    <span class="warn-label">Status Koneksi</span>
+    <span class="warn-label">Status Koneksi (${errorType})</span>
     <div class="warn-title" style="color:#ff453a;">✕ Gagal Memuat Data</div>
-    <div class="desc-text">Tidak dapat menjangkau server BMKG pada saat ini. Silahkan periksa koneksi internet Anda, lalu coba lagi.</div>
+    <div class="desc-text">${detailedMsg}</div>
     <div class="btn-row">
       <button type="button" class="cta-btn btn-error" data-cta="1" data-action="reload">
         <span>↺</span><span>Coba Lagi</span>
@@ -4932,7 +4975,7 @@ function renderError() {
     <div class="div-line"></div>
     <div class="meta-info">
       <span class="hi">  STATUS  </span><br/>
-      Gagal memuat data · Coba lagi beberapa saat
+      Gagal memuat data · Detail: ${errorType}
     </div>
     <div class="disclaimer-note" role="note" aria-label="Disclaimer informasi cuaca">
       <div class="disclaimer-note-ic">ⓘ</div>
@@ -5321,16 +5364,6 @@ function goToLightboxSlide(index, opts) {
 }
 
 function openZoom(urlOrIndex) {
-  if (PERF_LITE_MODE) {
-    let target = '';
-    if (typeof urlOrIndex === 'string') {
-      target = urlOrIndex;
-    } else if (typeof urlOrIndex === 'number' && lightboxState.slides[urlOrIndex]) {
-      target = lightboxState.slides[urlOrIndex].src || lightboxState.slides[urlOrIndex].previewUrl || '';
-    }
-    if (target) window.open(target, '_blank', 'noopener,noreferrer');
-    return;
-  }
 
   if (!lightboxState.slides.length) {
     setLightboxSlides(buildSafeSlides(''), 0);
@@ -5468,7 +5501,6 @@ function toggleLightboxZoom() {
 }
 
 function hydrateWarningGallery(alertLink, title, bodyText, lastBuild, fallbackUrl) {
-  if (PERF_LITE_MODE) return;
   const meta = parseAlertAssetMeta(alertLink);
   if (!meta) return;
 
@@ -5795,23 +5827,166 @@ document.addEventListener('keydown', function(e) {
 /* ══════════════════════════════════════════
    FETCH, PARSE + PROXY CHAIN
 ══════════════════════════════════════════ */
+let lastErrorType = 'NETWORK';
+let lastFetchTime = null;
+let countdownSeconds = 300; // 5 minutes countdown
+
+function tryLoadCachedData(isOffline) {
+  try {
+    const cachedXml = localStorage.getItem('bmkgLastSuccessData');
+    const cachedTime = localStorage.getItem('bmkgLastSuccessTime');
+    if (cachedXml) {
+      console.warn('Gagal memperbarui data. Menampilkan data cache dari:', cachedTime);
+      const doc = new DOMParser().parseFromString(cachedXml, 'text/xml');
+      const lastBuild = doc.querySelector('lastBuildDate')?.textContent?.trim() || '';
+      const items = doc.querySelectorAll('item');
+      let found = null;
+      items.forEach(function(item) {
+        const titleEl = item.querySelector('title');
+        if (titleEl && titleEl.textContent.includes('Kep. Riau') && !found) {
+          const descEl = item.querySelector('description');
+          const linkEl = item.querySelector('link');
+          found = {
+            title: titleEl.textContent.trim(),
+            desc: descEl ? (descEl.textContent || '') : '',
+            link: linkEl ? (linkEl.textContent || '#') : '#'
+          };
+        }
+      });
+      
+      const cachedDateStr = cachedTime ? new Date(cachedTime).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}) : '';
+      const statusLabel = isOffline ? `MODE OFFLINE · CACHE ${cachedDateStr} WIB` : `DATA CACHE · ${cachedDateStr} WIB`;
+      
+      if (found) {
+        renderWarning(found.title, found.desc, found.link, lastBuild);
+      } else {
+        renderSafe(lastBuild);
+      }
+      
+      document.getElementById('refreshChipText').textContent = statusLabel.toUpperCase();
+      setStatus('standby', 'OFFLINE');
+      return true;
+    }
+  } catch (_) {}
+  return false;
+}
+
+function startLiveTimers() {
+  lastFetchTime = new Date();
+  countdownSeconds = 300;
+  
+  if (window.timerInterval) clearInterval(window.timerInterval);
+  
+  window.timerInterval = setInterval(() => {
+    const elapsedSecs = Math.floor((new Date() - lastFetchTime) / 1000);
+    let freshnessText = '';
+    if (elapsedSecs < 60) {
+      freshnessText = 'Baru saja diperbarui';
+    } else {
+      const mins = Math.floor(elapsedSecs / 60);
+      freshnessText = `Diperbarui ${mins} menit yang lalu`;
+    }
+    
+    countdownSeconds--;
+    if (countdownSeconds <= 0) {
+      countdownSeconds = 300;
+      initSync(0); // auto-refresh
+    }
+    
+    const cdMins = Math.floor(countdownSeconds / 60);
+    const cdSecs = countdownSeconds % 60;
+    const cdText = `Perbarui otomatis dalam ${cdMins}:${cdSecs.toString().padStart(2, '0')}`;
+    
+    const chipTextEl = document.getElementById('refreshChipText');
+    if (chipTextEl && !chipTextEl.textContent.includes('SINKRONISASI') && !chipTextEl.textContent.includes('MENCANTUMKAN')) {
+      chipTextEl.textContent = `${freshnessText.toUpperCase()} · ${cdText.toUpperCase()}`;
+    }
+  }, 1000);
+}
+
+// Global pull-to-refresh logic
+(function() {
+  let touchStartY = 0;
+  let touchMoveY = 0;
+  let pulling = false;
+  
+  document.addEventListener('touchstart', function(e) {
+    if (window.scrollY === 0) {
+      touchStartY = e.touches[0].clientY;
+      pulling = true;
+    } else {
+      pulling = false;
+    }
+  }, { passive: true });
+  
+  document.addEventListener('touchmove', function(e) {
+    if (!pulling) return;
+    touchMoveY = e.touches[0].clientY;
+    const pullDistance = touchMoveY - touchStartY;
+    if (pullDistance > 100) {
+      const chipTextEl = document.getElementById('refreshChipText');
+      if (chipTextEl) chipTextEl.textContent = 'LEPASKAN UNTUK MEMPERBARUI DATA...';
+    }
+  }, { passive: true });
+  
+  document.addEventListener('touchend', function(e) {
+    if (!pulling) return;
+    const pullDistance = touchMoveY - touchStartY;
+    if (pullDistance > 120) {
+      location.reload();
+    }
+    pulling = false;
+  });
+})();
+
 async function initSync(attempt) {
   attempt = attempt || 0;
-  startSpin(); // spin ↻ every time a polling tick starts
-  if (attempt === 0) renderLoading();
+  startSpin(); 
+  
+  // WebSocket availability logging
+  const hasWS = 'WebSocket' in window;
+  console.log(`[System] WebSocket Support: ${hasWS ? 'Available ✅' : 'Unavailable ❌'}`);
+  
+  if (attempt === 0) {
+    renderLoading();
+    // Offline detection
+    if (!navigator.onLine) {
+      const loaded = tryLoadCachedData(true);
+      if (loaded) return;
+    }
+  }
 
   if (attempt >= PROXIES.length) {
-    renderError();
+    const loaded = tryLoadCachedData(false);
+    if (loaded) return;
+    renderError(lastErrorType);
     return;
   }
 
   const proxy = PROXIES[attempt];
+  if (proxy.direct && window.location.protocol === 'file:') {
+    console.log(`[Fetch] Memutus jalur Direct karena dijalankan secara lokal (file://). Berpindah ke proxy selanjutnya.`);
+    initSync(attempt + 1);
+    return;
+  }
   const target = proxy.direct ? RSS : proxy.url + encodeURIComponent(RSS);
+  
+  // Console logging proxy in use
+  console.log(`[Fetch] Menggunakan proxy ${attempt + 1}/${PROXIES.length}: ${proxy.direct ? 'Direct Link (No Proxy)' : proxy.url}`);
+
+  if (attempt > 0) {
+    const statusText = `Mencari alternatif... (Percobaan ${attempt + 1}/${PROXIES.length})`;
+    setStatus('loading', `Percobaan ${attempt + 1}/${PROXIES.length}`);
+    document.getElementById('refreshChipText').textContent = statusText.toUpperCase();
+    const loadingTextEl = document.querySelector('.loading-text');
+    if (loadingTextEl) {
+      loadingTextEl.textContent = `Sinkronisasi... (${attempt + 1}/${PROXIES.length})`;
+    }
+  }
 
   try {
     const res = await fetchWithTimeout(target, FETCH_TIMEOUT_MS);
     if (!res.ok) {
-      // if we hit an http error with direct, fail fast to the next proxy
       throw new Error('HTTP ' + res.status);
     }
 
@@ -5849,17 +6024,34 @@ async function initSync(attempt) {
       }
     });
 
+    // Caching XML response
+    try {
+      localStorage.setItem('bmkgLastSuccessData', xml);
+      localStorage.setItem('bmkgLastSuccessTime', new Date().toISOString());
+    } catch (_) {}
+
     if (found) {
       renderWarning(found.title, found.desc, found.link, lastBuild);
     } else {
       renderSafe(lastBuild);
     }
 
+    // Start countdown timers
+    startLiveTimers();
+
   } catch (err) {
-    // Quietly fall through to the next proxy. Use console.debug so the normal
-    // console (errors/warnings) stays clean — failures here are expected when
-    // a proxy is down or blocked.
     console.debug(`Proxy ${attempt} dilewati:`, err && err.message);
+    
+    // Determine error type
+    const errMsg = (err && err.message) ? err.message.toLowerCase() : '';
+    if (err.name === 'AbortError' || errMsg.includes('timeout')) {
+      lastErrorType = 'TIMEOUT';
+    } else if (errMsg.includes('cors') || errMsg.includes('allow-origin') || errMsg.includes('blocked') || errMsg.includes('failed to fetch')) {
+      lastErrorType = 'CORS';
+    } else {
+      lastErrorType = 'NETWORK';
+    }
+    
     initSync(attempt + 1);
   }
 }
@@ -6013,10 +6205,7 @@ window.addEventListener("keydown", function(event) {
 startSpin();
 initSync(0);
 
-// Auto-refresh for every 5 minutes.
-setInterval(function() {
-  initSync(0);
-}, PERF_LITE_MODE ? 600000 : 300000);
+// Auto-refresh is managed dynamically by the countdown timers in startLiveTimers()
 
 /* ═════════════════════════════════════════════
 "KEMBALI KE ATAS" — Liquid-glass pill controller
@@ -6194,7 +6383,18 @@ setInterval(function() {
       // -------------------- End of application sentinel --------------------
       (function () { /* no-op end-of-applicaation sentinel */ })();
     </script>
-    </div> <!-- /.wrapper --><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+    </div> <!-- /.wrapper -->
+    <script>
+      if (window.location.protocol !== 'file:') {
+        var s = document.createElement('script');
+        s.defer = true;
+        s.src = "https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447";
+        s.setAttribute("integrity", "sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==");
+        s.setAttribute("data-cf-beacon", '{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}');
+        s.setAttribute("crossorigin", "anonymous");
+        document.body.appendChild(s);
+      }
+    </script>
   </body>
 
 </html>

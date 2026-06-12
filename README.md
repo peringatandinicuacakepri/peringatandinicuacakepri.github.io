@@ -67,9 +67,9 @@ Alih-alih membuka beberapa halaman BMKG yang berbeda, sekarang semua informasi p
 
 *   **⏱️ Waktu Pembaruan yang Jelas:** Lihat kapan data terakhir diperbarui (*"Baru saja"* atau *"30 menit lalu"*) dan berapa lama hingga pembaruan otomatis berikutnya.
 
-*   **📱 Dua Mode Performa:** Pilih antara Mode Standar (visual premium dengan animasi) atau Mode Ringan (untuk hemat baterai & HP lama). Aplikasi otomatis memilih mode yang tepat sesuai perangkat Anda.
+*   **📱 Dua Mode Performa:** Pilih antara Mode Standar (visual premium dengan animasi) atau Mode Ringan (untuk hemat baterai & HP lama). Situs otomatis memilih mode yang tepat sesuai perangkat Anda.
 
-*   **🔌 Tetap Bekerja Saat Internet Mati:** Jika tidak ada koneksi internet, aplikasi otomatis menampilkan data cuaca terakhir yang tersimpan di browser Anda. Data tidak hilang!
+*   **🔌 Tetap Bekerja Saat Internet Mati:** Jika tidak ada koneksi internet, Situs otomatis menampilkan data cuaca terakhir yang tersimpan di browser Anda. Data tidak hilang!
 
 *   **🗺️ Peta Interaktif yang Responsif:** Gambar peta cuaca bisa diperbesar, digeser, dan diputar dengan jari (touch) atau mouse. Sesuai dengan tautan yang diberikan BMKG setiap saat.
 
@@ -95,7 +95,7 @@ flowchart TD
 ```
 
 1. **Ambil Data:** Situs mencoba mengambil peringatan dini cuaca terbaru dari BMKG setiap 5 menit.
-2. **Internet Mati?** Jika tidak ada koneksi, aplikasi otomatis menggunakan data terakhir yang tersimpan di browser.
+2. **Internet Mati?** Jika tidak ada koneksi, situs otomatis menggunakan data terakhir yang tersimpan di browser.
 3. **Tampilkan:** Informasi ditampilkan dalam kartu yang mewah, rapi, dan mudah dibaca.
 4. **Ulang Terus:** Setiap 5 menit, situs akan memeriksa data terbaru lagi.
 
@@ -118,11 +118,11 @@ Jika Anda ingin menjalankan kode ini di komputer pribadi atau ingin mengembangka
 
 Sebelum mulai, pahami istilah-istilah ini:
 
-- **Git:** Aplikasi untuk mendownload kode dari GitHub
+- **Git:** Situs untuk mendownload kode dari GitHub
 - **Repository:** Folder proyek di GitHub tempat semua kode disimpan
 - **Clone:** Mendownload seluruh folder proyek ke komputer Anda
 - **Terminal/Command Prompt:** Aplikasi untuk mengetik perintah teks
-- **Index.html:** File utama aplikasi yang bisa dibuka dengan browser
+- **Index.html:** File utama situs yang bisa dibuka dengan browser
 
 ---
 
@@ -235,11 +235,11 @@ ls -la
 dir
 ```
 
-Anda seharusnya melihat file `index.html` yang adalah file utama aplikasi.
+Anda seharusnya melihat file `index.html` yang adalah file utama situs.
 
 ---
 
-## 🔧 LANGKAH 3: BUKA APLIKASI (Pilih Salah Satu Cara)
+## 🔧 LANGKAH 3: BUKA SITUS (Pilih Salah Satu Cara)
 
 ### **CARA A: PALING MUDAH (Klik Dua Kali - Tidak Perlu Terminal Lagi)**
 
@@ -253,7 +253,7 @@ Ini adalah cara tercepat dan paling simpel:
 
 3. **Klik dua kali** pada file tersebut
 
-4. **Browser akan otomatis terbuka** dengan aplikasi cuaca
+4. **Browser akan otomatis terbuka** dengan situs cuaca
 
 **Kelebihan:**
 - ✅ Sangat mudah
@@ -267,7 +267,7 @@ Ini adalah cara tercepat dan paling simpel:
 
 ### **CARA B: DENGAN SERVER PYTHON (RECOMMENDED)**
 
-Cara ini paling direkomendasikan karena aplikasi bisa berfungsi 100% optimal.
+Cara ini paling direkomendasikan karena situs bisa berfungsi 100% optimal.
 
 **1. Cek apakah Python sudah ada:**
 
@@ -309,14 +309,14 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 - Buka browser favorit Anda (Chrome, Firefox, Edge, Safari)
 - Di address bar, ketik: `http://localhost:8000`
 - Tekan Enter
-- Aplikasi cuaca akan terbuka!
+- Situs cuaca akan terbuka!
 
 **4. Cara Berhenti Server:**
 
 Di Terminal, tekan `Ctrl + C` (hold Ctrl, lalu tekan C).
 
 **Kelebihan:**
-- ✅ Aplikasi berfungsi 100% optimal
+- ✅ Situs berfungsi 100% optimal
 - ✅ Semua fitur bekerja dengan baik
 - ✅ Proxy lebih stabil
 - ✅ Cocok untuk development
@@ -365,7 +365,7 @@ Klik link atau ketik `http://localhost:8080` di browser.
 
 ## 🔧 LANGKAH 4: EDIT & KEMBANGKAN (Opsional)
 
-Jika ingin mengubah kode aplikasi:
+Jika ingin mengubah kode situs:
 
 **A. Buka File dengan Text Editor:**
 
@@ -388,7 +388,7 @@ Pilih salah satu editor favorit Anda:
 - Edit kode sesuai yang Anda inginkan
 - Tekan `Ctrl + S` untuk simpan
 - Refresh browser (tekan F5 atau Ctrl + R)
-- Perubahan akan terlihat langsung di aplikasi
+- Perubahan akan terlihat langsung di situs
 
 ---
 
@@ -413,20 +413,20 @@ A: Git belum terinstall. Ikuti Langkah 1 di atas untuk install.
 A: Python belum terinstall. Download dari [python.org](https://python.org/downloads) dan pastikan centang "Add to PATH".
 
 **Q: "Port 8000 already in use"**
-A: Port sudah digunakan aplikasi lain. Gunakan port lain:
+A: Port sudah digunakan situs lain. Gunakan port lain:
 ```bash
 python -m http.server 9000
 ```
 Lalu buka `http://localhost:9000`
 
-**Q: Aplikasi buka tapi data cuaca tidak muncul**
+**Q: Situs buka tapi data cuaca tidak muncul**
 A: Mungkin internet mati atau BMKG server down. Coba:
 - Refresh browser (tekan F5)
 - Tunggu beberapa saat
 - Atau kunjungi [nowcasting.bmkg.go.id](https://nowcasting.bmkg.go.id) untuk cek status
 
 **Q: "Mixed Content Error"**
-A: Aplikasi sudah handle ini otomatis. Jika masih error, gunakan HTTPS:
+A: Situs sudah handle ini otomatis. Jika masih error, gunakan HTTPS:
 ```bash
 # Buat SSL certificate (untuk pengguna advanced)
 ```
@@ -436,18 +436,18 @@ Atau gunakan cara klik dua kali atau Python server.
 
 ## ✅ SELESAI!
 
-Sekarang Anda sudah berhasil menjalankan aplikasi cuaca di komputer pribadi! 🎉
+Sekarang Anda sudah berhasil menjalankan situs cuaca di komputer pribadi! 🎉
 
 ### Personalisasi untuk Daerah Lain (Developer)
 
-Kode aplikasi ini bisa diubah untuk daerah lain. Buka file `index.html` dan cari bagian:
+Kode situs ini bisa diubah untuk daerah lain. Buka file `index.html` dan cari bagian:
 
 ```javascript
 // Ubah kode stasiun dari CKR (Batam) ke stasiun BMKG lain
 // Lihat daftar kode stasiun di (https://nowcasting.bmkg.go.id/infografis)
 ```
 
-Setiap stasiun BMKG memiliki kode unik. Ganti kode stasiun, ubah koordinat lokasi, dan aplikasi siap untuk daerah baru!
+Setiap stasiun BMKG memiliki kode unik. Ganti kode stasiun, ubah koordinat lokasi, dan situs siap untuk daerah baru!
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -475,12 +475,12 @@ Data otomatis diperbarui setiap <strong>5 menit</strong>. Anda juga bisa menekan
 
 <details>
 <summary><b>Apa itu "Mode Ringan"? Kapan harus dipakai?</b></summary><br/>
-Mode Ringan menghilangkan efek visual yang berat (blur, animasi) agar aplikasi lebih cepat dan hemat baterai. Cocok untuk HP lama atau jaringan lambat. Aplikasi otomatis memilih mode terbaik, tapi Anda bisa ganti di pengaturan.
+Mode Ringan menghilangkan efek visual yang berat (blur, animasi) agar situs lebih cepat dan hemat baterai. Cocok untuk HP lama atau jaringan lambat. Situs otomatis memilih mode terbaik, tapi Anda bisa ganti di pengaturan.
 </details>
 
 <details>
 <summary><b>Bagaimana jika internet mati?</b></summary><br/>
-Tidak masalah! Aplikasi tetap menampilkan data cuaca terakhir yang tersimpan di browser Anda. Data tidak hilang. Namun data terbaru hanya bisa diambil saat ada koneksi internet.
+Tidak masalah! Situs tetap menampilkan data cuaca terakhir yang tersimpan di browser Anda. Data tidak hilang. Namun data terbaru hanya bisa diambil saat ada koneksi internet.
 </details>
 
 <details>
@@ -490,37 +490,37 @@ Jika cuaca aman dan tidak ada peringatan ekstrem, BMKG mungkin tidak merilis gam
 
 <details>
 <summary><b>Stasiun radar sering offline atau mati?</b></summary><br/>
-Bisa terjadi. Stasiun Meteorologi Hang Nadim di Batam kadang dalam pemeliharaan atau gangguan teknis. Jika terjadi, aplikasi akan menampilkan data terakhir.
+Bisa terjadi. Stasiun Meteorologi Hang Nadim di Batam kadang dalam pemeliharaan atau gangguan teknis. Jika terjadi, situs akan menampilkan data terakhir.
 </details>
 
 <details>
-<summary><b>Apakah aplikasi ini menguras kuota/baterai?</b></summary><br/>
+<summary><b>Apakah situs ini menguras kuota/baterai?</b></summary><br/>
 Sangat hemat! Ukuran data yang diunduh hanya beberapa kilobyte per pembaruan. Mode Ringan juga mematikan efek visual berat untuk hemat baterai HP lama.
 </details>
 
 <details>
-<summary><b>Apakah aplikasi ini melacak lokasi saya (GPS)?</b></summary><br/>
-Tidak sama sekali! Aplikasi tidak pernah mengakses GPS atau lokasi pribadi Anda. Koordinat yang ditampilkan hanya alamat fisik Stasiun Meteorologi Hang Nadim (untuk membuka peta), bukan posisi tepat Anda.
+<summary><b>Apakah situs ini melacak lokasi saya (GPS)?</b></summary><br/>
+Tidak sama sekali! Situs tidak pernah mengakses GPS atau lokasi pribadi Anda. Koordinat yang ditampilkan hanya alamat fisik Stasiun Meteorologi Hang Nadim (untuk membuka peta), bukan posisi tepat Anda.
 </details>
 
 <details>
-<summary><b>Bisakah saya embed aplikasi ini di website sendiri?</b></summary><br/>
+<summary><b>Bisakah saya embed situs ini di website sendiri?</b></summary><br/>
 Tentu! Karena lisensi GNU GPL v3 (terbuka), Anda bisa gunakan tag <code>&lt;iframe&gt;</code> untuk embed di blog/website, atau clone repositori untuk host sendiri. Jangan lupa kasih kredit ya!
 </details>
 
 <details>
 <summary><b>Bisakah saya ubah untuk daerah lain selain Kepri?</b></summary><br/>
-Tentu bisa! Kode aplikasi modular dan bisa diubah. Ganti kode stasiun BMKG, ubah koordinat, dan judul — aplikasi siap untuk daerah baru. Lihat bagian "Personalisasi untuk Daerah Lain" di atas.
+Tentu bisa! Kode situs modular dan bisa diubah. Ganti kode stasiun BMKG, ubah koordinat, dan judul — aplikasi siap untuk daerah baru. Lihat bagian "Personalisasi untuk Daerah Lain" di atas.
 </details>
 
 <details>
-<summary><b>Apakah aplikasi ini memerlukan "API Key" atau kunci akses khusus?</b></summary><br/>
+<summary><b>Apakah situs ini memerlukan "API Key" atau kunci akses khusus?</b></summary><br/>
 Tidak perlu! Data BMKG gratis dan terbuka untuk publik. Tidak seperti layanan cuaca berbayar (OpenWeatherMap, dsb) yang butuh API Key, proyek ini langsung ambil data dari server BMKG tanpa perlu registrasi apapun.
 </details>
 
 <details>
 <summary><b>Gambar dari server BMKG blokir (Mixed Content error)?</b></summary><br/>
-Aplikasi sudah dilengkapi sistem otomatis yang mengubah link `http://` menjadi `https://` agar tidak diblokir browser. Jadi Anda tidak perlu khawatir.
+Situs sudah dilengkapi sistem otomatis yang mengubah link `http://` menjadi `https://` agar tidak diblokir browser. Jadi Anda tidak perlu khawatir.
 </details>
 
 <details>
@@ -547,7 +547,7 @@ Pastikan Python sudah terinstall. Ketik `python --version` di terminal untuk cek
 
 **Koordinat Stasiun:** Stasiun Meteorologi Hang Nadim terletak di Batam, Kepulauan Riau — `1.119590, 104.113316`
 
-> ⚠️ **Hak Cipta:** Seluruh data cuaca dan infografis adalah hak cipta © **BMKG Indonesia**. Aplikasi ini hanya menampilkan kembali data publik terbuka BMKG secara non-komersial.
+> ⚠️ **Hak Cipta:** Seluruh data cuaca dan infografis adalah hak cipta © **BMKG Indonesia**. Situs ini hanya menampilkan kembali data publik terbuka BMKG secara non-komersial.
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -563,7 +563,7 @@ Pastikan Python sudah terinstall. Ketik `python --version` di terminal untuk cek
 
 </div>
 
-Aplikasi ini dibangun murni dengan **HTML5**, **CSS3**, dan **JavaScript Vanilla** (tanpa framework). Artinya:
+Situs ini dibangun murni dengan **HTML5**, **CSS3**, dan **JavaScript Vanilla** (tanpa framework). Artinya:
 - ✅ Tidak ada file besar yang perlu diunduh
 - ✅ Halaman muat sangat cepat
 - ✅ Cocok untuk internet lambat

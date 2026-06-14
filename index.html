@@ -6,8 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b1923" />
   <meta name="color-scheme" content="dark" />
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Peringatan Dini Cuaca BMKG — Kepri" />
+  <meta property="og:description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
+  <meta property="og:image" content="https://peringatandinicuacakepri.github.io/og-image.png" />
+  <meta property="og:type" content="website" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
   <script>
-    /* Early, ES5-compatible performance bootstrap.
+    /* Early, ES5-compatible performance bootstrap (CRITICAL PATH).
+       Runs synchronously before CSS parsing to detect lite mode.
+       Must not be deferred.
+       
        Adds .perf-lite before CSS is parsed when the device is likely low-end,
        Data Saver is enabled, or the user typed ?lite=1 / switch to Lite Mode. */
     (function () {
@@ -62,6 +72,7 @@
           if (btn) {
             var isLite = document.documentElement.classList.contains('perf-lite');
             btn.setAttribute('aria-pressed', isLite ? 'true' : 'false');
+            btn.setAttribute('aria-label', isLite ? 'Mode ringan aktif' : 'Mode ringan nonaktif');
             btn.setAttribute('title', isLite ? 'Mode ringan aktif — klik untuk kembali ke mode penuh' : 'Mode ringan nonaktif — klik untuk mode HP low-end');
             btn.innerHTML = '<span class="lite-toggle-dot" aria-hidden="true"></span><span class="lite-toggle-text">' + (isLite ? 'Mode Ringan: Aktif' : 'Mode Ringan: Nonaktif') + '</span>';
             if (isLite) {
@@ -82,13 +93,6 @@
   <meta name="description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://peringatandinicuacakepri.github.io/" />
-  <!-- Open Graph / Facebook -->
-  <meta property="og:title" content="Peringatan Dini Cuaca BMKG — Kepri" />
-  <meta property="og:description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
-  <meta property="og:image" content="https://peringatandinicuacakepri.github.io/og-image.png" />
-  <meta property="og:type" content="website" />
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
   <!-- Responsive & Mobile Web App Capabilities -->
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -160,7 +164,7 @@
 
   /* Gradients */
   --grad-glass-top: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
-  --grad-glass-highlight: var(--grad-glass-highlight);
+  --grad-glass-highlight: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent);
   --grad-spotlight: radial-gradient(circle at 82% 10%, rgba(255, 255, 255, 0.12), transparent 28%);
 
   /* Shadows & Effects */
@@ -482,7 +486,6 @@ body.modal-open {
   transition: transform 0.18s ease, cursor 0.18s ease, box-shadow 0.18s ease;
   transform: translate3d(0, 0, 0) scale(1);
   transform-origin: center center;
-  will-change: transform;
   will-change: transform, opacity;
   image-rendering: auto;
 }
@@ -594,6 +597,7 @@ body.modal-open {
 }
 
 .zoom-generated-panel img {
+  /* ⚠️ Ensure dynamically-injected images include loading="lazy" attribute */
   width: 100%;
   height: 100%;
   max-height: 100%;
@@ -6333,18 +6337,15 @@ initSync(0);
     cancel = false;
     var startY = window.pageYOffset || document.documentElement.scrollTop || 0;
     if (startY <= 0) return;
-
     if (reduceMotion) { window.scrollTo(0, 0); return; }
 
     // Duration scales with distance, capped: snappy on short pages,
     // never sluggish on long ones. ~400–700ms is the sweet spot.
     var duration = Math.min(700, Math.max(380, startY * 0.55));
     var t0 = 0;
-
     // Cancel on user input (wheel/touch) — feels native
     window.addEventListener("wheel",     stop, { passive: true, once: true });
     window.addEventListener("touchstart",stop, { passive: true, once: true });
-
     function step(ts) {
       if (cancel) return;
       if (!t0) t0 = ts;
@@ -6357,7 +6358,6 @@ initSync(0);
     cancelAnimationFrame(animId);
     animId = requestAnimationFrame(step);
   }
-
   btn.addEventListener("click", scrollToTop);
 })();
       </script>

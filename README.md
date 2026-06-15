@@ -1,5 +1,5 @@
 <div align="center">
-
+  
 # 🌩️ Peringatan Dini Cuaca BMKG — Kep. Riau
 
 #### Pantau peringatan dini cuaca Kepulauan Riau secara real-time, langsung dari data resmi BMKG dengan desain yang mewah, ringan, cepat! 🌩️⚡
@@ -20,9 +20,39 @@
 
 <br/>
 
-### 🌐 [Buka Website](https://peringatandinicuacakepri.github.io) &nbsp;•&nbsp; [✨ Fitur Unggulan](#-fitur-unggulan) &nbsp;•&nbsp; [📸 Tampilan](#-tampilan) &nbsp;•&nbsp; [❓ FAQ & Bantuan](#-faq--bantuan) &nbsp;•&nbsp; [🚀 Mulai](#-mulai)
-
 </div>
+
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
+
+### 📋 Daftar Isi
+
+* [🌩️ Peringatan Dini Cuaca BMKG — Kep. Riau](#️-peringatan-dini-cuaca-bmkg--kep-riau)
+  * [👋 Tentang Proyek Ini](#-tentang-proyek-ini)
+  * [📸 Tampilan Dashboard](#-tampilan-dashboard)
+  * [✨ Fitur Unggulan](#-fitur-unggulan)
+  * [⚙️ Bagaimana Sistemnya Bekerja?](#️-bagaimana-sistemnya-bekerja)
+  * [🚀 Mulai](#-mulai)
+    * [Cara Paling Cepat: Klik & Lihat](#cara-paling-cepat-klik--lihat)
+    * [Jalankan di Komputer Anda Sendiri (Untuk Pemula)](#jalankan-di-komputer-anda-sendiri-untuk-pemula)
+  * [📋 Persiapan Awal (Wajib Dibaca Pemula!)](#-persiapan-awal-wajib-dibaca-pemula)
+  * [🔧 Langkah 1: Install Git](#-langkah-1-install-git-jika-belum-ada)
+  * [🔧 Langkah 2: Download Kode Proyek](#-langkah-2-download-kode-proyek-clone-dari-github)
+  * [🔧 Langkah 3: Buka Situs](#-langkah-3-buka-situs-pilih-salah-satu-cara)
+    * [Cara A: Paling Mudah](#cara-a-paling-mudah-klik-dua-kali---tidak-perlu-terminal-lagi)
+    * [Cara B: Server Python (Disarankan)](#cara-b-dengan-server-python-disarankan)
+    * [Cara C: Node.JS (Alternatif)](#cara-c-dengan-nodejs-alternatif)
+  * [🔧 Langkah 4: Edit & Kembangkan](#-langkah-4-edit--kembangkan-opsional)
+  * [📋 Ringkasan Untuk Pemula](#-ringkasan-untuk-pemula)
+  * [❓ Troubleshooting](#-troubleshooting-jika-ada-masalah)
+  * [✅ Selesai!](#-selesai)
+    * [Personalisasi untuk Daerah Lain (Developer)](#personalisasi-untuk-daerah-lain-developer)
+  * [[❓ FAQ & Bantuan](#-faq--bantuan)
+  * [📊 Sumber Data & Referensi](#-sumber-data--referensi)
+  * [📁 Struktur Proyek](#-struktur-proyek)
+  * [🛠️ Teknologi yang Digunakan](#️-teknologi-yang-digunakan)
+  * [🔒 Privasi](#-privasi)
+  * [🤝 Kontribusi & Dukungan](#-kontribusi--dukungan)
+    * [Berikan Bintang ⭐](#berikan-bintang-)
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -63,19 +93,18 @@ Alih-alih membuka beberapa halaman BMKG yang berbeda, sekarang semua informasi p
 
 ## ✨ Fitur Unggulan
 
-*   **📡 Data Real-Time dari BMKG:** Informasi cuaca terbaru diperbarui setiap 5 menit langsung dari server resmi BMKG untuk prakiraan 0-6 jam ke depan.
-
-*   **⏱️ Waktu Pembaruan yang Jelas:** Lihat kapan data terakhir diperbarui (*"Baru saja"* atau *"30 menit lalu"*) dan berapa lama hingga pembaruan otomatis berikutnya.
-
-*   **📱 Dua Mode Performa:** Pilih antara Mode Standar (visual premium dengan animasi) atau Mode Ringan (untuk hemat baterai & HP lama). Situs otomatis memilih mode yang tepat sesuai perangkat Anda.
-
-*   **🔌 Tetap Bekerja Saat Internet Mati:** Jika tidak ada koneksi internet, Situs otomatis menampilkan data cuaca terakhir yang tersimpan di browser Anda. Data tidak hilang!
-
-*   **🗺️ Peta Interaktif yang Responsif:** Gambar peta cuaca bisa diperbesar, digeser, dan diputar dengan jari (touch) atau mouse. Sesuai dengan tautan yang diberikan BMKG setiap saat.
-
-*   **📱 Tarik Layar untuk Segarkan:** Di smartphone, cukup tarik layar ke bawah untuk memperbarui data cuaca secara instan (Pull-to-Refresh).
-  
-*   **🎁 Gratis & Terbuka:** Lisensi GNU GPL v3 — menjamin sumber kode tetap terbuka, bebas dikembangkan, aman secara hukum untuk semua orang, dan syarat setiap karya turunannya wajib menggunakan lisensi yang sama.
+| Fitur | Deskripsi |
+| --- | --- |
+| 📡 **Data Real-Time BMKG** | Informasi cuaca terkini diperbarui setiap 5 menit langsung dari server resmi BMKG untuk prakiraan 0–6 jam ke depan |
+| ⏱️ **Waktu Pembaruan Jelas** | Lihat kapan data terakhir diperbarui dan hitung mundur ke pembaruan berikutnya |
+| 📱 **Dua Mode** | Mode Standar (visual premium) atau Mode Ringan (hemat baterai & HP lama) yang otomatis menyesuaikan dengan perangkat|
+| 🔌 **Offline Mode** | Tetap menampilkan data cuaca terakhir meskipun internet mati berdasarkan data yang tersimpan di browser sebelumnya |
+| 🗺️ **Peta Interaktif** | Gambar peta cuaca bisa diperbesar, digeser, dan diputar dengan sentuhan atau mouse |
+| 🔍 **Buka di Peta** | Lihat lokasi stasiun radar BMKG Hang Nadim di peta favorit Anda |
+| 🎨 **Liquid Glass UI** | Desain kartu modern ala iOS dengan efek kaca buram yang elegan nan mewah|
+| 🔗 **Sumber Resmi** | Tautan langsung ke BMKG dan sumber data resmi lainnya |
+| 🎁 **Gratis & Terbuka:** | Lisensi GNU GPL v3 — menjamin sumber kode tetap terbuka, bebas dikembangkan, aman secara hukum untuk semua orang, dan syarat setiap karya turunannya *wajib* menggunakan lisensi yang sama.
+| ⚡ **Ringan & Cepat** | Hanya HTML, CSS, dan JavaScript Vanilla tanpa framework yang dimuat secara instan |
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -536,6 +565,18 @@ Pastikan Python sudah ter-install. Ketik `python --version` di terminal untuk ce
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
+## 📁 Struktur Proyek
+
+```
+peringatandinicuacakepri.github.io/
+│
+├── screenshots/        # Tangkapan layar untuk dokumentasi tambahan pada README
+├── LICENSE             # Lisensi yang digunakan pada proyek GitHub ini
+└── README.md           # Anda berada di sini
+└── index.html          # Situs utama — file tunggal mandiri yang berisi kode situsnya
+```
+
+
 ## 🛠️ Teknologi yang Digunakan
 
 <div align="center">
@@ -548,13 +589,17 @@ Pastikan Python sudah ter-install. Ketik `python --version` di terminal untuk ce
 
 </div>
 
-Situs ini dibangun murni dengan **HTML5**, **CSS3**, dan **JavaScript Vanilla** (tanpa framework). Artinya:
-- ✅ Tidak ada file besar yang perlu diunduh
-- ✅ Halaman muat sangat cepat
-- ✅ Cocok untuk internet lambat
-- ✅ Hemat memori di HP lama
+> Dibangun tanpa *external dependencies* yang membuatnya menjadi portabel dan ringan.
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
+
+
+## 🔒 Privasi
+
+- **Tidak ada data yang disimpan atau dikirim ke server** yang dikendalikan oleh proyek ini
+- Semua panggilan API langsung dari browser Anda ke server BMKG
+- Lokasi perangkat **tidak pernah diakses** — koordinat yang ditampilkan hanya alamat fisik Stasiun Meteorologi Hang Nadim
+- Data yang tersimpan di browser (Cache) hanya untuk mode offline dan tidak dikirim ke mana pun
 
 ## 🤝 Kontribusi & Dukungan
 

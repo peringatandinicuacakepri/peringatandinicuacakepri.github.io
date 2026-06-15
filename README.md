@@ -1,6 +1,6 @@
 <div align="center">
   
-# 🌩️ Peringatan Dini Cuaca BMKG — Kep. Riau 🌤
+# 🌤 Peringatan Dini Cuaca BMKG — Kep. Riau 🌩️
 
 #### Pantau peringatan dini cuaca Kepulauan Riau secara real-time, langsung dari data resmi BMKG dengan desain yang mewah, ringan, cepat! 🌩️⚡
 

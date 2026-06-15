@@ -1,6 +1,6 @@
 <div align="center">
   
-# 🌩️ Peringatan Dini Cuaca BMKG — Kep. Riau
+# 🌩️ Peringatan Dini Cuaca BMKG — Kep. Riau 🌤
 
 #### Pantau peringatan dini cuaca Kepulauan Riau secara real-time, langsung dari data resmi BMKG dengan desain yang mewah, ringan, cepat! 🌩️⚡
 
@@ -60,7 +60,7 @@
 
 Proyek ini memudahkan Anda memantau **peringatan dini cuaca ekstrem** di Kepulauan Riau secara real-time. Data diambil langsung dari server resmi BMKG, jadi informasi yang Anda lihat selalu akurat dan terkini.
 
-Alih-alih membuka beberapa halaman BMKG yang berbeda, sekarang semua informasi penting cuaca tersedia di **satu layar yang rapi, responsif, dan cepat dimuat** bahkan di smartphone lama sekalipun.
+Alih-alih membuka beberapa halaman BMKG yang berbeda, sekarang semua informasi penting cuaca tersedia di **satu layar yang rapi, responsif, dan cepat dimuat** bahkan di perangkat lama sekalipun.
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -472,80 +472,7 @@ Setiap stasiun BMKG memiliki kode unik. Ganti kode stasiun, ubah koordinat lokas
 
 ## 🛟 FAQ & Bantuan
 
-<details>
-<summary><b>Apakah saya perlu membuat akun untuk menggunakan situs ini?</b></summary><br/>
-Tidak! Situs ini gratis dan tidak butuh login atau akun apapun. Cukup buka website dan langsung bisa lihat cuaca Kepri.
-</details>
-
-<details>
-<summary><b>Apakah data cuaca akurat? Darimanakah sumbernya?</b></summary><br/>
-Data cuaca diambil langsung dari server resmi <strong>BMKG (Badan Meteorologi, Klimatologi, dan Geofisika)</strong> — lembaga cuaca nasional Indonesia. Jadi data yang Anda lihat sama akuratnya dengan website resmi BMKG.
-</details>
-
-<details>
-<summary><b>Apakah situs ini resmi dari BMKG?</b></summary><br/>
-Tidak. Ini adalah proyek independen (personal) yang merapikan dan menampilkan data terbuka milik BMKG agar lebih mudah dibaca, dan enak dilihat. Untuk informasi resmi, tetap kunjungi <a href="https://www.bmkg.go.id">bmkg.go.id</a>.
-</details>
-
-<details>
-<summary><b>Seberapa sering data diperbarui?</b></summary><br/>
-Data otomatis diperbarui setiap <strong>5 menit</strong>. Anda hanya tarik layar dari atas ke bawah untuk update yang instan.
-</details>
-
-<details>
-<summary><b>Apa itu "Mode Ringan"? Kapan harus dipakai?</b></summary><br/>
-Mode Ringan menghilangkan efek visual yang berat (blur, animasi) agar situs lebih cepat dan hemat baterai. Cocok untuk HP lama atau jaringan lambat. Situs otomatis memilih mode terbaik, tetapi Anda bisa menggantinya lagi nanti.
-</details>
-
-<details>
-<summary><b>Bagaimanakah jika internet mati?</b></summary><br/>
-Tidak masalah! Situs tetap menampilkan data cuaca terakhir kali yang tersimpan di browser Anda. Data tidak hilang. Namun data terbaru hanya bisa diambil saat ada koneksi internet.
-</details>
-
-<details>
-<summary><b>Mengapa gambar peta cuaca tidak muncul?</b></summary><br/>
-Jika cuaca aman dan tidak ada peringatan ekstrem, BMKG mungkin tidak merilis gambar peta baru untuk hari itu. Situs akan menampilkan status "Kondisi Aman" saja.
-</details>
-
-<details>
-<summary><b>Stasiun radar sering offline atau mati?</b></summary><br/>
-Bisa terjadi. Stasiun Meteorologi Hang Nadim di Batam kadang dalam pemeliharaan atau gangguan teknis. Jika terjadi, situs akan menampilkan data terakhir.
-</details>
-
-<details>
-<summary><b>Apakah situs ini menguras kuota/baterai?</b></summary><br/>
-Sangat hemat! Ukuran data yang diunduh hanya beberapa kilobyte per pembaruan. Mode Ringan juga mematikan efek visual berat untuk hemat baterai HP lama.
-</details>
-
-<details>
-<summary><b>Apakah situs ini melacak lokasi saya (GPS)?</b></summary><br/>
-Tidak sama sekali! Situs tidak pernah mengakses GPS atau lokasi pribadi Anda. Koordinat yang ditampilkan hanya alamat fisik Stasiun Meteorologi Hang Nadim (untuk membuka peta), bukan posisi tepat Anda.
-</details>
-
-<details>
-<summary><b>Bisakah saya embed situs ini di website sendiri?</b></summary><br/>
-Tentu! Karena lisensi GNU GPL v3 (terbuka), Anda bisa gunakan tag <code>&lt;iframe&gt;</code> untuk embed di blog/website, atau clone repositori untuk host sendiri. Jangan lupa kasih kredit ya!
-</details>
-
-<details>
-<summary><b>Bisakah saya ubah untuk daerah lain selain Kepri?</b></summary><br/>
-Tentu bisa! Kode situs modular dan bisa diubah. Ganti kode stasiun BMKG, ubah koordinat, dan judul — aplikasi siap untuk daerah baru. Lihat bagian "Personalisasi untuk Daerah Lain" di atas.
-</details>
-
-<details>
-<summary><b>Apakah situs ini memerlukan "API Key" atau kunci akses khusus?</b></summary><br/>
-Tidak perlu! Data BMKG gratis dan terbuka untuk publik. Tidak seperti layanan cuaca berbayar (OpenWeatherMap, dsb) yang butuh API Key, proyek ini langsung ambil data dari server BMKG tanpa perlu registrasi apapun secara bebas.
-</details>
-
-<details>
-<summary><b>Saya error saat clone, apa yang harus dilakukan?</b></summary><br/>
-Pastikan Git sudah terinstall dengan benar. Ketik `git --version` di terminal untuk cek. Jika tidak terinstall, download dari <a href="https://git-scm.com">git-scm.com</a>. Jika masih error, coba download file sebagai ZIP dari GitHub: klik tombol "Code" (hijau) → pilih "Download ZIP".
-</details>
-
-<details>
-<summary><b>Server Python tidak jalan, kenapa?</b></summary><br/>
-Pastikan Python sudah ter-install. Ketik `python --version` di terminal untuk cek. Jika tidak, download dari <a href="https://www.python.org/downloads">python.org</a>. Jika sudah ter-install tapi masih error, coba `python3 -m http.server 8000` atau gunakan Node.js sebagai alternatifnya.
-</details>
+<details> <summary><b>Apakah saya perlu membuat akun untuk menggunakan situs ini?</b></summary><br/> Tidak! Situs ini gratis dan tidak butuh login atau akun apapun. Cukup buka website dan langsung bisa lihat cuaca Kepri. </details><details> <summary><b>Apakah data cuaca akurat? Darimanakah sumbernya?</b></summary><br/> Data cuaca diambil langsung dari server resmi <strong>BMKG (Badan Meteorologi, Klimatologi, dan Geofisika)</strong> — lembaga cuaca nasional Indonesia. Jadi data yang Anda lihat sama akuratnya dengan website resmi BMKG. </details><details> <summary><b>Apakah situs ini resmi dari BMKG?</b></summary><br/> Tidak. Ini adalah proyek independen (personal) yang merapikan dan menampilkan data terbuka milik BMKG agar lebih mudah dibaca, dan enak dilihat. Untuk informasi resmi, tetap kunjungi <a href="https://www.bmkg.go.id">bmkg.go.id</a>. </details><details> <summary><b>Seberapa sering data diperbarui?</b></summary><br/> Data otomatis diperbarui setiap <strong>5 menit</strong>. Anda hanya tarik layar dari atas ke bawah untuk update yang instan. </details><details> <summary><b>Apa itu "Mode Ringan"? Kapan harus dipakai?</b></summary><br/> Mode Ringan menghilangkan efek visual yang berat (blur, animasi) agar situs lebih cepat dan hemat baterai. Cocok untuk HP lama atau jaringan lambat. Situs otomatis memilih mode terbaik, tetapi Anda bisa menggantinya lagi nanti. </details><details> <summary><b>Bagaimanakah jika internet mati?</b></summary><br/> Tidak masalah! Situs tetap menampilkan data cuaca terakhir kali yang tersimpan di browser Anda. Data tidak hilang. Namun data terbaru hanya bisa diambil saat ada koneksi internet. </details><details> <summary><b>Mengapa gambar peta cuaca tidak muncul?</b></summary><br/> Jika cuaca aman dan tidak ada peringatan ekstrem, BMKG mungkin tidak merilis gambar peta baru untuk hari itu. Situs akan menampilkan status "Kondisi Aman" saja. </details><details> <summary><b>Stasiun radar sering offline atau mati?</b></summary><br/> Bisa terjadi. Stasiun Meteorologi Hang Nadim di Batam kadang dalam pemeliharaan atau gangguan teknis. Jika terjadi, situs akan menampilkan data terakhir. </details><details> <summary><b>Apakah situs ini menguras kuota/baterai?</b></summary><br/> Sangat hemat! Ukuran data yang diunduh hanya beberapa kilobyte per pembaruan. Mode Ringan juga mematikan efek visual berat untuk hemat baterai HP lama. </details><details> <summary><b>Apakah situs ini melacak lokasi saya (GPS)?</b></summary><br/> Tidak sama sekali! Situs tidak pernah mengakses GPS atau lokasi pribadi Anda. Koordinat yang ditampilkan hanya alamat fisik Stasiun Meteorologi Hang Nadim (untuk membuka peta), bukan posisi tepat Anda. </details><details> <summary><b>Bisakah saya embed situs ini di website sendiri?</b></summary><br/> Tentu! Karena lisensi GNU GPL v3 (terbuka), Anda bisa gunakan tag <code>&lt;iframe&gt;</code> untuk embed di blog/website, atau clone repositori untuk host sendiri. Jangan lupa kasih kredit ya! </details><details> <summary><b>Bisakah saya ubah untuk daerah lain selain Kepri?</b></summary><br/> Tentu bisa! Kode situs modular dan bisa diubah. Ganti kode stasiun BMKG, ubah koordinat, dan judul — aplikasi siap untuk daerah baru. Lihat bagian "Personalisasi untuk Daerah Lain" di atas. </details><details> <summary><b>Apakah situs ini memerlukan "API Key" atau kunci akses khusus?</b></summary><br/> Tidak perlu! Data BMKG gratis dan terbuka untuk publik. Tidak seperti layanan cuaca berbayar (OpenWeatherMap, dsb) yang butuh API Key, proyek ini langsung ambil data dari server BMKG tanpa perlu registrasi apapun secara bebas. </details><details> <summary><b>Saya error saat clone, apa yang harus dilakukan?</b></summary><br/> Pastikan Git sudah terinstall dengan benar. Ketik `git --version` di terminal untuk cek. Jika tidak terinstall, download dari <a href="https://git-scm.com">git-scm.com</a>. Jika masih error, coba download file sebagai ZIP dari GitHub: klik tombol "Code" (hijau) → pilih "Download ZIP". </details><details> <summary><b>Server Python tidak jalan, kenapa?</b></summary><br/> Pastikan Python sudah ter-install. Ketik `python --version` di terminal untuk cek. Jika tidak, download dari <a href="https://www.python.org/downloads">python.org</a>. Jika sudah ter-install tapi masih error, coba `python3 -m http.server 8000` atau gunakan Node.js sebagai alternatifnya. </details><details> <summary><b>Apakah tersedia dalam bentuk aplikasi mobile (APK)?</b></summary><br/> Saat ini belum tersedia di Play Store/App Store. Namun, karena situs ini sudah mendukung <strong>PWA (Progressive Web App)</strong>, Anda bisa membukanya di Chrome (Android) atau Safari (iOS), lalu pilih "Add to Home Screen" atau "Tambahkan ke Layar Utama". Situs akan muncul dan berfungsi seperti aplikasi biasa! </details><details> <summary><b>Bolehkah saya menggunakan proyek ini untuk keperluan belajar atau tugas akhir?</b></summary><br/> Tentu saja! Proyek ini bersifat <i>Open Source</i>. Anda sangat dipersilakan menggunakannya sebagai bahan referensi, tugas kuliah, atau portofolio, selama tetap mengikuti aturan lisensi GNU GPL v3 dan mencantumkan sumber aslinya. </details><details> <summary><b>Kenapa kadang data cuaca di situs ini berbeda dengan aplikasi cuaca bawaan HP (seperti AccuWeather/The Weather Channel)?</b></summary><br/> Aplikasi global biasanya menggunakan model prediksi cuaca global yang terkadang kurang akurat untuk skala lokal. Situs ini menggunakan data <strong>Real-Time Radar & Nowcasting</strong> langsung dari stasiun BMKG lokal di Kepulauan Riau, sehingga informasinya cenderung lebih akurat untuk kondisi saat ini (0-6 jam ke depan) di wilayah tersebut. </details>
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -576,6 +503,7 @@ peringatandinicuacakepri.github.io/
 └── index.html          # Situs utama — file tunggal mandiri yang berisi kode situsnya
 ```
 
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## 🛠️ Teknologi yang Digunakan
 
@@ -600,6 +528,8 @@ peringatandinicuacakepri.github.io/
 - Semua panggilan API langsung dari browser Anda ke server BMKG
 - Lokasi perangkat **tidak pernah diakses** — koordinat yang ditampilkan hanya alamat fisik Stasiun Meteorologi Hang Nadim
 - Data yang tersimpan di browser (Cache) hanya untuk mode offline dan tidak dikirim ke mana pun
+
+![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## 🤝 Kontribusi & Dukungan
 

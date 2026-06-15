@@ -4275,6 +4275,130 @@ body::after {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
     }
   </style>
+
+
+  <style id="interaction-motion-control">
+    /* ==============================================================
+       INTERACTION-ONLY MOTION FIX
+       - Stops continuous card animations.
+       - Card animation only plays once when clicked on PC devices
+         (hover + smooth pointer/mouse).
+       - On mobile/touchscreen, card and burst animations are hidden.
+       ============================================================== */
+    @keyframes bmkgCardClickPulse {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      34% { transform: translate3d(0, -4px, 0) scale(1.008); }
+      68% { transform: translate3d(0, 1px, 0) scale(0.998); }
+      100% { transform: translate3d(0, 0, 0) scale(1); }
+    }
+
+    @keyframes bmkgStationClickPulse {
+      0% { transform: translate3d(0, 0, 0); }
+      38% { transform: translate3d(0, -2px, 0); }
+      100% { transform: translate3d(0, 0, 0); }
+    }
+
+    @keyframes bmkgCardSheenOnce {
+      0% { opacity: 0; transform: translateX(-130%) skewX(-16deg); }
+      22% { opacity: .45; }
+      100% { opacity: 0; transform: translateX(130%) skewX(-16deg); }
+    }
+
+    /* Disable all animations that were previously continuously active on cards/background. */
+    html:not(.perf-lite) body,
+    html:not(.perf-lite) body::before,
+    html:not(.perf-lite) body::after,
+    html:not(.perf-lite) .app,
+    html:not(.perf-lite) .app::before,
+    html:not(.perf-lite) .glass-card.w-glow,
+    html:not(.perf-lite) .info-dot {
+      animation: none !important;
+    }
+
+    /* Card hover no longer triggers automatic movement; movement only via click. */
+    html:not(.perf-lite) .glass-card:hover:not(.is-click-animating) {
+      transform: none !important;
+    }
+
+    /* PC/laptop only: brief animation when card is clicked. */
+    @media (hover: hover) and (pointer: fine) {
+      html:not(.perf-lite) #mainCard {
+        will-change: auto;
+      }
+
+      html:not(.perf-lite) #mainCard.is-click-animating {
+        animation: bmkgCardClickPulse 760ms cubic-bezier(.16, 1, .3, 1) 1 both !important;
+      }
+
+      html:not(.perf-lite) #mainCard.is-click-animating .sta-banner,
+      html:not(.perf-lite) #mainCard.is-click-animating .disclaimer-note {
+        animation: bmkgStationClickPulse 620ms cubic-bezier(.16, 1, .3, 1) 1 both !important;
+      }
+
+      html:not(.perf-lite) #mainCard.is-click-animating::after {
+        animation: bmkgCardSheenOnce 720ms cubic-bezier(.16, 1, .3, 1) 1 both !important;
+      }
+    }
+
+    /* HP/touchscreen: don't show card animation at all. */
+    @media (max-width: 767px), (hover: none), (pointer: coarse) {
+      html:not(.perf-lite) body,
+      html:not(.perf-lite) body::before,
+      html:not(.perf-lite) body::after,
+      html:not(.perf-lite) .app,
+      html:not(.perf-lite) .app::before,
+      html:not(.perf-lite) .app::after,
+      html:not(.perf-lite) #mainCard,
+      html:not(.perf-lite) #mainCard::before,
+      html:not(.perf-lite) #mainCard::after,
+      html:not(.perf-lite) .glass-card,
+      html:not(.perf-lite) .glass-card::before,
+      html:not(.perf-lite) .glass-card::after,
+      html:not(.perf-lite) .sta-banner,
+      html:not(.perf-lite) .sta-banner::before,
+      html:not(.perf-lite) .sta-banner::after,
+      html:not(.perf-lite) .disclaimer-note,
+      html:not(.perf-lite) .disclaimer-note::before,
+      html:not(.perf-lite) .info-dot,
+      html:not(.perf-lite) .dot-live,
+      html:not(.perf-lite) .dot-danger,
+      html:not(.perf-lite) .sdot {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        will-change: auto !important;
+      }
+
+      html:not(.perf-lite) .scan-line,
+      html:not(.perf-lite) .card-orb,
+      html:not(.perf-lite) .lg-burst {
+        display: none !important;
+      }
+
+      html:not(.perf-lite) .map-container:hover,
+      html:not(.perf-lite) .map-container:hover img,
+      html:not(.perf-lite) .cta-btn:hover,
+      html:not(.perf-lite) .footer:hover,
+      html:not(.perf-lite) .wpill:hover,
+      html:not(.perf-lite) .time-pill:hover,
+      html:not(.perf-lite) .refresh-chip:hover,
+      html:not(.perf-lite) .disclaimer-note:hover,
+      html:not(.perf-lite) .spill:hover,
+      html:not(.perf-lite) .sta-code:hover {
+        transform: none !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html:not(.perf-lite) #mainCard.is-click-animating,
+      html:not(.perf-lite) #mainCard.is-click-animating .sta-banner,
+      html:not(.perf-lite) #mainCard.is-click-animating .disclaimer-note,
+      html:not(.perf-lite) #mainCard.is-click-animating::after {
+        animation: none !important;
+      }
+    }
+  </style>
+
 </head>
 
 <body>
@@ -4603,6 +4727,10 @@ body::after {
    =============================================================== */
 // Variable Examples
 const PERF_LITE_MODE = document.documentElement.classList.contains('perf-lite');
+const DESKTOP_INTERACTION_MOTION = !PERF_LITE_MODE &&
+  window.matchMedia &&
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+  !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 const RSS = 'https://www.bmkg.go.id/alerts/nowcast/id/rss.xml';
 const INFOGRAFIS = buildInfografisUrl();
 const PROXIES = [{
@@ -5823,7 +5951,7 @@ window.addEventListener('resize', function() {
           EASTER EGG — iOS 26 Liquid Glass Burst
   ───────────────────────────────────────────────────────── */
 function triggerLiquidGlass(el) {
-  if (PERF_LITE_MODE) return;
+  if (!DESKTOP_INTERACTION_MOTION) return;
   const burst = document.getElementById('lgBurst');
   const rect = el.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
@@ -5897,9 +6025,30 @@ function addRipple(el, rect, cx, cy) {
   setTimeout(() => r.remove(), 700);
 }
 
+
+
+function triggerMainCardClickAnimation() {
+  if (!DESKTOP_INTERACTION_MOTION) return;
+  const card = document.getElementById('mainCard');
+  if (!card) return;
+  card.classList.remove('is-click-animating');
+  // Force reflow so repeated clicks restart the one-shot animation.
+  void card.offsetWidth;
+  card.classList.add('is-click-animating');
+  clearTimeout(card.__bmkgClickMotionTimer);
+  card.__bmkgClickMotionTimer = setTimeout(() => {
+    card.classList.remove('is-click-animating');
+  }, 820);
+}
+
 // Attach easter egg to ALL future .cta-btn clicks
 // Also centralizes small dynamic actions so inline handlers are not needed.
 document.addEventListener('click', function(e) {
+  const mainCard = document.getElementById('mainCard');
+  if (mainCard && mainCard.contains(e.target)) {
+    triggerMainCardClickAnimation();
+  }
+
   const btn = e.target.closest('.cta-btn');
   if (btn) {
     triggerLiquidGlass(btn);
@@ -6495,6 +6644,6 @@ initSync(0);
         }
       })();
     </script>
-  </body>
+  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0bf6bbc7fd181b9',t:'MTc4MTUwMzkyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>

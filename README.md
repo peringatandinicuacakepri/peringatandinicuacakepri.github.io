@@ -20,7 +20,7 @@
 
 <br/>
 
-### 🌐 [Buka Website](https://peringatandinicuacakepri.github.io) &nbsp;•&nbsp; [✨ Fitur Unggulan](#-fitur-unggulan) &nbsp;•&nbsp; [📸 Tampilan](#-tampilan) &nbsp;•&nbsp; [🛟 FAQ & Bantuan](#-faq--bantuan) &nbsp;•&nbsp; [🚀 Mulai](#-mulai)
+### 🌐 [Buka Website](https://peringatandinicuacakepri.github.io) &nbsp;•&nbsp; [✨ Fitur Unggulan](#-fitur-unggulan) &nbsp;•&nbsp; [📸 Tampilan](#-tampilan) &nbsp;•&nbsp; [❓ FAQ & Bantuan](#-faq--bantuan) &nbsp;•&nbsp; [🚀 Mulai](#-mulai)
 
 </div>
 
@@ -38,7 +38,7 @@ Alih-alih membuka beberapa halaman BMKG yang berbeda, sekarang semua informasi p
 
 <div align="center">
 
-| 💎 Mode Standar (Visual Premium) | 🍃 Mode Ringan (Hemat Baterai) |
+| 💎 Mode Standar (Visual Premium) | 🍃 Mode Ringan (Visual dibatasi supaya ringan) |
 |:---:|:---:|
 | ![Mode Full](screenshots/01-mode-full.png) | ![Mode Ringan](screenshots/02-mode-ringan.png) |
 | *Efek kaca buram & animasi halus* | *Simpel & cepat untuk HP lama* |
@@ -73,15 +73,13 @@ Alih-alih membuka beberapa halaman BMKG yang berbeda, sekarang semua informasi p
 
 *   **🗺️ Peta Interaktif yang Responsif:** Gambar peta cuaca bisa diperbesar, digeser, dan diputar dengan jari (touch) atau mouse. Sesuai dengan tautan yang diberikan BMKG setiap saat.
 
-*   **🧭 Navigasi Cepat ke Lokasi:** Klik lokasi stasiun untuk langsung membuka di Google Maps, Apple Maps, Waze, atau aplikasi peta pilihan Anda.
-
 *   **📱 Tarik Layar untuk Segarkan:** Di smartphone, cukup tarik layar ke bawah untuk memperbarui data cuaca secara instan (Pull-to-Refresh).
   
-*   **🎁 Gratis & Terbuka:** Lisensi GNU GPL v3 — menjamin sumber tetap terbuka, bebas dikembangkan, aman secara hukum untuk semua orang, dan syarat setiap karya turunannya wajib menggunakan lisensi yang sama.
+*   **🎁 Gratis & Terbuka:** Lisensi GNU GPL v3 — menjamin sumber kode tetap terbuka, bebas dikembangkan, aman secara hukum untuk semua orang, dan syarat setiap karya turunannya wajib menggunakan lisensi yang sama.
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
-## ⚙️ Bagaimana Sistem Bekerja?
+## ⚙️ Bagaimana Sistemnya Bekerja?
 
 ```mermaid
 flowchart TD
@@ -105,7 +103,7 @@ flowchart TD
 
 ### Cara Paling Cepat: Klik & Lihat
 
-Tidak perlu install apa-apa! Cukup buka website di browser:
+Tidak perlu install apa-apa! Cukup buka website di browser Anda:
 
 👉 **[peringatandinicuacakepri.github.io](https://peringatandinicuacakepri.github.io)**
 
@@ -120,7 +118,7 @@ Sebelum mulai, pahami istilah-istilah ini:
 
 - **Git:** Situs untuk mendownload kode dari GitHub
 - **Repository:** Folder proyek di GitHub tempat semua kode disimpan
-- **Clone:** Mendownload seluruh folder proyek ke komputer Anda
+- **Clone:** Men-download seluruh folder proyek ke komputer Anda
 - **Terminal/Command Prompt:** Aplikasi untuk mengetik perintah teks
 - **Index.html:** File utama situs yang bisa dibuka dengan browser
 
@@ -140,23 +138,23 @@ Kemudian ketik:
 git --version
 ```
 
-Jika muncul versi seperti `git version 2.40.0`, berarti Git sudah terinstall. **Lanjut ke Langkah 2.**
+Jika muncul versi seperti `git version 2.40.0` dan lain-lain, berarti Git sudah ter-install. Silahkan **Lanjut ke Langkah 2.**
 
 Jika tidak ada atau error, ikuti cara install di bawah:
 
 **Untuk Windows:**
 1. Buka [git-scm.com/download/win](https://git-scm.com/download/win)
-2. Klik tombol besar berwarna biru (installer akan otomatis download)
-3. Jalankan file yang sudah didownload (double-click)
-4. Ikuti wizard install (klik Next terus sampai selesai)
-5. Restart komputer
+2. Klik teks "Click here to download" yang berwarna oranye (Installer akan otomatis ter-download)
+3. Jalankan file yang sudah di-download (double-click/klik dua-kali)
+4. Ikuti wizard install (klik Next terus sampai selesai                )
+5. Restart komputer Anda
 
 **Untuk macOS:**
 Buka Terminal dan ketik:
 ```
 xcode-select --install
 ```
-Tunggu proses install selesai.
+Tunggu proses install sampai selesai.
 
 **Untuk Linux (Ubuntu/Debian):**
 Buka Terminal dan ketik:
@@ -169,7 +167,7 @@ sudo apt-get install git
 
 ## 🔧 LANGKAH 2: DOWNLOAD KODE PROYEK (Clone dari GitHub)
 
-Buka **Terminal** atau **Command Prompt** dan ikuti langkah ini:
+Buka **Terminal** atau **Command Prompt** dan ikuti langkah berikut ini:
 
 **A. Pilih Lokasi Folder (Opsional tapi Disarankan)**
 
@@ -235,7 +233,7 @@ ls -la
 dir
 ```
 
-Anda seharusnya melihat file `index.html` yang adalah file utama situs.
+Anda seharusnya melihat file `index.html` yang adalah file utama situsnya.
 
 ---
 
@@ -243,7 +241,7 @@ Anda seharusnya melihat file `index.html` yang adalah file utama situs.
 
 ### **CARA A: PALING MUDAH (Klik Dua Kali - Tidak Perlu Terminal Lagi)**
 
-Ini adalah cara tercepat dan paling simpel:
+Ini adalah cara paling tercepat dan paling simpel:
 
 1. **Buka folder proyek** di komputer Anda
    - Ketik path di address bar file manager
@@ -261,13 +259,13 @@ Ini adalah cara tercepat dan paling simpel:
 - ✅ Cocok untuk pengguna biasa
 
 **Kekurangan:**
-- ❌ Beberapa fitur mungkin terbatas atau tidak bekerja optimal (terutama untuk proxy)
+- ❌ Beberapa fitur mungkin terbatas atau tidak bekerja optimal (terutama untuk proksi)
 
 ---
 
-### **CARA B: DENGAN SERVER PYTHON (RECOMMENDED)**
+### **CARA B: DENGAN SERVER PYTHON (DISARANKAN)**
 
-Cara ini paling direkomendasikan karena situs bisa berfungsi 100% optimal.
+Cara ini paling direkomendasikan karena situs pasti bisa berfungsi 100% secara optimal.
 
 **1. Cek apakah Python sudah ada:**
 
@@ -277,9 +275,9 @@ Di Terminal, ketik:
 python --version
 ```
 
-Jika muncul versi seperti `Python 3.10.5`, berarti sudah ada. **Lanjut ke step 2.**
+Jika muncul versi seperti `Python 3.10.5` dan lain-lain, berarti sudah ada. **Lanjut ke step 2.**
 
-Jika tidak ada atau error, download Python dari [python.org](https://python.org/downloads). Jangan lupa centang "Add Python to PATH" saat install.
+Jika tidak ada atau error, download Python dari [python.org](https://python.org/downloads). Dan jangan lupa centang "Add Python to PATH" pada instalasi.
 
 **2. Jalankan Server:**
 
@@ -306,7 +304,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 **3. Buka di Browser:**
 
-- Buka browser favorit Anda (Chrome, Firefox, Edge, Safari)
+- Buka browser favorit Anda (Chrome, Firefox, Edge, Safari, BRAVEX)
 - Di address bar, ketik: `http://localhost:8000`
 - Tekan Enter
 - Situs cuaca akan terbuka!
@@ -318,18 +316,18 @@ Di Terminal, tekan `Ctrl + C` (hold Ctrl, lalu tekan C).
 **Kelebihan:**
 - ✅ Situs berfungsi 100% optimal
 - ✅ Semua fitur bekerja dengan baik
-- ✅ Proxy lebih stabil
-- ✅ Cocok untuk development
+- ✅ Proksi lebih stabil
+- ✅ Cocok untuk pengembangan lebih lanjut.
 
 ---
 
 ### **CARA C: DENGAN NODE.JS (Alternatif)**
 
-Jika Anda sudah familiar dengan Node.js atau tidak punya Python:
+Jika Anda sudah familiar (sudah kenal) dengan Node.js atau tidak punya Python:
 
 **1. Install Node.js:**
 
-Download dari [nodejs.org](https://nodejs.org/). Pilih versi LTS (Long Term Support).
+Download dari [nodejs.org](https://nodejs.org/). Pilih versi Latest LTS (Long Term Support).
 
 **2. Install http-server (Hanya Sekali):**
 
@@ -359,18 +357,18 @@ Server akan berjalan di `http://localhost:8080`.
 
 **4. Buka di Browser:**
 
-Klik link atau ketik `http://localhost:8080` di browser.
+Klik link atau ketik `http://localhost:8080` di browser favorit Anda.
 
 ---
 
 ## 🔧 LANGKAH 4: EDIT & KEMBANGKAN (Opsional)
 
-Jika ingin mengubah kode situs:
+Jika ingin mengubah kode situsnya:
 
 **A. Buka File dengan Text Editor:**
 
-Pilih salah satu editor favorit Anda:
-- **Visual Studio Code** (Recommended, gratis): [code.visualstudio.com](https://code.visualstudio.com)
+Pilih salah satu teks editor favorit Anda:
+- **Visual Studio Code** (Disarankan, gratis): [code.visualstudio.com](https://code.visualstudio.com)
 - **Notepad++**: [notepad-plus-plus.org](https://notepad-plus-plus.org)
 - **Sublime Text**: [sublimetext.com](https://sublimetext.com)
 - **Atom**: [atom.io](https://atom.io)
@@ -384,10 +382,10 @@ Pilih salah satu editor favorit Anda:
 
 **C. Edit & Simpan:**
 
-- Double-click file (misalnya `index.html`)
+- Double-click (klik dua-kali) pada file (misalnya `index.html`)
 - Edit kode sesuai yang Anda inginkan
 - Tekan `Ctrl + S` untuk simpan
-- Refresh browser (tekan F5 atau Ctrl + R)
+- Refresh browser (tekan Ctrl + R/Tekan dan Tahan Control, Lalu klik R atau F5)
 - Perubahan akan terlihat langsung di situs
 
 ---
@@ -397,7 +395,7 @@ Pilih salah satu editor favorit Anda:
 | Pilihan | Cara | Kesulitan | Hasil |
 |---------|------|-----------|-------|
 | **Klik 2x** | Double-click `index.html` | Sangat Mudah ⭐ | Berfungsi Baik ✅ |
-| **Python (Recommended)** | Ketik command di Terminal | Mudah ⭐⭐ | Berfungsi Optimal ✅✅ |
+| **Python (Disarankan)** | Ketik command di Terminal | Mudah ⭐⭐ | Berfungsi Optimal ✅✅ |
 | **Node.js** | Install, lalu ketik command | Sedang ⭐⭐⭐ | Berfungsi Optimal ✅✅ |
 
 **Rekomendasi untuk pemula:** Gunakan **CARA B (Python)** karena paling seimbang antara kemudahan dan hasil optimal.
@@ -407,10 +405,10 @@ Pilih salah satu editor favorit Anda:
 ## ❓ TROUBLESHOOTING (Jika Ada Masalah)
 
 **Q: "command not found: git"**
-A: Git belum terinstall. Ikuti Langkah 1 di atas untuk install.
+A: Git belum ter-install. Ikuti Langkah 1 di atas untuk install.
 
 **Q: "Python not found"**
-A: Python belum terinstall. Download dari [python.org](https://python.org/downloads) dan pastikan centang "Add to PATH".
+A: Python belum ter-install. Download dari [python.org](https://python.org/downloads) dan pastikan centang pilihan "Add to PATH" pada saat instalasi.
 
 **Q: "Port 8000 already in use"**
 A: Port sudah digunakan situs lain. Gunakan port lain:
@@ -424,30 +422,22 @@ A: Mungkin internet mati atau BMKG server down. Coba:
 - Refresh browser (tekan F5)
 - Tunggu beberapa saat
 - Atau kunjungi [nowcasting.bmkg.go.id](https://nowcasting.bmkg.go.id) untuk cek status
-
-**Q: "Mixed Content Error"**
-A: Situs sudah handle ini otomatis. Jika masih error, gunakan HTTPS:
-```bash
-# Buat SSL certificate (untuk pengguna advanced)
-```
-Atau gunakan cara klik dua kali atau Python server.
-
 ---
 
 ## ✅ SELESAI!
 
-Sekarang Anda sudah berhasil menjalankan situs cuaca di komputer pribadi! 🎉
+Sekarang Anda sudah berhasil menjalankan situs cuaca di komputer pribadi Anda! 🎉
 
 ### Personalisasi untuk Daerah Lain (Developer)
 
 Kode situs ini bisa diubah untuk daerah lain. Buka file `index.html` dan cari bagian:
 
 ```javascript
-// Ubah kode stasiun dari CKR (Batam) ke stasiun BMKG lain
+// Ubah kode stasiun dari CKR (Batam) ke stasiun BMKG yang lain
 // Lihat daftar kode stasiun di (https://nowcasting.bmkg.go.id/infografis)
 ```
 
-Setiap stasiun BMKG memiliki kode unik. Ganti kode stasiun, ubah koordinat lokasi, dan situs siap untuk daerah baru!
+Setiap stasiun BMKG memiliki kode unik. Ganti kode stasiun, ubah koordinat lokasi (opsional), dan situs siap untuk daerah baru!
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -459,28 +449,28 @@ Tidak! Situs ini gratis dan tidak butuh login atau akun apapun. Cukup buka websi
 </details>
 
 <details>
-<summary><b>Apakah data cuaca akurat? Dari mana sumbernya?</b></summary><br/>
+<summary><b>Apakah data cuaca akurat? Darimanakah sumbernya?</b></summary><br/>
 Data cuaca diambil langsung dari server resmi <strong>BMKG (Badan Meteorologi, Klimatologi, dan Geofisika)</strong> — lembaga cuaca nasional Indonesia. Jadi data yang Anda lihat sama akuratnya dengan website resmi BMKG.
 </details>
 
 <details>
 <summary><b>Apakah situs ini resmi dari BMKG?</b></summary><br/>
-Tidak. Ini adalah proyek independen (personal) yang merapikan dan menampilkan data terbuka milik BMKG agar lebih mudah dibaca. Untuk informasi resmi, tetap kunjungi <a href="https://www.bmkg.go.id">bmkg.go.id</a>.
+Tidak. Ini adalah proyek independen (personal) yang merapikan dan menampilkan data terbuka milik BMKG agar lebih mudah dibaca, dan enak dilihat. Untuk informasi resmi, tetap kunjungi <a href="https://www.bmkg.go.id">bmkg.go.id</a>.
 </details>
 
 <details>
 <summary><b>Seberapa sering data diperbarui?</b></summary><br/>
-Data otomatis diperbarui setiap <strong>5 menit</strong>. Anda juga bisa menekan tombol "Segarkan" atau tarik layar ke bawah di HP untuk update instan.
+Data otomatis diperbarui setiap <strong>5 menit</strong>. Anda hanya tarik layar dari atas ke bawah untuk update yang instan.
 </details>
 
 <details>
 <summary><b>Apa itu "Mode Ringan"? Kapan harus dipakai?</b></summary><br/>
-Mode Ringan menghilangkan efek visual yang berat (blur, animasi) agar situs lebih cepat dan hemat baterai. Cocok untuk HP lama atau jaringan lambat. Situs otomatis memilih mode terbaik, tapi Anda bisa ganti di pengaturan.
+Mode Ringan menghilangkan efek visual yang berat (blur, animasi) agar situs lebih cepat dan hemat baterai. Cocok untuk HP lama atau jaringan lambat. Situs otomatis memilih mode terbaik, tetapi Anda bisa menggantinya lagi nanti.
 </details>
 
 <details>
-<summary><b>Bagaimana jika internet mati?</b></summary><br/>
-Tidak masalah! Situs tetap menampilkan data cuaca terakhir yang tersimpan di browser Anda. Data tidak hilang. Namun data terbaru hanya bisa diambil saat ada koneksi internet.
+<summary><b>Bagaimanakah jika internet mati?</b></summary><br/>
+Tidak masalah! Situs tetap menampilkan data cuaca terakhir kali yang tersimpan di browser Anda. Data tidak hilang. Namun data terbaru hanya bisa diambil saat ada koneksi internet.
 </details>
 
 <details>
@@ -515,12 +505,7 @@ Tentu bisa! Kode situs modular dan bisa diubah. Ganti kode stasiun BMKG, ubah ko
 
 <details>
 <summary><b>Apakah situs ini memerlukan "API Key" atau kunci akses khusus?</b></summary><br/>
-Tidak perlu! Data BMKG gratis dan terbuka untuk publik. Tidak seperti layanan cuaca berbayar (OpenWeatherMap, dsb) yang butuh API Key, proyek ini langsung ambil data dari server BMKG tanpa perlu registrasi apapun.
-</details>
-
-<details>
-<summary><b>Gambar dari server BMKG blokir (Mixed Content error)?</b></summary><br/>
-Situs sudah dilengkapi sistem otomatis yang mengubah link `http://` menjadi `https://` agar tidak diblokir browser. Jadi Anda tidak perlu khawatir.
+Tidak perlu! Data BMKG gratis dan terbuka untuk publik. Tidak seperti layanan cuaca berbayar (OpenWeatherMap, dsb) yang butuh API Key, proyek ini langsung ambil data dari server BMKG tanpa perlu registrasi apapun secara bebas.
 </details>
 
 <details>
@@ -530,7 +515,7 @@ Pastikan Git sudah terinstall dengan benar. Ketik `git --version` di terminal un
 
 <details>
 <summary><b>Server Python tidak jalan, kenapa?</b></summary><br/>
-Pastikan Python sudah terinstall. Ketik `python --version` di terminal untuk cek. Jika tidak, download dari <a href="https://www.python.org/downloads">python.org</a>. Jika sudah terinstall tapi masih error, coba `python3 -m http.server 8000` atau gunakan Node.js sebagai alternatif.
+Pastikan Python sudah ter-install. Ketik `python --version` di terminal untuk cek. Jika tidak, download dari <a href="https://www.python.org/downloads">python.org</a>. Jika sudah ter-install tapi masih error, coba `python3 -m http.server 8000` atau gunakan Node.js sebagai alternatifnya.
 </details>
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
@@ -573,7 +558,7 @@ Situs ini dibangun murni dengan **HTML5**, **CSS3**, dan **JavaScript Vanilla** 
 
 ## 🤝 Kontribusi & Dukungan
 
-Menemukan bug? Punya saran fitur? Punya ide untuk perbaikan?
+Menemukan bug? Punya saran fitur? Atau punya ide untuk perbaikan?
 
 👉 **[Buka Issue di GitHub](https://github.com/peringatandinicuacakepri/peringatandinicuacakepri.github.io/issues)** untuk laporkan masalah atau usulkan fitur baru.
 
@@ -586,7 +571,5 @@ Jika proyek ini membantu Anda, dukungan Anda berupa bintang (⭐) di repositori 
 <div align="center">
 
 Dibuat dengan 💟 oleh **Jeremi Totti Manalu**
-
-*Berbagi informasi cuaca akurat untuk keselamatan bersama.*
 
 </div>

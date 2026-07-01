@@ -19,7 +19,7 @@
        Must not be deferred.
        
        Adds .perf-lite before CSS is parsed when the device is likely low-end,
-       Data Saver is enabled, or the user typed ?lite=1 / switch to Lite Mode. */
+       Data Saver is enabled, or the user typed / switch to Lite Mode. */
     (function () {
       try {
         var nav = window.navigator || {};
@@ -27,7 +27,6 @@
         var qs = window.location.search || '';
         var stored = null;
         try { stored = window.localStorage && localStorage.getItem('bmkgPerfMode'); } catch (_) {}
-
         var forcedLite = /(?:[?&])lite=1(?:&|$)/.test(qs) || stored === 'lite';
         var forcedFull = /(?:[?&])lite=0(?:&|$)/.test(qs) || stored === 'full';
         var weakMemory = nav.deviceMemory && nav.deviceMemory <= 2;
@@ -49,6 +48,7 @@
           } catch (_) {}
           window.location.reload();
         };
+
         // ROBUST Event delegation for lite mode toggle button
         document.addEventListener('click', function liteModeClickHandler(e) {
           var target = e.target;
@@ -65,7 +65,6 @@
             target = target.parentElement;
           }
         }, { capture: true, passive: false });
-
 
         document.addEventListener('DOMContentLoaded', function () {
           var btn = document.getElementById('liteModeBtn');
@@ -90,6 +89,7 @@
   <title>
     Peringatan Dini Cuaca BMKG — Kep. Riau
   </title>
+
   <meta name="description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://peringatandinicuacakepri.github.io/" />
@@ -106,6 +106,12 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🌤️</text></svg>" />
   <link rel="dns-prefetch" href="https://www.bmkg.go.id" />
   <link rel="dns-prefetch" href="https://nowcasting.bmkg.go.id" />
+  <link rel="dns-prefetch" href="https://api.allorigins.win" />
+  <link rel="dns-prefetch" href="https://allorigins.hexlet.app" />
+  <link rel="dns-prefetch" href="https://corsproxy.io" />
+  <link rel="preconnect" href="https://api.allorigins.win" crossorigin />
+  <link rel="preconnect" href="https://allorigins.hexlet.app" crossorigin />
+  <link rel="preconnect" href="https://corsproxy.io" crossorigin />
   <style>
 
 /* ===========================================================
@@ -4756,7 +4762,7 @@ const PROXIES = [{
   }
 ];
 
-const FETCH_TIMEOUT_MS = PERF_LITE_MODE ? 9000 : 14000;
+const FETCH_TIMEOUT_MS = PERF_LITE_MODE ? 1000 : 1000;
 let infografisUrl = '';
 let zoomImgUrl = '';
 let galleryRequestToken = 0;
@@ -4772,7 +4778,8 @@ function fetchWithTimeout(url, ms) {
     }
   }, ms);
   return fetch(url, {
-      signal: ctrl.signal
+      signal: ctrl.signal,
+      priority: 'high'
     })
     .then(res => {
       clearTimeout(timer);
@@ -6460,13 +6467,11 @@ initSync(0);
 (function () {
   var btn = document.getElementById("backToTopBtn");
   if (!btn) return;
-
   var sentinel = document.createElement("div");
   sentinel.setAttribute("aria-hidden", "true");
   sentinel.style.cssText =
     "position:absolute;top:0;left:0;width:1px;height:300px;pointer-events:none;";
   document.body.appendChild(sentinel);
-
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(function (entries) {
       btn.classList.toggle("is-visible", !entries[0].isIntersecting);
@@ -6479,9 +6484,7 @@ initSync(0);
   var reduceMotion = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var animId = 0, cancel = false;
-
   function stop() { cancel = true; }
-
   function scrollToTop() {
     cancel = false;
     var startY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -6577,7 +6580,7 @@ initSync(0);
           }
           function xhr(url, done) {
             var x = new XMLHttpRequest();
-            var timer = setTimeout(function () { try { x.abort(); } catch (e) {} done(new Error('timeout')); }, 9000);
+            var timer = setTimeout(function () { try { x.abort(); } catch (e) {} done(new Error('timeout')); }, 1000);
             x.onreadystatechange = function () {
               if (x.readyState !== 4) return;
               clearTimeout(timer);
@@ -6620,10 +6623,7 @@ initSync(0);
         } catch (e) {}
       })();
     </script>
-    <script>
-      // -------------------- End of application sentinel --------------------
-      (function () { /* no-op end-of-applicaation sentinel */ })();
-    </script>
+
     </div> <!-- /.wrapper -->
     <script>
       (function() {
@@ -6644,6 +6644,7 @@ initSync(0);
         }
       })();
     </script>
+
   <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0bf6bbc7fd181b9',t:'MTc4MTUwMzkyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 
 </html>

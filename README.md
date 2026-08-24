@@ -25,36 +25,46 @@
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 ## 🌐 Navigation / Navigasi
-- [🇬🇧 English Version](#-english-version)
-- [🇮🇩 Versi Bahasa Indonesia](#-versi-bahasa-indonesia)
+- [🇬🇧 English Version](#english-version)
+- [🇮🇩 Versi Bahasa Indonesia](#versi-bahasa-indonesia)
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
+<a id="english-version"></a>
 # 🇬🇧 English Version
 
 ## 📋 Table of Contents
-* [👋 About the Project](#-about-the-project)
-* [📸 Dashboard Preview](#-dashboard-preview)
-* [✨ Key Features](#-key-features)
-* [⚙️ How the System Works](#️-how-the-system-works)
-* [🌐 Technical Challenges: Overcoming CORS](#-technical-challenges-overcoming-cors)
-* [🚀 Quick Start](#-quick-start)
-* [📋 Initial Preparation](#-initial-preparation)
-* [🔧 Step 1: Install Git](#-step-1-install-git)
-* [🔧 Step 2: Download the Project](#-step-2-download-the-project)
-* [🔧 Step 3: Open the Website](#-step-3-open-the-website)
-* [🔧 Step 4: Edit & Develop](#-step-4-edit--develop)
-* [📋 Summary for Beginners](#-summary-for-beginners)
-* [❓ Troubleshooting](#-troubleshooting)
-* [🛟 FAQ & Support](#-faq--support)
-* [📊 Data Sources & References](#-data-sources--references)
-* [📁 Project Structure](#-project-structure)
-* [🛠️ Technologies Used](#️-technologies-used)
-* [🔒 Privacy](#-privacy)
-* [🤝 Contribution & Support](#-contribution--support)
+* [👋 About the Project](#en-about)
+* [📸 Dashboard Preview](#en-preview)
+* [✨ Key Features](#en-features)
+* [⚙️ How the System Works](#en-how-it-works)
+* [🌐 Technical Challenge: Getting Around CORS](#en-cors)
+* [🚀 Quick Start](#en-quick-start)
+  * [The Fastest Way: Click & View](#en-click-view)
+  * [Running the Project Locally (For Beginners)](#en-run-locally)
+* [📋 Initial Preparation](#en-preparation)
+* [🔧 Step 1: Install Git](#en-step1)
+* [🔧 Step 2: Download the Project](#en-step2)
+* [🔧 Step 3: Open the Website](#en-step3)
+  * [Method A: Double-Click (Easiest)](#en-step3a)
+  * [Method B: Python Server (Recommended)](#en-step3b)
+  * [Method C: Node.js (Alternative)](#en-step3c)
+* [🔧 Step 4: Edit & Develop](#en-step4)
+* [📋 Summary for Beginners](#en-summary)
+* [❓ Troubleshooting](#en-troubleshooting)
+* [✅ Done!](#en-done)
+  * [Personalize for Another Region (Developers)](#en-personalize)
+* [🛟 FAQ & Support](#en-faq)
+* [📊 Data Sources & References](#en-sources)
+* [📁 Project Structure](#en-structure)
+* [🛠️ Technologies Used](#en-tech)
+* [🔒 Privacy](#en-privacy)
+* [🤝 Contribution & Support](#en-contribute)
+  * [Leave a Star ⭐](#en-star)
 
 ---
 
+<a id="en-about"></a>
 ## 👋 About the Project
 This open-source project facilitates the real-time monitoring of extreme weather alerts across the Riau Islands. The application retrieves metadata and infographical assets directly from the official BMKG server, ensuring that the displayed parameters are consistently reliable, authoritative, and timely.
 
@@ -62,6 +72,7 @@ Rather than forcing users to navigate multiple disparate government pages, all c
 
 ---
 
+<a id="en-preview"></a>
 ## 📸 Dashboard Preview
 
 <div align="center">
@@ -89,6 +100,7 @@ Rather than forcing users to navigate multiple disparate government pages, all c
 
 ---
 
+<a id="en-features"></a>
 ## ✨ Key Features
 
 | Feature | Description |
@@ -106,6 +118,7 @@ Rather than forcing users to navigate multiple disparate government pages, all c
 
 ---
 
+<a id="en-how-it-works"></a>
 ## ⚙️ How the System Works
 
 ```mermaid
@@ -126,16 +139,17 @@ flowchart TD
 
 ---
 
-## 🌐 Technical Challenges: Overcoming CORS
+<a id="en-cors"></a>
+## 🌐 Technical Challenge: Getting Around CORS
 
-### 1. The CORS Impediment and Its UX Consequences
+### 1. The CORS Block and What It Breaks
 When developing client-side web applications that consume public data, developers frequently encounter the restrictive mechanism known as **Cross-Origin Resource Sharing (CORS)**. In this project, the core functionality relies on retrieving real-time weather warning data directly from the official BMKG server (`nowcasting.bmkg.go.id`). However, because the application is hosted on GitHub Pages (`peringatandinicuacakepri.github.io`), any client-side asynchronous HTTP request (such as via the `fetch` API or `XMLHttpRequest`) initiated from our origin to the BMKG domain is categorized as a cross-origin request.
 
 By default, the browser's **Same-Origin Policy (SOP)**, which is a fundamental security pillar designed to prevent malicious websites from reading sensitive data from other origins, intervenes. If the destination server does not explicitly return the `Access-Control-Allow-Origin` header indicating that our origin is permitted to access the resource, the browser immediately blocks the response payload. Because the official BMKG server does not append this permissive CORS header, direct web requests from our client-side application fail consistently, throwing a console error:
 
 `Access to fetch at 'https://nowcasting.bmkg.go.id/nowcast...' from origin 'https://peringatandinicuacakepri.github.io' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.`
 
-#### Impact on User Experience (UX)
+### Impact on User Experience (UX)
 If left unmitigated, this security constraint has a catastrophic impact on user experience:
 * **Inoperable Dashboard:** The core value proposition of the app is to deliver real-time meteorological warnings. Without data access, the application is rendered completely inert, displaying blank containers and broken visual components.
 * **Perpetual Loading States:** Users are greeted by infinite loading spinners or frozen interfaces, leading to frustration and the false assumption that their internet connection is faulty.
@@ -143,8 +157,8 @@ If left unmitigated, this security constraint has a catastrophic impact on user 
 
 ---
 
-### 2. Comparison of Technical Workarounds
-To circumvent the CORS barrier, several architectural pathways were analyzed. Below is a comparative evaluation of these approaches:
+### 2. The Options, and How the Proxy Solves It
+Three ways around the CORS block were considered:
 
 | Solution | Implementation Complexity | Financial Cost | Performance & Latency | Architectural Pros & Cons |
 | :--- | :--- | :--- | :--- | :--- |
@@ -152,22 +166,40 @@ To circumvent the CORS barrier, several architectural pathways were analyzed. Be
 | **Self-Hosted Proxy Backend** *(e.g., Express.js, Go, or Serverless Functions)* | High | Variable (Hosting fees for servers/cloud workers) | Moderate-to-Fast | **Pros:** Complete control over headers, payload caching, and request rate-limiting; enhanced privacy.<br>**Cons:** Introduces server maintenance overhead; destroys the purely static, zero-cost architecture of GitHub Pages. |
 | **Third-Party CORS Proxies** *(e.g., AllOrigins, CORSProxy.io)* | Extremely Low (Client-side implementation) | Zero (Free-tier services) | Moderate (Dependent on proxy server location) | **Pros:** Zero configuration; preserves the serverless nature of our deployment; bypasses browser-level CORS completely.<br>**Cons:** Introduces a single point of failure (third-party uptime); slight latency overhead due to proxy redirection. |
 
-#### Architectural Rationale for the Chosen Solution
-Given that this is an open-source, community-driven project with no dedicated budget, maintaining a self-hosted server was deemed unsustainable. The implementation of **third-party public CORS proxies (AllOrigins and CORSProxy.io)** emerged as the most pragmatic and efficient compromise. It allows the application to remain entirely static, serverless, and free to host, while successfully retrieving the vital BMKG data feed. To mitigate the risk of third-party downtime, a **failover system** has been coded, allowing the app to dynamically switch between alternative proxies if one service encounters an outage.
+#### How the Proxy Solves It
+A proxy service such as **AllOrigins** or **CORSProxy.io** uses the gap between the browser environment and the server environment:
+
+1. **Rewrite the URL:** instead of calling `fetch()` on the BMKG URL, the app wraps it in the proxy's URL, for example `https://api.allorigins.win/raw?url=https://nowcasting.bmkg.go.id/nowcast/...`
+2. **Browser talks to the proxy:** the browser sends the request to AllOrigins, which does return CORS headers, so the browser allows it.
+3. **Proxy talks to BMKG:** AllOrigins makes a plain HTTP request to the BMKG server. That happens server-to-server, outside any browser, so the Same-Origin Policy does not apply and the XML comes back without a block.
+4. **Proxy returns the data:** AllOrigins sends the payload back to the user's browser with `Access-Control-Allow-Origin: *` attached.
+5. **Browser accepts it:** with that header present, the site's JavaScript can read the response and render the weather cards.
+
+### 3. Data Security and Information Integrity
+Using a third party is safe here for two reasons:
+* **The data is public:** BMKG early warning data needs no authentication, API key, or credentials. No personal data or secret key ever passes through the proxy.
+* **Dynamic failover:** if one proxy goes down or times out, the app switches to another. The code tries AllOrigins first, then falls back to CORSProxy.io and other backups, so a single outage does not take the dashboard offline.
+
+### 4. Why This Option Was Chosen
+This is an open-source project with no budget, so running a server was not sustainable. Public CORS proxies keep the site fully static, serverless, and free to host while still delivering the BMKG feed. The failover logic covers the main weakness of depending on someone else's uptime.
 
 ---
 
+<a id="en-quick-start"></a>
 ## 🚀 Quick Start
 
+<a id="en-click-view"></a>
 ### The Fastest Way: Click & View
 No manual setup is required! Simply launch the application via your favorite web browser:
 👉 **[peringatandinicuacakepri.github.io](https://peringatandinicuacakepri.github.io)**
 
+<a id="en-run-locally"></a>
 ### Running the Project Locally (For Beginners)
 If you wish to host the dashboard locally or inspect the source files, please follow the steps below.
 
 ---
 
+<a id="en-preparation"></a>
 ## 📋 Initial Preparation
 Before you begin, make sure you understand the following concepts:
 - **Git:** A tool used to download code from GitHub and manage version control.
@@ -178,6 +210,7 @@ Before you begin, make sure you understand the following concepts:
 
 ---
 
+<a id="en-step1"></a>
 ## 🔧 Step 1: Install Git (If Not Already Installed)
 Verify if Git is installed by opening your Terminal or Command Prompt and typing:
 ```bash
@@ -191,6 +224,7 @@ Otherwise, install Git depending on your operating system:
 
 ---
 
+<a id="en-step2"></a>
 ## 🔧 Step 2: Download the Project (Clone from GitHub)
 Open your Terminal or Command Prompt and execute the following commands:
 1. **Choose a Directory (Optional but Recommended)**:
@@ -209,8 +243,10 @@ Open your Terminal or Command Prompt and execute the following commands:
 
 ---
 
+<a id="en-step3"></a>
 ## 🔧 Step 3: Open the Website (Choose One Method)
 
+<a id="en-step3a"></a>
 ### Method A: Direct Double-Click (Easiest Method)
 1. Open your file explorer and locate the downloaded project folder.
 2. Search for the `index.html` file.
@@ -218,6 +254,7 @@ Open your Terminal or Command Prompt and execute the following commands:
 - **Pros:** Completely visual, no terminal commands required.
 - **Cons:** Browser security policies might limit proxy connections in local file environments.
 
+<a id="en-step3b"></a>
 ### Method B: Local Python Server (Recommended)
 1. Verify Python is installed by running `python --version` or `python3 --version`. If it is not installed, download it from [python.org](https://python.org).
 2. Inside your terminal, make sure you are in the project folder and run:
@@ -227,6 +264,7 @@ Open your Terminal or Command Prompt and execute the following commands:
 3. Open your browser and navigate to `http://localhost:8000`.
 - **Pros:** Highly stable and matches production behavior perfectly.
 
+<a id="en-step3c"></a>
 ### Method C: Node.js (Alternative)
 1. Download and install Node.js from [nodejs.org](https://nodejs.org).
 2. Install the lightweight local server package globally:
@@ -241,6 +279,7 @@ Open your Terminal or Command Prompt and execute the following commands:
 
 ---
 
+<a id="en-step4"></a>
 ## 🔧 Step 4: Edit & Develop (Optional)
 If you wish to customize the dashboard:
 1. Open the project folder in an editor such as **Visual Studio Code**, **Notepad++**, or **Sublime Text**.
@@ -249,6 +288,7 @@ If you wish to customize the dashboard:
 
 ---
 
+<a id="en-summary"></a>
 ## 📋 Summary for Beginners
 | Option | Method | Difficulty | Result |
 | :--- | :--- | :--- | :--- |
@@ -258,6 +298,7 @@ If you wish to customize the dashboard:
 
 ---
 
+<a id="en-troubleshooting"></a>
 ## ❓ Troubleshooting
 * **Error: "command not found: git"**: Git is not installed. Follow the instructions in Step 1.
 * **Error: "Python not found"**: Python is missing or not configured. Ensure "Add Python to PATH" is checked during Python installation.
@@ -266,33 +307,77 @@ If you wish to customize the dashboard:
 
 ---
 
+<a id="en-done"></a>
+## ✅ Done!
+
+You have now run the weather site on your own computer! 🎉
+
+<a id="en-personalize"></a>
+### Personalize for Another Region (Developers)
+
+The code can be adapted for other regions. Open `index.html` and find this section:
+
+```javascript
+// Change the station code from CKR (Batam) to another BMKG station
+// See the list of station codes at (https://nowcasting.bmkg.go.id/infografis)
+```
+
+Every BMKG station has a unique code. Change the station code, adjust the coordinates (optional), and the site is ready for a new region.
+
+---
+
+<a id="en-faq"></a>
 ## 🛟 FAQ & Support
-<details> <summary><b>Do I need an account to use this website?</b></summary><br/> No. The application is completely free and requires no login or registration. </details>
-<details> <summary><b>Is the weather data accurate?</b></summary><br/> Yes. All weather updates and radar maps are retrieved directly from the official BMKG server. </details>
-<details> <summary><b>Is this an official BMKG application?</b></summary><br/> No. This is an independent, non-commercial open-source project designed to organize and visualize BMKG's public data feeds in an easy-to-read layout. </details>
-<details> <summary><b>What is "Light Mode"?</b></summary><br/> Light Mode disables resource-heavy visual filters (such as frosted blurs and transitions) to conserve battery power and run smoothly on legacy mobile devices. </details>
+<details> <summary><b>Do I need an account to use this website?</b></summary><br/> No. The site is free and needs no login or account. Open it and you can see the Kepri weather straight away. </details>
+<details> <summary><b>Is the weather data accurate? Where does it come from?</b></summary><br/> The data is fetched directly from the official server of <strong>BMKG (Badan Meteorologi, Klimatologi, dan Geofisika)</strong>, Indonesia's national weather agency. What you see here is as accurate as the official BMKG website. </details>
+<details> <summary><b>Is this an official BMKG application?</b></summary><br/> No. This is an independent, personal project that tidies up and displays BMKG's open data so it is easier to read and nicer to look at. For official information, always visit <a href="https://www.bmkg.go.id">bmkg.go.id</a>. </details>
+<details> <summary><b>How often is the data updated?</b></summary><br/> Automatically every <strong>5 minutes</strong>. You can also pull the screen down from the top for an instant update. </details>
+<details> <summary><b>What is "Light Mode", and when should I use it?</b></summary><br/> Light Mode removes heavy visual effects (blur, animations) so the site runs faster and uses less battery. It suits older phones and slow connections. The site picks the best mode automatically, but you can switch it yourself at any time. </details>
+<details> <summary><b>What happens when my internet drops?</b></summary><br/> No problem. The site keeps showing the last weather data stored in your browser, so nothing is lost. New data can only be fetched once you are back online. </details>
+<details> <summary><b>Why is the weather map image missing?</b></summary><br/> When conditions are calm and there is no extreme warning, BMKG may not publish a new map image for that day. The site then shows a "Safe Condition" status instead. </details>
+<details> <summary><b>Does the radar station go offline often?</b></summary><br/> It can happen. The Hang Nadim Meteorological Station in Batam is sometimes under maintenance or hit by a technical fault. When that happens, the site shows the last data it received. </details>
+<details> <summary><b>Does this site drain my data allowance or battery?</b></summary><br/> It is very light. Each update downloads only a few kilobytes. Light Mode also turns off the heavy visual effects to save battery on older phones. </details>
+<details> <summary><b>Does this site track my location (GPS)?</b></summary><br/> Not at all. The site never reads your GPS or personal location. The coordinates it shows are the physical address of the Hang Nadim Meteorological Station, used by the "open in maps" button, not your position. </details>
+<details> <summary><b>Can I embed this site on my own website?</b></summary><br/> Yes. The GNU GPL v3 license is open, so you can embed it with an <code>&lt;iframe&gt;</code> tag on your blog or website, or clone the repository and host it yourself. Please keep the credit. </details>
+<details> <summary><b>Can I adapt it for a region other than Kepri?</b></summary><br/> Yes. The code is modular. Change the BMKG station code, the coordinates, and the title, and the app is ready for a new region. See "Personalize for Another Region" above. </details>
+<details> <summary><b>Does this site need an API key or special access?</b></summary><br/> No. BMKG data is free and open to the public. Unlike paid weather services such as OpenWeatherMap that require an API key, this project reads BMKG's servers directly with no registration. </details>
+<details> <summary><b>I got an error while cloning. What should I do?</b></summary><br/> Check that Git is installed correctly by typing `git --version` in your terminal. If it is missing, download it from <a href="https://git-scm.com">git-scm.com</a>. If it still fails, download the project as a ZIP from GitHub instead: click the green "Code" button, then "Download ZIP". </details>
+<details> <summary><b>The Python server will not start. Why?</b></summary><br/> Make sure Python is installed by typing `python --version` in your terminal. If it is missing, download it from <a href="https://www.python.org/downloads">python.org</a>. If Python is installed but you still get an error, try `python3 -m http.server 8000`, or use Node.js instead. </details>
+<details> <summary><b>Is there a mobile app (APK)?</b></summary><br/> Not on the Play Store or App Store yet. The site is responsive and works well on a phone browser, so you can open it in Chrome (Android) or Safari (iOS) and add it to your home screen from the browser's Share menu. It then behaves like an app, though it still needs a connection to fetch new data. </details>
+<details> <summary><b>May I use this project for study or a final-year assignment?</b></summary><br/> Of course. The project is <i>open source</i>. You are welcome to use it as a reference, for coursework, or in your portfolio, as long as you follow the GNU GPL v3 license and credit the original source. </details>
+<details> <summary><b>Why does the weather here sometimes differ from the weather app on my phone (AccuWeather, The Weather Channel)?</b></summary><br/> Global apps usually rely on global forecast models, which can be less accurate at local scale. This site reads <strong>real-time radar and nowcasting</strong> data from the local BMKG station in the Riau Islands, so it tends to be more accurate for current conditions (0 to 6 hours ahead) in this area. </details>
 
----
-
+<a id="en-sources"></a>
 ## 📊 Data Sources & References
-* **BMKG Nowcasting**: Raw data feed for real-time Indonesian weather warnings and predictions [Nowcasting BMKG](https://nowcasting.bmkg.go.id/nowcast).
-* **BMKG Alerts RSS**: National weather alert feed in XML format [Alert RSS XML](https://www.bmkg.go.id/alerts/nowcast/id/rss.xml).
-* **CORS Proxies**: Services that fetch cross-origin data without browser security blocks [AllOrigins](https://allorigins.win) / [CORSProxy](https://corsproxy.io).
+
+| Provider | Description | Link |
+|:---|:---|:---|
+| **BMKG Nowcasting** | The Indonesian government's official source for early weather warnings and real-time nowcasting (0 to 6 hours ahead) | [Nowcasting BMKG](https://nowcasting.bmkg.go.id/nowcast) |
+| **BMKG Alerts RSS** | National weather alert feed (XML format) | [Alert RSS XML](https://www.bmkg.go.id/alerts/nowcast/id/rss.xml) |
+| **BMKG Infografis** | Public directory holding the image assets for weather warnings from every BMKG radar station in Indonesia | [Infografis](https://nowcasting.bmkg.go.id/infografis/) |
+| **Google Fonts** | Google's web typography service, used for the interface typefaces | [fonts.google.com](https://fonts.google.com) |
+| **Proxy Services** | Free CORS proxy services that fetch site data for JavaScript without tripping the browser's security block | [AllOrigins](https://allorigins.win) / [CORSProxy](https://corsproxy.io) |
+
+**Station coordinates:** The Hang Nadim Meteorological Station is in Batam, Riau Islands (coordinates: `1.119590, 104.113316`)
+
+> ⚠️ **Copyright:** All weather data and infographics are copyright © **BMKG Indonesia**. This site only republishes BMKG's open public data, non-commercially.
 
 ---
 
+<a id="en-structure"></a>
 ## 📁 Project Structure
 ```
 peringatandinicuacakepri.github.io/
 │
-├── screenshots/        # Application screenshots for documentation
-├── LICENSE             # Project license (GNU GPL v3)
-└── README.md           # Documentation (You are here)
-└── index.html          # Main application (standalone file containing all code)
+├── screenshots/        # Screenshots used in this README
+├── LICENSE             # License for this GitHub project (GNU GPL v3)
+├── README.md           # Documentation (you are here)
+└── index.html          # The main site (a single standalone file holding all the code)
 ```
 
 ---
 
+<a id="en-tech"></a>
 ## 🛠️ Technologies Used
 <div align="center">
 
@@ -304,55 +389,68 @@ peringatandinicuacakepri.github.io/
 
 </div>
 
+> Built with no external dependencies, which keeps it portable and light.
+
 ---
 
+<a id="en-privacy"></a>
 ## 🔒 Privacy
-* No user data is ever collected or sent to external servers controlled by this project.
-* All API requests are initiated locally from your web browser to the BMKG server.
-* The application does not access your physical location (GPS coordinates).
+* No user data is EVER collected or sent to external servers controlled by this project.
+* All API requests ARE initiated locally from your web browser to the BMKG server.
+* The application does NOT access your physical location (GPS coordinates)
+* Data kept in your browser (cache) exists only for offline mode and is NEVER sent anywhere
 
 ---
 
+<a id="en-contribute"></a>
 ## 🤝 Contribution & Support
-Have a feature request or found a bug? 
-👉 **[Open an Issue on GitHub](https://github.com/peringatandinicuacakepri/peringatandinicuacakepri.github.io/issues)** to report bugs or suggest enhancements.
-If you find this project helpful, please consider leaving a star (⭐) to show your support!
+
+Found a bug? Have a feature idea? Or a suggestion for an improvement?
+
+👉 **[Open an Issue on GitHub](https://github.com/peringatandinicuacakepri/peringatandinicuacakepri.github.io/issues)** to report a problem or propose a new feature.
+
+<a id="en-star"></a>
+### Leave a Star ⭐
+
+If this project helps you, a star (⭐) on the repository is a big motivation for me as the developer. Thank you for the support!
 
 ![divider](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
+<a id="versi-bahasa-indonesia"></a>
 # 🇮🇩 Versi Bahasa Indonesia
 
 ## 📋 Daftar Isi
-* [👋 Tentang Proyek Ini](#-tentang-proyek-ini)
-* [📸 Tampilan Dashboard](#-tampilan-dashboard)
-* [✨ Fitur Unggulan](#-fitur-unggulan)
-* [⚙️ Bagaimana Sistemnya Bekerja?](#️-bagaimana-sistemnya-bekerja)
-* [🛡️ Solusi Teknis: Mengatasi Masalah CORS dengan Proxy Pihak Ketiga](#-solusi-teknis-mengatasi-masalah-cors-dengan-proxy-pihak-ketiga)
-* [🚀 Mulai](#-mulai)
-  * [Cara Paling Cepat: Klik & Lihat](#cara-paling-cepat-klik--lihat)
-  * [Jalankan di Komputer Anda Sendiri (Untuk Pemula)](#jalankan-di-komputer-anda-sendiri-untuk-pemula)
-* [📋 Persiapan Awal (Wajib Dibaca Pemula!)](#-persiapan-awal-wajib-dibaca-pemula)
-* [🔧 Langkah 1: Install Git](#-langkah-1-install-git-jika-belum-ada)
-* [🔧 Langkah 2: Download Kode Proyek](#-langkah-2-download-kode-proyek-clone-dari-github)
-* [🔧 Langkah 3: Buka Situs](#-langkah-3-buka-situs-pilih-salah-satu-cara)
-  * [Cara A: Paling Mudah](#cara-a-paling-mudah-klik-dua-kali---tidak-perlu-terminal-lagi)
-  * [Cara B: Server Python (Disarankan)](#cara-b-dengan-server-python-disarankan)
-  * [Cara C: Node.JS (Alternatif)](#cara-c-dengan-nodejs-alternatif)
-* [🔧 Langkah 4: Edit & Kembangkan](#-langkah-4-edit--kembangkan-opsional)
-* [📋 Ringkasan Untuk Pemula](#-ringkasan-untuk-pemula)
-* [❓ Troubleshooting](#-troubleshooting-jika-ada-masalah)
-* [✅ Selesai!](#-selesai)
-  * [Personalisasi untuk Daerah Lain (Developer)](#personalisasi-untuk-daerah-lain-developer)
-* [❓ FAQ & Bantuan](#-faq--bantuan)
-* [📊 Sumber Data & Referensi](#-sumber-data--referensi)
-* [📁 Struktur Proyek](#-struktur-proyek)
-* [🛠️ Teknologi yang Digunakan](#️-teknologi-yang-digunakan)
-* [🔒 Privasi](#-privasi)
-* [🤝 Kontribusi & Dukungan](#-kontribusi--dukungan)
-  * [Berikan Bintang ⭐](#berikan-bintang-)
+* [👋 Tentang Proyek Ini](#id-about)
+* [📸 Tampilan Dashboard](#id-preview)
+* [✨ Fitur Unggulan](#id-features)
+* [⚙️ Bagaimana Sistemnya Bekerja?](#id-how-it-works)
+* [🛡️ Solusi Teknis: Mengatasi Masalah CORS dengan Proxy Pihak Ketiga](#id-cors)
+* [🚀 Mulai](#id-quick-start)
+  * [Cara Paling Cepat: Klik & Lihat](#id-click-view)
+  * [Jalankan di Komputer Anda Sendiri (Untuk Pemula)](#id-run-locally)
+* [📋 Persiapan Awal (Wajib Dibaca Pemula!)](#id-preparation)
+* [🔧 Langkah 1: Install Git](#id-step1)
+* [🔧 Langkah 2: Download Kode Proyek](#id-step2)
+* [🔧 Langkah 3: Buka Situs](#id-step3)
+  * [Cara A: Paling Mudah](#id-step3a)
+  * [Cara B: Server Python (Disarankan)](#id-step3b)
+  * [Cara C: Node.js (Alternatif)](#id-step3c)
+* [🔧 Langkah 4: Edit & Kembangkan](#id-step4)
+* [📋 Ringkasan Untuk Pemula](#id-summary)
+* [❓ Troubleshooting](#id-troubleshooting)
+* [✅ Selesai!](#id-done)
+  * [Personalisasi untuk Daerah Lain (Developer)](#id-personalize)
+* [❓ FAQ & Bantuan](#id-faq)
+* [📊 Sumber Data & Referensi](#id-sources)
+* [📁 Struktur Proyek](#id-structure)
+* [🛠️ Teknologi yang Digunakan](#id-tech)
+* [🔒 Privasi](#id-privacy)
+* [🤝 Kontribusi & Dukungan](#id-contribute)
+  * [Berikan Bintang ⭐](#id-star)
 
 ---
 
+<a id="id-about"></a>
 ## 👋 Tentang Proyek Ini
 
 Proyek ini memudahkan Anda memantau **peringatan dini cuaca ekstrem** di Kepulauan Riau secara real-time. Data diambil langsung dari server resmi BMKG, jadi informasi yang Anda lihat selalu akurat dan terkini.
@@ -361,6 +459,7 @@ Alih-alih membuka beberapa halaman BMKG yang berbeda, sekarang semua informasi p
 
 ---
 
+<a id="id-preview"></a>
 ## 📸 Tampilan Dashboard
 
 <div align="center">
@@ -388,6 +487,7 @@ Alih-alih membuka beberapa halaman BMKG yang berbeda, sekarang semua informasi p
 
 ---
 
+<a id="id-features"></a>
 ## ✨ Fitur Unggulan
 
 | Fitur | Deskripsi |
@@ -396,15 +496,16 @@ Alih-alih membuka beberapa halaman BMKG yang berbeda, sekarang semua informasi p
 | ⏱️ **Waktu Pembaruan Jelas** | Lihat kapan data terakhir diperbarui dan hitung mundur ke pembaruan berikutnya |
 | 📱 **Dua Mode** | Mode Standar (visual premium) atau Mode Ringan (hemat baterai & HP lama) yang otomatis menyesuaikan dengan perangkat|
 | 🔌 **Offline Mode** | Tetap menampilkan data cuaca terakhir meskipun internet mati berdasarkan data yang tersimpan di browser sebelumnya |
-| 🗺️ **Peta Interaktif** | Gambar peta cuaca bisa diperbesar, digeser, dan diputar dengan sentuhan atau mouse |
+| 🗺️ **Peta Interaktif** | Gambar peta cuaca bisa diperbesar dan digeser dengan sentuhan atau mouse |
 | 🔍 **Buka di Peta** | Lihat lokasi stasiun radar BMKG Hang Nadim di peta favorit Anda |
 | 🎨 **Liquid Glass UI** | Desain kartu modern ala iOS dengan efek kaca buram yang elegan nan mewah|
 | 🔗 **Sumber Resmi** | Tautan langsung ke BMKG dan sumber data resmi lainnya |
-| 🎁 **Gratis & Terbuka:** | Lisensi GNU GPL v3 yang menjamin sumber kode tetap terbuka, bebas dikembangkan, aman secara hukum untuk semua orang, dan syarat setiap karya turunannya wajib menggunakan lisensi yang sama. |
+| 🎁 **Gratis & Terbuka** | Lisensi GNU GPL v3 yang menjamin sumber kode tetap terbuka, bebas dikembangkan, aman secara hukum untuk semua orang, dan syarat setiap karya turunannya wajib menggunakan lisensi yang sama. |
 | ⚡ **Ringan & Cepat** | Hanya HTML, CSS, dan JavaScript Vanilla tanpa framework yang dimuat secara instan |
 
 ---
 
+<a id="id-how-it-works"></a>
 ## ⚙️ Bagaimana Sistemnya Bekerja?
 
 ```mermaid
@@ -425,6 +526,7 @@ flowchart TD
 
 ---
 
+<a id="id-cors"></a>
 ## 🛡️ Solusi Teknis: Mengatasi Masalah CORS dengan Proxy Pihak Ketiga
 
 ### 1. Memahami Aspek Keamanan Web dan Keterbatasan Browser
@@ -459,8 +561,10 @@ Meskipun menggunakan layanan pihak ketiga, solusi ini sepenuhnya aman karena:
 
 ---
 
+<a id="id-quick-start"></a>
 ## 🚀 Mulai
 
+<a id="id-click-view"></a>
 ### Cara Paling Cepat: Klik & Lihat
 
 Tidak perlu install apa-apa! Cukup buka website di browser Anda:
@@ -468,22 +572,25 @@ Tidak perlu install apa-apa! Cukup buka website di browser Anda:
 👉 **[peringatandinicuacakepri.github.io](https://peringatandinicuacakepri.github.io)**
 
 
+<a id="id-run-locally"></a>
 ### Jalankan di Komputer Anda Sendiri (Untuk Pemula)
 
 Jika Anda ingin menjalankan kode ini di komputer pribadi atau ingin mengembangkannya:
 
+<a id="id-preparation"></a>
 ## 📋 Persiapan Awal (Wajib Dibaca Pemula!)
 
 Sebelum mulai, pahami istilah-istilah ini:
 
-- **Git:** Situs untuk mendownload kode dari GitHub
+- **Git:** Alat untuk mendownload kode dari GitHub dan melacak versi
 - **Repository:** Folder proyek di GitHub tempat semua kode disimpan
 - **Clone:** Men-download seluruh folder proyek ke komputer Anda
 - **Terminal/Command Prompt:** Aplikasi untuk mengetik perintah teks
-- **Index.html:** File utama situs yang bisa dibuka dengan browser
+- **index.html:** File utama situs yang bisa dibuka dengan browser
 
 ---
 
+<a id="id-step1"></a>
 ## 🔧 Langkah 1: Install Git (Jika Belum Ada)
 
 **Cek apakah Git sudah terinstall:**
@@ -498,7 +605,7 @@ Kemudian ketik:
 git --version
 ```
 
-Jika muncul versi seperti `git version 2.40.0` dan lain-lain, berarti Git sudah ter-install. Silahkan **Lanjut ke Langkah 2.**
+Jika muncul versi seperti `git version 2.40.0` dan lain-lain, berarti Git sudah ter-install. Silakan **Lanjut ke Langkah 2.**
 
 Jika tidak ada atau error, ikuti cara install di bawah:
 
@@ -525,6 +632,7 @@ sudo apt-get install git
 
 ---
 
+<a id="id-step2"></a>
 ## 🔧 Langkah 2: Download Kode Proyek (Clone dari GitHub)
 
 Buka **Terminal** atau **Command Prompt** dan ikuti langkah berikut ini:
@@ -597,8 +705,10 @@ Anda seharusnya melihat file `index.html` yang adalah file utama situsnya.
 
 ---
 
+<a id="id-step3"></a>
 ## 🔧 Langkah 3: Buka Situs (Pilih Salah Satu Cara)
 
+<a id="id-step3a"></a>
 ### **Cara A: Paling Mudah (Klik Dua Kali - Tidak Perlu Terminal Lagi)**
 
 Ini adalah cara paling tercepat dan paling simpel:
@@ -623,6 +733,7 @@ Ini adalah cara paling tercepat dan paling simpel:
 
 ---
 
+<a id="id-step3b"></a>
 ### **Cara B: Server Python (Disarankan)**
 
 Cara ini paling direkomendasikan karena situs pasti bisa berfungsi 100% secara optimal.
@@ -664,7 +775,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 **3. Buka di Browser:**
 
-- Buka browser favorit Anda (Chrome, Firefox, Edge, Safari, BRAVEX)
+- Buka browser favorit Anda (Chrome, Firefox, Edge, Safari, Brave)
 - Di address bar, ketik: `http://localhost:8000`
 - Tekan Enter
 - Situs cuaca akan terbuka!
@@ -681,7 +792,8 @@ Di Terminal, tekan `Ctrl + C` (hold Ctrl, lalu tekan C).
 
 ---
 
-### **Cara C: Node.JS (Alternatif)**
+<a id="id-step3c"></a>
+### **Cara C: Node.js (Alternatif)**
 
 Jika Anda sudah familiar (sudah kenal) dengan Node.js atau tidak punya Python:
 
@@ -721,6 +833,7 @@ Klik link atau ketik `http://localhost:8080` di browser favorit Anda.
 
 ---
 
+<a id="id-step4"></a>
 ## 🔧 Langkah 4: Edit & Kembangkan (Opsional)
 
 Jika ingin mengubah kode situsnya:
@@ -732,7 +845,6 @@ Pilih salah satu teks editor favorit Anda:
 - **Visual Studio Code** (Disarankan, gratis): [code.visualstudio.com](https://code.visualstudio.com)
 - **Notepad++**: [notepad-plus-plus.org](https://notepad-plus-plus.org)
 - **Sublime Text**: [sublimetext.com](https://sublimetext.com)
-- **Atom**: [atom.io](https://atom.io)
 
 **B. Buka File Proyek:**
 
@@ -751,6 +863,7 @@ Pilih salah satu teks editor favorit Anda:
 
 ---
 
+<a id="id-summary"></a>
 ## 📋 Ringkasan Untuk Pemula
 
 | Pilihan | Cara | Kesulitan | Hasil |
@@ -763,6 +876,7 @@ Pilih salah satu teks editor favorit Anda:
 
 ---
 
+<a id="id-troubleshooting"></a>
 ## ❓ Troubleshooting (Jika Ada Masalah)
 
 **Q: "command not found: git"**
@@ -783,12 +897,15 @@ A: Mungkin internet mati atau BMKG server down. Coba:
 - Refresh browser (tekan F5)
 - Tunggu beberapa saat
 - Atau kunjungi [nowcasting.bmkg.go.id](https://nowcasting.bmkg.go.id) untuk cek status
+
 ---
 
+<a id="id-done"></a>
 ## ✅ Selesai!
-1l)
+
 Sekarang Anda sudah berhasil menjalankan situs cuaca di komputer pribadi Anda! 🎉
 
+<a id="id-personalize"></a>
 ### Personalisasi untuk Daerah Lain (Developer)
 
 Kode situs ini bisa diubah untuk daerah lain. Buka file `index.html` dan cari bagian:
@@ -802,6 +919,7 @@ Setiap stasiun BMKG memiliki kode unik. Ganti kode stasiun, ubah koordinat lokas
 
 ---
 
+<a id="id-faq"></a>
 ## ❓ FAQ & Bantuan
 
 <details> <summary><b>Apakah saya perlu membuat akun untuk menggunakan situs ini?</b></summary><br/> Tidak! Situs ini gratis dan tidak butuh login atau akun apapun. Cukup buka website dan langsung bisa lihat cuaca Kepri. </details>
@@ -819,12 +937,13 @@ Setiap stasiun BMKG memiliki kode unik. Ganti kode stasiun, ubah koordinat lokas
 <details> <summary><b>Apakah situs ini memerlukan "API Key" atau kunci akses khusus?</b></summary><br/> Tidak perlu! Data BMKG gratis dan terbuka untuk publik. Tidak seperti layanan cuaca berbayar (OpenWeatherMap, dsb) yang butuh API Key, proyek ini langsung ambil data dari server BMKG tanpa perlu registrasi apapun secara bebas. </details>
 <details> <summary><b>Saya error saat clone, apa yang harus dilakukan?</b></summary><br/> Pastikan Git sudah terinstall dengan benar. Ketik `git --version` di terminal untuk cek. Jika tidak terinstall, download dari <a href="https://git-scm.com">git-scm.com</a>. Jika masih error, coba download file sebagai ZIP dari GitHub: klik tombol "Code" (hijau) → pilih "Download ZIP". </details>
 <details> <summary><b>Server Python tidak jalan, kenapa?</b></summary><br/> Pastikan Python sudah ter-install. Ketik `python --version` di terminal untuk cek. Jika tidak, download dari <a href="https://www.python.org/downloads">python.org</a>. Jika sudah ter-install tapi masih error, coba `python3 -m http.server 8000` atau gunakan Node.js sebagai alternatifnya. </details>
-<details> <summary><b>Apakah tersedia dalam bentuk aplikasi mobile (APK)?</b></summary><br/> Saat ini belum tersedia di Play Store/App Store. Namun, karena situs ini sudah mendukung <strong>PWA (Progressive Web App)</strong>, Anda bisa membukanya di Chrome (Android) atau Safari (iOS), lalu pilih "Add to Home Screen" atau "Tambahkan ke Layar Utama". Situs akan muncul dan berfungsi seperti aplikasi biasa! </details>
+<details> <summary><b>Apakah tersedia dalam bentuk aplikasi mobile (APK)?</b></summary><br/> Saat ini belum ada di Play Store/App Store. Situs ini sudah responsif dan nyaman dibuka di browser HP, jadi Anda bisa membukanya di Chrome (Android) atau Safari (iOS) lalu menambahkan ke layar utama lewat menu Share browser. Setelah itu situs terasa seperti aplikasi biasa, tetapi tetap butuh koneksi internet untuk mengambil data baru. </details>
 <details> <summary><b>Bolehkah saya menggunakan proyek ini untuk keperluan belajar atau tugas akhir?</b></summary><br/> Tentu saja! Proyek ini bersifat <i>Open Source</i>. Anda sangat dipersilakan menggunakannya sebagai bahan referensi, tugas kuliah, atau portofolio, selama tetap mengikuti aturan lisensi GNU GPL v3 dan mencantumkan sumber aslinya. </details>
 <details> <summary><b>Kenapa kadang data cuaca di situs ini berbeda dengan aplikasi cuaca bawaan HP (seperti AccuWeather/The Weather Channel)?</b></summary><br/> Aplikasi global biasanya menggunakan model prediksi cuaca global yang terkadang kurang akurat untuk skala lokal. Situs ini menggunakan data <strong>Real-Time Radar & Nowcasting</strong> langsung dari stasiun BMKG lokal di Kepulauan Riau, sehingga informasinya cenderung lebih akurat untuk kondisi saat ini (0-6 jam ke depan) di wilayah tersebut. </details>
 
 ---
 
+<a id="id-sources"></a>
 ## 📊 Sumber Data & Referensi
 
 | Penyedia | Keterangan | Link |
@@ -841,19 +960,21 @@ Setiap stasiun BMKG memiliki kode unik. Ganti kode stasiun, ubah koordinat lokas
 
 ---
 
+<a id="id-structure"></a>
 ## 📁 Struktur Proyek
 
 ```
 peringatandinicuacakepri.github.io/
 │
-├── screenshots/        # Tangkapan layar untuk dokumentasi tambahan pada README
-├── LICENSE             # Lisensi yang digunakan pada proyek GitHub ini
-└── README.md           # Anda berada di sini
-└── index.html          # Situs utama (file tunggal mandiri yang berisi kode situsnya)
+├── screenshots/        # Tangkapan layar yang dipakai di README ini
+├── LICENSE             # Lisensi proyek GitHub ini (GNU GPL v3)
+├── README.md           # Dokumentasi (Anda berada di sini)
+└── index.html          # Situs utama (file tunggal mandiri yang berisi seluruh kode)
 ```
 
 ---
 
+<a id="id-tech"></a>
 ## 🛠️ Teknologi yang Digunakan
 
 <div align="center">
@@ -871,21 +992,24 @@ peringatandinicuacakepri.github.io/
 ---
 
 
+<a id="id-privacy"></a>
 ## 🔒 Privasi
 
-- **Tidak ada data yang disimpan atau dikirim ke server** yang dikendalikan oleh proyek ini
-- Semua panggilan API langsung dari browser Anda ke server BMKG
-- Lokasi perangkat **tidak pernah diakses** karena koordinat yang ditampilkan hanya alamat fisik Stasiun Meteorologi Hang Nadim
-- Data yang tersimpan di browser (Cache) hanya untuk mode offline dan tidak dikirim ke mana pun
+- **TIDAK ada data yang disimpan atau dikirim ke server** yang dikendalikan oleh proyek ini
+- Semua panggilan API LANGSUNG dari browser Anda ke server BMKG
+- Lokasi perangkat **TIDAK pernah diakses** karena koordinat yang ditampilkan hanya alamat fisik Stasiun Meteorologi Hang Nadim
+- Data yang tersimpan di browser (Cache) hanya untuk mode offline dan TIDAK dikirim ke mana pun
 
 ---
 
+<a id="id-contribute"></a>
 ## 🤝 Kontribusi & Dukungan
 
-Menemukan bug? Punya saran fitur? Atau punya id untuk perbaikan?
+Menemukan bug? Punya saran fitur? Atau punya ide untuk perbaikan?
 
 👉 **[Buka Issue di GitHub](https://github.com/peringatandinicuacakepri/peringatandinicuacakepri.github.io/issues)** untuk laporkan masalah atau usulkan fitur baru.
 
+<a id="id-star"></a>
 ### Berikan Bintang ⭐
 
 Jika proyek ini membantu Anda, dukungan Anda berupa bintang (⭐) di repositori ini akan sangat memotivasi saya selaku pengembang. Terima kasih banyak atas dukungan Anda!

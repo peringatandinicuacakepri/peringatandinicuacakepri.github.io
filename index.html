@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#0b1923" />
   <meta name="color-scheme" content="dark" />
   <!-- Open Graph / Facebook -->
-  <meta property="og:title" content="Peringatan Dini Cuaca BMKG — Kep. Riau" />
+  <meta property="og:title" content="Peringatan Dini Cuaca BMKG - Kep. Riau" />
   <meta property="og:description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
   <meta property="og:image" content="https://peringatandinicuacakepri.github.io/og-image.png" />
   <meta property="og:type" content="website" />
@@ -72,7 +72,7 @@
             var isLite = document.documentElement.classList.contains('perf-lite');
             btn.setAttribute('aria-pressed', isLite ? 'true' : 'false');
             btn.setAttribute('aria-label', isLite ? 'Mode ringan aktif' : 'Mode ringan nonaktif');
-            btn.setAttribute('title', isLite ? 'Mode ringan aktif — klik untuk kembali ke mode penuh' : 'Mode ringan nonaktif — klik untuk mode HP low-end');
+            btn.setAttribute('title', isLite ? 'Mode ringan aktif - klik untuk kembali ke mode penuh' : 'Mode ringan nonaktif - klik untuk mode HP low-end');
             btn.innerHTML = '<span class="lite-toggle-dot" aria-hidden="true"></span><span class="lite-toggle-text">' + (isLite ? 'Mode Ringan: Aktif' : 'Mode Ringan: Nonaktif') + '</span>';
             if (isLite) {
               if (btn.classList.contains('is-active') === false) btn.classList.add('is-active');
@@ -87,7 +87,7 @@
   </script>
 
   <title>
-    Peringatan Dini Cuaca BMKG — Kep. Riau
+    Peringatan Dini Cuaca BMKG - Kep. Riau
   </title>
 
   <meta name="description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
@@ -115,7 +115,7 @@
   <style>
 
 /* ===========================================================
-     #  MAIN CSS  —  BMKG Kepri Weather Early-Warning
+     #  MAIN CSS  -  BMKG Kepri Weather Early-Warning
      #  Organized per section: reset, layout, glass card,
      #  "Open in Maps" modal (BMKG style), animations, etc.
    =========================================================== */
@@ -1489,9 +1489,94 @@ body.modal-open {
   font-weight: 700;
   letter-spacing: .22em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, .22);
+  color: rgba(255, 255, 255, .72);
   display: block;
   margin-bottom: 6px;
+}
+
+/* The expiry is the most important operational detail in an active alert. */
+.validity-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border: 1px solid #fdba74;
+  border-radius: var(--radius-md);
+  background: #fff7ed;
+  color: #431407;
+  box-shadow: 0 8px 20px rgba(251, 146, 60, 0.14);
+  line-height: 1.4;
+}
+
+.validity-banner strong,
+.validity-banner time {
+  display: block;
+}
+
+.validity-banner strong {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.validity-banner time {
+  margin-top: 2px;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -.01em;
+}
+
+.validity-banner .validity-range {
+  display: block;
+  margin-top: 3px;
+  color: #7c2d12;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.validity-banner .validity-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border-radius: 9px;
+  background: #9a3412;
+  color: #fff7ed;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.validity-banner--unknown {
+  border-color: #fcd34d;
+  background: #fffbeb;
+  color: #451a03;
+}
+
+.validity-banner--unknown .validity-range {
+  color: #78350f;
+}
+
+.estimate-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: -4px 0 15px;
+  padding: 9px 11px;
+  border-left: 3px solid #67e8f9;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: rgba(103, 232, 249, 0.08);
+  color: #dffbff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.estimate-note strong {
+  color: #fff;
 }
 
 .warn-title {
@@ -1737,6 +1822,7 @@ body::after {
   letter-spacing: 0.08em;
   color: var(--accent);
   cursor: pointer;
+  font: inherit;
   transition: background 0.25s ease, transform 300ms var(--spring), color 0.25s ease;
   text-decoration: none;
 }
@@ -1746,30 +1832,39 @@ body::after {
   transform: scale(1.03);
 }
 
+.map-zoom-btn:disabled {
+  cursor: not-allowed;
+  opacity: .58;
+  transform: none;
+}
+
 .map-container {
   position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 0;
   border-radius: 20px;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(0, 229, 255, 0.12);
-  aspect-ratio: auto;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 8px;
-  min-height: 220px;
+  isolation: isolate;
 }
 
 .map-container img {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 520px;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
   object-fit: contain;
   display: block;
   transition: transform 0.4s ease;
   border-radius: var(--radius-sm);
+  background: #071117;
 }
 
 .map-container:hover img {
@@ -1779,8 +1874,79 @@ body::after {
 .map-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 50%);
+  z-index: 1;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.58) 0%, transparent 55%);
   pointer-events: none;
+}
+
+.map-action-badge {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 7px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(4, 15, 22, 0.88);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.1;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.32);
+  pointer-events: none;
+}
+
+.map-container.map-container--unavailable {
+  cursor: default;
+}
+
+.map-media-state {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  color: #e0f2fe;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.map-media-state--pending {
+  color: #cffafe;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.map-media-state--pending small {
+  color: #a5f3fc;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.map-error-state strong {
+  color: #fff;
+  font-size: 14px;
+}
+
+.map-error-state span {
+  max-width: 34ch;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.map-error-state a {
+  margin-top: 4px;
+  width: auto;
+  min-height: 40px;
+  padding: 10px 14px;
+  font-size: 11px;
 }
 
 .map-hidden-safe {
@@ -2099,7 +2265,7 @@ body::after {
   margin-bottom: 24px;
 }
 
-/* Credits list — see "CREDITS LIST & CLICKABLE LINK STYLING" below */
+/* Credits list - see "CREDITS LIST & CLICKABLE LINK STYLING" below */
               /* Fluid Keyframes Animations */
 @keyframes iosFadeIn {
   from {
@@ -2337,7 +2503,7 @@ body::after {
   border-radius: 10px;
 }
 
-/* ── Option items (Google Maps, etc.) — liquid glass list items ── */
+/* ── Option items (Google Maps, etc.) - liquid glass list items ── */
 .map-option-item {
   display: flex;
   align-items: center;
@@ -3587,7 +3753,7 @@ body::after {
 
 
     /* ============================================================ 
-           # FULL MODE PREMIUM POLISH — Liquid Glass iOS 26 Feel
+           # FULL MODE PREMIUM POLISH - Liquid Glass iOS 26 Feel
                         # Only for capable devices.             
        ============================================================ */
     html:not(.perf-lite) .app {
@@ -4047,7 +4213,7 @@ body::after {
 
     /* ──────────────────────────────────────────────────────────────
              LITE-MODE "FAUX LIQUID GLASS" (iOS 26 style) ()
-         No backdrop-filter, no animations, no filters — only cheap
+         No backdrop-filter, no animations, no filters - only cheap
               layered gradients + inset highlight shadows. 
        ────────────────────────────────────────────────────────────── */
     html.perf-lite .hdr,
@@ -4332,7 +4498,7 @@ body::after {
 
 
     /* =============================================================
-        #  "KEMBALI KE ATAS" — Liquid-Glass Pill. Same recipe as
+        #  "KEMBALI KE ATAS" - Liquid-Glass Pill. Same recipe as
                 #  the rest of the UI (glass-card / chips).          
        ============================================================= */
     .back-to-top {
@@ -4367,7 +4533,7 @@ body::after {
         0 10px 28px rgba(0, 0, 0, 0.28),
         0 0 0 1px rgba(0, 229, 255, 0.08),
         0 8px 24px rgba(0, 157, 255, 0.18);
-      opacity: 0; /* Hidden until JS adds .is-visible — opacity-only = GPU-cheap */
+      opacity: 0; /* Hidden until JS adds .is-visible - opacity-only = GPU-cheap */
       visibility: hidden;
       transform: translate3d(0, 8px, 0);
       transition:
@@ -4428,7 +4594,7 @@ body::after {
   </style>
 
   <style>
-    /* iOS San Francisco system font stack — native Apple typography feel */
+    /* iOS San Francisco system font stack - native Apple typography feel */
     html, body,
     .skip-to-main,
     .cta-btn,
@@ -4593,7 +4759,7 @@ body::after {
 </noscript>
 
 <!-- ==============================================================
-     #  "KEMBALI KE ATAS" — Back-to-Top Pill Button (BMKG style)
+     #  "KEMBALI KE ATAS" - Back-to-Top Pill Button (BMKG style)
      #  Floating, fixed bottom-right. Revealed via JS after scroll.
      ============================================================== -->
 
@@ -4626,8 +4792,8 @@ body::after {
                  #  BMKG INFOGRAPHIC GALLERY LIGHTBOX                
      #  Opens when the user clicks the "Enlarge" button on the map.
      ============================================================== -->
-    <div class="zoom-modal" id="zoomModal" aria-hidden="true">
-    <div class="zoom-shell" role="dialog" aria-modal="true" aria-label="Galeri peringatan dini cuaca">
+    <div class="zoom-modal" id="zoomModal" aria-hidden="true" inert>
+    <div class="zoom-shell" role="dialog" aria-modal="true" aria-labelledby="zoomLabel" aria-describedby="zoomHelpText">
       <div class="zoom-topbar">
         <div class="zoom-counter" id="zoomCounter">
           1 / 1
@@ -4711,7 +4877,7 @@ body::after {
   </div>
 
   <!-- ============================================================
-          #  MAIN PAGE CONTENT — header, warning card, footer
+          #  MAIN PAGE CONTENT - header, warning card, footer
        ============================================================ -->
     <div class="wrapper">
     <div class="app">
@@ -4737,7 +4903,7 @@ body::after {
           </div>
         </div>
       </header>
-      <!-- Main glass card — content is rendered by JS inside #dc -->
+      <!-- Main glass card - content is rendered by JS inside #dc -->
         <main class="glass-card" id="mainCard" tabindex="-1">
         <div class="card-orb">
         </div>
@@ -4849,7 +5015,7 @@ body::after {
         </div>
       </div>
 
-      <!-- Credit footer — click to open the "Data Providers" modal -->
+      <!-- Credit footer - click to open the "Data Providers" modal -->
         <footer class="footer" id="trigger-credit-modal" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Lihat detail kredit penyedia data">
         © Badan Meteorologi, Klimatologi, dan Geofisika Indonesia
       </footer>
@@ -4898,9 +5064,604 @@ body::after {
       </div>
     </div>
 
+    <script>
+(function (root) {
+  var MONTH_LOOKUP = {
+    jan: 0, januari: 0, feb: 1, februari: 1, mar: 2, maret: 2,
+    apr: 3, april: 3, may: 4, mei: 4, jun: 5, juni: 5,
+    jul: 6, juli: 6, aug: 7, agustus: 7, sep: 8, september: 8,
+    oct: 9, oktober: 9, nov: 10, november: 10, dec: 11, desember: 11
+  };
+  var HOSTS = [
+    'https://nowcasting.bmkg.go.id',
+    'https://www.nowcasting.bmkg.go.id'
+  ];
+  var EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
+
+  function pad(value) {
+    return ('0' + value).slice(-2);
+  }
+
+  function uniqueValues(values) {
+    var result = [];
+    var seen = {};
+    var i;
+    values = values || [];
+    for (i = 0; i < values.length; i += 1) {
+      if (!values[i] || seen[values[i]]) continue;
+      seen[values[i]] = true;
+      result.push(values[i]);
+    }
+    return result;
+  }
+
+  function normalizeWarningText(text) {
+    return String(text || '')
+      .replace(/\r/g, '')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  function normalizeHttpUrl(value) {
+    var raw = String(value || '')
+      .trim()
+      .replace(/\\_/g, '_')
+      .replace(/&amp;/gi, '&');
+    var parsed;
+    if (!/^https?:\/\//i.test(raw)) return '';
+    if (!root.URL) return raw;
+    try {
+      parsed = new root.URL(raw, root.location && root.location.href ? root.location.href : undefined);
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return '';
+      return parsed.href;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function parseDateValue(value) {
+    var raw;
+    var direct;
+    var match;
+    var month;
+    var zone;
+    var offset;
+    var iso;
+    var parsed;
+    if (!value) return null;
+    if (Object.prototype.toString.call(value) === '[object Date]') {
+      return isNaN(value.getTime()) ? null : value;
+    }
+    raw = String(value).trim();
+    if (!raw) return null;
+    direct = new Date(raw);
+    if (!isNaN(direct.getTime())) return direct;
+    match = raw.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})[^0-9]*(\d{1,2})[.:](\d{2})(?:\s*(WIB|WITA|WIT))?/i);
+    if (!match) return null;
+    month = MONTH_LOOKUP[match[2].toLowerCase()];
+    if (typeof month !== 'number') return null;
+    zone = (match[6] || 'WIB').toUpperCase();
+    offset = zone === 'WIT' ? '+09:00' : zone === 'WITA' ? '+08:00' : '+07:00';
+    iso = match[3] + '-' + pad(month + 1) + '-' + pad(match[1]) + 'T' + pad(match[4]) + ':' + match[5] + ':00' + offset;
+    parsed = new Date(iso);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  function formatBMKGDateTime(value) {
+    var date = parseDateValue(value);
+    var datePart;
+    var timePart;
+    if (!date) return '';
+    try {
+      datePart = date.toLocaleDateString('id-ID', {
+        day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Jakarta'
+      });
+      timePart = date.toLocaleTimeString('id-ID', {
+        hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Jakarta'
+      }).replace('.', ':');
+      return datePart + ' ' + timePart + ' WIB';
+    } catch (e) {
+      return date.toISOString().slice(0, 16).replace('T', ' ') + ' WIB';
+    }
+  }
+
+  function formatBMKGClock(value) {
+    var date = parseDateValue(value);
+    if (!date) return '';
+    try {
+      return date.toLocaleTimeString('id-ID', {
+        hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Jakarta'
+      }).replace('.', ':');
+    } catch (e) {
+      return pad(date.getUTCHours()) + ':' + pad(date.getUTCMinutes());
+    }
+  }
+
+  function getBMKGTodayParts() {
+    var date = new Date();
+    try {
+      if (root.Intl && root.Intl.DateTimeFormat) {
+        var parts = new root.Intl.DateTimeFormat('en-GB', {
+          timeZone: 'Asia/Jakarta', day: '2-digit', month: '2-digit', year: 'numeric'
+        }).formatToParts(date);
+        var result = {};
+        var i;
+        for (i = 0; i < parts.length; i += 1) {
+          if (parts[i].type !== 'literal') result[parts[i].type] = parts[i].value;
+        }
+        if (result.year && result.month && result.day) return result;
+      }
+    } catch (e) {}
+    return { year: String(date.getFullYear()), month: pad(date.getMonth() + 1), day: pad(date.getDate()) };
+  }
+
+  function parseAlertAssetMeta(alertLink) {
+    var raw;
+    var match;
+    var id;
+    var digits;
+    try {
+      raw = decodeURIComponent(String(alertLink || '').replace(/\\_/g, '_'));
+    } catch (e) {
+      raw = String(alertLink || '').replace(/\\_/g, '_');
+    }
+    match = raw.match(/(?:^|\/)([A-Za-z]{3}\d{11})_alert(?:\.xml)?(?:[?#]|$)/i) ||
+      raw.match(/(?:^|\/)([A-Za-z]{3}\d{8}\d{3})(?:_alert)?(?:\.xml)?(?:[?#]|$)/i);
+    if (!match) return null;
+    id = match[1].toUpperCase();
+    digits = id.slice(3);
+    return {
+      id: id,
+      station: id.slice(0, 3),
+      year: digits.slice(0, 4),
+      month: digits.slice(4, 6),
+      day: digits.slice(6, 8),
+      sequence: digits.slice(8, 11)
+    };
+  }
+
+  function parseInfografisMetaFromWeb(webUrl) {
+    var normalized = normalizeHttpUrl(webUrl);
+    var parsed;
+    var match;
+    var path;
+    var file;
+    var idMatch;
+    if (!normalized) return null;
+    try {
+      parsed = new root.URL(normalized);
+      path = parsed.pathname;
+      match = path.match(/\/infografis\/([^/]+)\/(\d{4})\/(\d{1,2})\/(\d{1,2})\//i);
+      if (!match) return null;
+      file = path.slice(path.lastIndexOf('/') + 1);
+      idMatch = file.match(/([A-Za-z]{3}\d{11})/i);
+      return {
+        id: idMatch ? idMatch[1].toUpperCase() : '',
+        station: match[1],
+        year: match[2],
+        month: pad(match[3]),
+        day: pad(match[4])
+      };
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function buildDirectoryVariants(meta) {
+    var safeMeta = meta || {};
+    var today = getBMKGTodayParts();
+    var stations = uniqueValues([safeMeta.station, 'CKR', 'KEPRI', 'KepRiau']);
+    var year = safeMeta.year || today.year;
+    var month = pad(safeMeta.month || today.month);
+    var day = pad(safeMeta.day || today.day);
+    var monthNumber = String(Number(month));
+    var dayNumber = String(Number(day));
+    var dirs = [];
+    var i;
+    for (i = 0; i < stations.length; i += 1) {
+      dirs.push(
+        '/infografis/' + stations[i] + '/' + year + '/' + month + '/' + day,
+        '/infografis/' + stations[i] + '/' + year + '/' + monthNumber + '/' + dayNumber,
+        '/infografis/' + stations[i] + '/' + year + '-' + month + '-' + day,
+        '/infografis/' + year + '/' + month + '/' + day + '/' + stations[i],
+        '/infografis/' + year + '/' + monthNumber + '/' + dayNumber + '/' + stations[i]
+      );
+    }
+    dirs.push('/infografis/' + year + '/' + month + '/' + day);
+    return uniqueValues(dirs);
+  }
+
+  function buildAssetFileNames(meta, index) {
+    var safeIndex = Math.max(0, Number(index) || 0);
+    var paddedIndex = pad(safeIndex);
+    var slideNumber = safeIndex + 1;
+    var paddedSlideNumber = pad(slideNumber);
+    var id = meta && meta.id ? meta.id : '';
+    var names = [];
+    var i;
+    for (i = 0; i < EXTENSIONS.length; i += 1) {
+      var ext = EXTENSIONS[i];
+      if (id) {
+        names.push(
+          id + '_image' + safeIndex + '.' + ext,
+          id + '_image_' + safeIndex + '.' + ext,
+          id + '_image' + paddedIndex + '.' + ext,
+          id + '_image_' + paddedIndex + '.' + ext,
+          id + '_image-' + safeIndex + '.' + ext,
+          id + '-image-' + safeIndex + '.' + ext,
+          id + '_' + safeIndex + '.' + ext
+        );
+      }
+      names.push(
+        'image' + safeIndex + '.' + ext,
+        'image_' + safeIndex + '.' + ext,
+        'image' + paddedIndex + '.' + ext,
+        'image_' + paddedIndex + '.' + ext,
+        'slide' + slideNumber + '.' + ext,
+        'slide_' + slideNumber + '.' + ext,
+        'slide' + paddedSlideNumber + '.' + ext,
+        'slide_' + paddedSlideNumber + '.' + ext,
+        'infografis-' + safeIndex + '.' + ext,
+        'infografis_' + safeIndex + '.' + ext
+      );
+      if (safeIndex === 0) names.push('infografis.' + ext, 'infographic.' + ext, 'infografis_text.' + ext, 'infographic_text.' + ext);
+      if (safeIndex === 1) names.push('infografis_text.' + ext, 'infographic_text.' + ext, 'text.' + ext);
+    }
+    return uniqueValues(names);
+  }
+
+  function buildWebImageCandidates(webUrl, index, meta) {
+    var normalized = normalizeHttpUrl(webUrl);
+    var safeIndex = Math.max(0, Number(index) || 0);
+    var candidates = [];
+    var parsed;
+    var path;
+    var slash;
+    var directory;
+    var file;
+    var extMatch;
+    var ext;
+    var stem;
+    var i;
+    var withFile;
+    if (!normalized) return candidates;
+    try {
+      parsed = new root.URL(normalized);
+    } catch (e) {
+      return [normalized];
+    }
+    path = parsed.pathname;
+    slash = path.lastIndexOf('/');
+    directory = slash >= 0 ? path.slice(0, slash + 1) : '/';
+    file = slash >= 0 ? path.slice(slash + 1) : path;
+    extMatch = file.match(/\.([a-z0-9]+)$/i);
+    ext = extMatch ? extMatch[1].toLowerCase() : 'jpg';
+    stem = file.replace(/\.[^.]+$/, '');
+    withFile = function (name) {
+      var next = new root.URL(parsed.href);
+      next.pathname = directory + name;
+      return next.href;
+    };
+    if (safeIndex === 0) candidates.push(normalized);
+    for (i = 0; i < EXTENSIONS.length; i += 1) {
+      var extension = EXTENSIONS[i];
+      if (/image[_-]?\d+$/i.test(stem)) {
+        candidates.push(withFile(stem.replace(/image[_-]?\d+$/i, 'image' + safeIndex) + '.' + extension));
+        candidates.push(withFile(stem.replace(/image[_-]?\d+$/i, 'image_' + safeIndex) + '.' + extension));
+      }
+      if (/infografis/i.test(stem)) {
+        candidates.push(withFile((safeIndex === 0 ? 'infografis' : 'infografis_text') + '.' + extension));
+        if (safeIndex === 0) candidates.push(withFile('infografis_text.' + extension));
+      }
+      if (meta && meta.id) {
+        candidates.push(withFile(meta.id + '_image' + safeIndex + '.' + extension));
+        candidates.push(withFile(meta.id + '_image_' + safeIndex + '.' + extension));
+      }
+    }
+    if (safeIndex === 0) candidates.push(withFile(stem + '.' + ext));
+    return uniqueValues(candidates);
+  }
+
+  function buildInfografisCandidates(options) {
+    var opts = options || {};
+    var meta = opts.meta || parseAlertAssetMeta(opts.alertLink) || parseInfografisMetaFromWeb(opts.webUrl);
+    var index = Math.max(0, Number(opts.index) || 0);
+    var candidates = [];
+    var dirs;
+    var names;
+    var i;
+    var j;
+    var k;
+    if (!meta) meta = { station: 'CKR' };
+    if (index === 0 && opts.webUrl) candidates.push(normalizeHttpUrl(opts.webUrl));
+    dirs = buildDirectoryVariants(meta);
+    names = buildAssetFileNames(meta, index);
+    for (i = 0; i < dirs.length; i += 1) {
+      for (j = 0; j < HOSTS.length; j += 1) {
+        for (k = 0; k < names.length; k += 1) {
+          candidates.push(HOSTS[j] + dirs[i] + '/' + names[k]);
+        }
+      }
+    }
+    return uniqueValues(candidates);
+  }
+
+  function buildNowcastingImageCandidates(alertLink, index, webUrl) {
+    var meta = parseAlertAssetMeta(alertLink) || parseInfografisMetaFromWeb(webUrl);
+    if (!meta && webUrl) meta = { station: 'CKR' };
+    return uniqueValues(buildWebImageCandidates(webUrl, index, meta).concat(
+      buildInfografisCandidates({ meta: meta, alertLink: alertLink, index: index, webUrl: webUrl })
+    ));
+  }
+
+  function buildInfografisUrl(options) {
+    var candidates = buildInfografisCandidates({
+      meta: options && options.meta,
+      alertLink: options && options.alertLink,
+      index: 0,
+      webUrl: options && options.webUrl
+    });
+    return candidates[0] || '';
+  }
+
+  function buildNowcastingImageUrl(alertLink, index, webUrl) {
+    var candidates = buildNowcastingImageCandidates(alertLink, index, webUrl);
+    return candidates[0] || '';
+  }
+
+  function buildPreviewImageUrl(alert) {
+    var record = typeof alert === 'object' ? alert : { link: alert };
+    return buildNowcastingImageUrl(record.link, 0, record.web) || buildInfografisUrl({ alertLink: record.link, webUrl: record.web });
+  }
+
+  function getLocalName(element) {
+    return String(element && (element.localName || element.nodeName) || '').split(':').pop().toLowerCase();
+  }
+
+  function getElementsByLocalName(rootElement, name) {
+    var wanted = String(name).toLowerCase();
+    var all;
+    var result = [];
+    var i;
+    if (!rootElement || !rootElement.getElementsByTagName) return result;
+    if (getLocalName(rootElement) === wanted) result.push(rootElement);
+    all = rootElement.getElementsByTagName('*');
+    for (i = 0; i < all.length; i += 1) {
+      if (getLocalName(all[i]) === wanted) result.push(all[i]);
+    }
+    return result;
+  }
+
+  function getFirstElementText(rootElement, name) {
+    var nodes = getElementsByLocalName(rootElement, name);
+    return nodes.length ? String(nodes[0].textContent || '').trim() : '';
+  }
+
+  function titleCaseRegionList(value) {
+    return String(value || '').replace(/[A-Za-zÀ-ÿ]+(?:[.'-][A-Za-zÀ-ÿ]+)*/g, function (token) {
+      var lower = token.toLocaleLowerCase ? token.toLocaleLowerCase('id-ID') : token.toLowerCase();
+      if (/^[ivxlcdm]+$/i.test(token) && token.length > 1) return token.toUpperCase();
+      return lower.charAt(0).toLocaleUpperCase ? lower.charAt(0).toLocaleUpperCase('id-ID') + lower.slice(1) : lower.charAt(0).toUpperCase() + lower.slice(1);
+    });
+  }
+
+  function titleCaseNarrativeRegions(text) {
+    var output = normalizeWarningText(text);
+    var patterns = [
+      /(\bkhususnya\s+di\s+)([^.!?\n]+)/gi,
+      /(\bdan\s+dapat\s+meluas\s+ke\s+wilayah\s+)([^.!?\n]+)/gi,
+      /(\bmeluas\s+ke\s+wilayah\s+)([^.!?\n]+)/gi
+    ];
+    var i;
+    for (i = 0; i < patterns.length; i += 1) {
+      output = output.replace(patterns[i], function (full, prefix, regions) {
+        return prefix + titleCaseRegionList(regions);
+      });
+    }
+    if (!/\bkhususnya\s+di\b/i.test(output)) {
+      output = output.replace(
+        /(\bpada\b[^.!?\n]*?\b(?:WIB|WITA|WIT)\s+di\s+)([^.!?\n]+?)(?=\s+(?:dan\s+dapat\s+meluas|kondisi(?:\s+ini|\s+diperkirakan)|masyarakat|prakirawan)|[.!?]|$)/i,
+        function (full, prefix, regions) { return prefix + titleCaseRegionList(regions); }
+      );
+    }
+    return output;
+  }
+
+  function parseReleaseOpening(text) {
+    var source = String(text || '').replace(/\s+/g, ' ').trim();
+    var match = source.match(/(?:^|\b)(?:UPDATE\s+)?Peringatan\s+Dini\s+Cuaca\s+Wilayah\s+(.+?)\s+(?:tgl\.?|tanggal)\s+(.+?)\s+(?:pkl\.?|pukul)\s+(\d{1,2}[.:]\d{2})\s*(WIB|WITA|WIT)/i);
+    if (!match) return null;
+    return {
+      province: titleCaseRegionList(match[1]),
+      date: match[2].trim(),
+      time: match[3].replace('.', ':'),
+      zone: match[4].toUpperCase(),
+      text: match[0].trim()
+    };
+  }
+
+  function extractNarrativeTiming(text) {
+    var source = normalizeWarningText(text).replace(/[ \t]+/g, ' ');
+    var times = [];
+    var dates = [];
+    var timePattern = /\b([01]?\d|2[0-3])[:.]([0-5]\d)\s*(WIB|WITA|WIT)?\b/gi;
+    var datePattern = /(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/gi;
+    var timeMatch;
+    var dateMatch;
+    var explicitRange;
+    var headerMatch;
+    var estimateMatch;
+    var firstTime;
+    var lastTime;
+    var rangeStart;
+    var rangeEnd;
+    var rangeZone;
+    var startToken;
+    var endToken;
+    var headerDate;
+    while ((timeMatch = timePattern.exec(source))) {
+      times.push({
+        time: pad(timeMatch[1]) + ':' + timeMatch[2],
+        zone: (timeMatch[3] || 'WIB').toUpperCase(),
+        index: timeMatch.index
+      });
+    }
+    while ((dateMatch = datePattern.exec(source))) {
+      var month = MONTH_LOOKUP[dateMatch[2].toLowerCase()];
+      if (typeof month === 'number') {
+        dates.push({ day: Number(dateMatch[1]), month: month, year: Number(dateMatch[3]), index: dateMatch.index });
+      }
+    }
+    function localDateTimeFor(token) {
+      var previousDate = null;
+      var i;
+      var offset;
+      var iso;
+      var j;
+      for (i = 0; i < dates.length; i += 1) {
+        if (dates[i].index <= token.index) previousDate = dates[i];
+      }
+      if (!previousDate) previousDate = dates[0];
+      if (!previousDate) return null;
+      offset = token.zone === 'WIT' ? '+09:00' : token.zone === 'WITA' ? '+08:00' : '+07:00';
+      iso = previousDate.year + '-' + pad(previousDate.month + 1) + '-' + pad(previousDate.day) + 'T' + token.time + ':00' + offset;
+      return parseDateValue(iso);
+    }
+    explicitRange = source.match(/\b(\d{1,2}[.:]\d{2})\s*(?:-|sampai|hingga)\s*(\d{1,2}[.:]\d{2})\s*(WIB|WITA|WIT)?\b/i);
+    headerMatch = source.match(/\bBerlaku\s+Sampai\s+(.{1,100}?)(?=\.|$)/i);
+    estimateMatch = source.match(/\bKondisi(?:\s+ini)?\s+diperkirakan\s+(?:masih\s+)?(?:dapat\s+)?berlangsung\s+hingga\s+[^.!?\n]+[.!?]?/i);
+    firstTime = times[0] || null;
+    lastTime = times.length > 1 ? times[times.length - 1] : null;
+    rangeStart = explicitRange ? explicitRange[1].replace('.', ':') : firstTime ? firstTime.time : '';
+    rangeEnd = explicitRange ? explicitRange[2].replace('.', ':') : lastTime ? lastTime.time : '';
+    rangeZone = (explicitRange && explicitRange[3] || lastTime && lastTime.zone || firstTime && firstTime.zone || 'WIB').toUpperCase();
+    startToken = explicitRange && firstTime ? { time: rangeStart, zone: rangeZone, index: firstTime.index } : firstTime;
+    endToken = explicitRange && lastTime ? { time: rangeEnd, zone: rangeZone, index: lastTime.index } : lastTime;
+    headerDate = headerMatch ? parseDateValue(headerMatch[1]) : null;
+    return {
+      source: source,
+      times: times,
+      startTime: rangeStart,
+      endTime: rangeEnd,
+      zone: rangeZone,
+      startDate: startToken ? localDateTimeFor(startToken) : null,
+      endDate: endToken ? localDateTimeFor(endToken) : null,
+      headerExpiry: headerDate,
+      headerText: headerMatch ? headerMatch[0].trim() : '',
+      estimateText: estimateMatch ? estimateMatch[0].trim() : '',
+      rangeText: rangeStart && rangeEnd ? rangeStart + ' sampai ' + rangeEnd + ' ' + rangeZone : rangeStart ? rangeStart + ' ' + rangeZone : ''
+    };
+  }
+
+  function deriveAlertValidity(alert) {
+    alert = alert || {};
+    var text = [alert.title, alert.headline, alert.desc, alert.description].filter(Boolean).join('\n');
+    var narrative = alert.narrativeTiming || extractNarrativeTiming(text);
+    var effectiveDate = parseDateValue(alert.effective) || narrative.startDate;
+    var expiresDate = parseDateValue(alert.expires) || narrative.headerExpiry || narrative.endDate;
+    var expiryLabel = formatBMKGDateTime(expiresDate) || (narrative.endTime ? narrative.endTime + ' ' + narrative.zone : 'Belum tersedia dari rilis BMKG');
+    var startLabel = formatBMKGClock(effectiveDate) || narrative.startTime;
+    var endLabel = formatBMKGClock(expiresDate) || narrative.endTime;
+    var zone = narrative.zone || 'WIB';
+    var rangeLabel = startLabel && endLabel ? startLabel + ' sampai ' + endLabel + ' ' + zone : narrative.rangeText;
+    return { effectiveDate: effectiveDate, expiresDate: expiresDate, expiryLabel: expiryLabel, rangeLabel: rangeLabel, narrative: narrative };
+  }
+
+  function parseFeedAlertItem(item) {
+    var title;
+    var desc;
+    var link;
+    if (!item) return null;
+    title = getFirstElementText(item, 'title');
+    desc = getFirstElementText(item, 'description');
+    link = normalizeHttpUrl(getFirstElementText(item, 'link'));
+    return {
+      title: title,
+      desc: desc,
+      link: link,
+      pubDate: getFirstElementText(item, 'pubDate'),
+      narrativeTiming: extractNarrativeTiming(title + '\n' + desc),
+      opening: parseReleaseOpening(title + '\n' + desc)
+    };
+  }
+
+  function findKepriAlert(doc) {
+    var items = getElementsByLocalName(doc, 'item');
+    var i;
+    var alert;
+    for (i = 0; i < items.length; i += 1) {
+      alert = parseFeedAlertItem(items[i]);
+      if (alert && /(?:Kep\.?\s*Riau|Kepulauan\s+Riau)/i.test(alert.title)) return alert;
+    }
+    return null;
+  }
+
+  function parseCapAlertXml(xml, alert) {
+    var doc;
+    var info;
+    var parsed = {};
+    var key;
+    if (!xml) return null;
+    try {
+      doc = typeof xml === 'string' ? new root.DOMParser().parseFromString(xml, 'text/xml') : xml;
+      if (!doc || getElementsByLocalName(doc, 'parsererror').length) return null;
+      info = getElementsByLocalName(doc, 'info')[0] || doc;
+      if (alert) for (key in alert) if (Object.prototype.hasOwnProperty.call(alert, key)) parsed[key] = alert[key];
+      parsed.headline = getFirstElementText(info, 'headline') || parsed.title || '';
+      parsed.description = getFirstElementText(info, 'description') || parsed.desc || '';
+      parsed.desc = parsed.description;
+      parsed.web = normalizeHttpUrl(getFirstElementText(info, 'web')) || parsed.web || '';
+      parsed.effective = getFirstElementText(info, 'effective') || parsed.effective || '';
+      parsed.expires = getFirstElementText(info, 'expires') || parsed.expires || '';
+      parsed.senderName = getFirstElementText(info, 'senderName') || parsed.senderName || '';
+      parsed.areaDesc = getFirstElementText(info, 'areaDesc') || parsed.areaDesc || '';
+      parsed.narrativeTiming = extractNarrativeTiming(parsed.headline + '\n' + parsed.desc);
+      parsed.opening = parseReleaseOpening(parsed.headline + '\n' + parsed.desc) || parsed.opening || null;
+      parsed.validity = deriveAlertValidity(parsed);
+      return parsed;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  root.BMKGShared = {
+    uniqueValues: uniqueValues,
+    normalizeWarningText: normalizeWarningText,
+    normalizeHttpUrl: normalizeHttpUrl,
+    parseDateValue: parseDateValue,
+    formatBMKGDateTime: formatBMKGDateTime,
+    formatBMKGClock: formatBMKGClock,
+    getBMKGTodayParts: getBMKGTodayParts,
+    parseAlertAssetMeta: parseAlertAssetMeta,
+    parseInfografisMetaFromWeb: parseInfografisMetaFromWeb,
+    buildDirectoryVariants: buildDirectoryVariants,
+    buildAssetFileNames: buildAssetFileNames,
+    buildWebImageCandidates: buildWebImageCandidates,
+    buildInfografisCandidates: buildInfografisCandidates,
+    buildNowcastingImageCandidates: buildNowcastingImageCandidates,
+    buildInfografisUrl: buildInfografisUrl,
+    buildNowcastingImageUrl: buildNowcastingImageUrl,
+    buildPreviewImageUrl: buildPreviewImageUrl,
+    getLocalName: getLocalName,
+    getElementsByLocalName: getElementsByLocalName,
+    getFirstElementText: getFirstElementText,
+    titleCaseRegionList: titleCaseRegionList,
+    titleCaseNarrativeRegions: titleCaseNarrativeRegions,
+    parseReleaseOpening: parseReleaseOpening,
+    extractNarrativeTiming: extractNarrativeTiming,
+    deriveAlertValidity: deriveAlertValidity,
+    parseFeedAlertItem: parseFeedAlertItem,
+    findKepriAlert: findKepriAlert,
+    parseCapAlertXml: parseCapAlertXml
+  };
+})(window);
+
+    </script>
+
     <script type="module">
 /* ===============================================================
-   #    MAIN JS  —  Fetch BMKG RSS + render the warning card
+   #    MAIN JS  -  Fetch BMKG RSS + render the warning card
    #    - initSync()        : entry point + 5-minute auto-polling
    #    - renderLoading/Warning/Safe/Error: view states
    #    - Lightbox / gallery: infographic zoom modal
@@ -4913,7 +5674,6 @@ const DESKTOP_INTERACTION_MOTION = !PERF_LITE_MODE &&
   window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
   !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 const RSS = 'https://www.bmkg.go.id/alerts/nowcast/id/rss.xml';
-const INFOGRAFIS = buildInfografisUrl();
 const PROXIES = [{
     url: '',
     json: false,
@@ -4937,7 +5697,8 @@ const PROXIES = [{
   }
 ];
 
-const FETCH_TIMEOUT_MS = PERF_LITE_MODE ? 1000 : 1000;
+const FETCH_TIMEOUT_MS = PERF_LITE_MODE ? 5000 : 8000;
+const CAP_TIMEOUT_MS = PERF_LITE_MODE ? 3500 : 6000;
 let infografisUrl = '';
 let zoomImgUrl = '';
 let galleryRequestToken = 0;
@@ -4964,6 +5725,33 @@ function fetchWithTimeout(url, ms) {
       clearTimeout(timer);
       throw err;
     });
+}
+
+function isUsableXml(text) {
+  const value = String(text || '').trim();
+  return value.length > 80 && !/^\s*[\[{]/.test(value) && !/^<!doctype html/i.test(value) && !/<html[\s>]/i.test(value);
+}
+
+async function fetchCapAlert(alertOrLink) {
+  const record = typeof alertOrLink === 'object' ? alertOrLink : { link: alertOrLink };
+  const targetUrl = normalizeHttpUrl(record.link);
+  if (!targetUrl) return null;
+
+  for (const proxy of PROXIES) {
+    if (proxy.direct && window.location.protocol === 'file:') continue;
+    const requestUrl = proxy.direct ? targetUrl : proxy.url + encodeURIComponent(targetUrl);
+    try {
+      const response = await fetchWithTimeout(requestUrl, CAP_TIMEOUT_MS);
+      if (!response.ok) continue;
+      const text = proxy.json ? ((await response.json())?.contents || '') : await response.text();
+      if (!isUsableXml(text)) continue;
+      const parsed = parseCapAlertXml(text, record);
+      if (parsed) return parsed;
+    } catch (_) {
+      // A detail document is enrichment. The RSS record remains usable when it fails.
+    }
+  }
+  return null;
 }
 
 const i18n = {
@@ -5027,7 +5815,7 @@ function nowHHMM() {
 }
 
 function translateDate(dateStr) {
-  if (!dateStr) return '—';
+  if (!dateStr) return 'Waktu belum tersedia';
   const raw = String(dateStr).trim();
   const monthIndex = {
     Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Mei: 4, Jun: 5,
@@ -5036,20 +5824,13 @@ function translateDate(dateStr) {
     Juli: 6, Agustus: 7, September: 8, Oktober: 9, November: 10, Desember: 11
   };
   let parsed = new Date(raw);
-  // Robust parser for RSS-like strings, e.g.:
-  // "Sun, 27 May 2026 04:15:37 +0000" or "27 Mei 2026 04:15:37 +0000".
   const match = raw.match(/(?:[A-Za-z]+,\s*)?(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(?:([+-])(\d{2})(\d{2})|GMT|UTC|Z)?/i);
 
   if (match) {
-    const day = Number(match[1]);
     const monthName = match[2];
     const month = monthIndex[monthName] ?? monthIndex[monthName.slice(0, 3)];
-    const year = Number(match[3]);
-    const hour = Number(match[4]);
-    const minute = Number(match[5]);
-    const second = Number(match[6] || 0);
     if (Number.isInteger(month)) {
-      let utcMs = Date.UTC(year, month, day, hour, minute, second);
+      let utcMs = Date.UTC(Number(match[3]), month, Number(match[1]), Number(match[4]), Number(match[5]), Number(match[6] || 0));
       if (match[7] && match[8] && match[9]) {
         const sign = match[7] === '+' ? 1 : -1;
         const offsetMinutes = sign * (Number(match[8]) * 60 + Number(match[9]));
@@ -5078,17 +5859,114 @@ function translateDate(dateStr) {
   return `${parts.weekday}, ${parts.day} ${parts.month} ${parts.year} ${parts.hour}:${parts.minute}:${parts.second} WIB`;
 }
 
-// Build today's infografis URL for Kepri (CKR station)
-function buildInfografisUrl() {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, '0');
-  const d = String(now.getDate()).padStart(2, '0');
-  return `https://nowcasting.bmkg.go.id/infografis/CKR/${y}/${m}/${d}/infografis.jpg`;
+const BMKG_SHARED = window.BMKGShared;
+
+function uniqueValues(values) {
+  return BMKG_SHARED.uniqueValues(values);
 }
 
-function buildPreviewImageUrl(alertLink) {
-  return buildNowcastingImageUrl(alertLink, 0) || buildInfografisUrl();
+function normalizeHttpUrl(value) {
+  return BMKG_SHARED.normalizeHttpUrl(value);
+}
+
+function parseDateValue(value) {
+  return BMKG_SHARED.parseDateValue(value);
+}
+
+function formatBMKGDateTime(value) {
+  return BMKG_SHARED.formatBMKGDateTime(value);
+}
+
+function formatBMKGClock(value) {
+  return BMKG_SHARED.formatBMKGClock(value);
+}
+
+function getBMKGTodayParts() {
+  return BMKG_SHARED.getBMKGTodayParts();
+}
+
+function parseAlertAssetMeta(alertLink) {
+  return BMKG_SHARED.parseAlertAssetMeta(alertLink);
+}
+
+function parseInfografisMetaFromWeb(webUrl) {
+  return BMKG_SHARED.parseInfografisMetaFromWeb(webUrl);
+}
+
+function buildDirectoryVariants(meta) {
+  return BMKG_SHARED.buildDirectoryVariants(meta);
+}
+
+function buildAssetFileNames(meta, index) {
+  return BMKG_SHARED.buildAssetFileNames(meta, index);
+}
+
+function buildWebImageCandidates(webUrl, index, meta) {
+  return BMKG_SHARED.buildWebImageCandidates(webUrl, index, meta);
+}
+
+function buildInfografisCandidates(options) {
+  return BMKG_SHARED.buildInfografisCandidates(options);
+}
+
+function buildNowcastingImageCandidates(alertLink, index, webUrl) {
+  return BMKG_SHARED.buildNowcastingImageCandidates(alertLink, index, webUrl);
+}
+
+function buildInfografisUrl(options) {
+  return BMKG_SHARED.buildInfografisUrl(options);
+}
+
+function buildNowcastingImageUrl(alertLink, index, webUrl) {
+  return BMKG_SHARED.buildNowcastingImageUrl(alertLink, index, webUrl);
+}
+
+function buildPreviewImageUrl(alert) {
+  return BMKG_SHARED.buildPreviewImageUrl(alert);
+}
+
+function getLocalName(element) {
+  return BMKG_SHARED.getLocalName(element);
+}
+
+function getElementsByLocalName(root, name) {
+  return BMKG_SHARED.getElementsByLocalName(root, name);
+}
+
+function getFirstElementText(root, name) {
+  return BMKG_SHARED.getFirstElementText(root, name);
+}
+
+function titleCaseRegionList(value) {
+  return BMKG_SHARED.titleCaseRegionList(value);
+}
+
+function titleCaseNarrativeRegions(text) {
+  return BMKG_SHARED.titleCaseNarrativeRegions(text);
+}
+
+function parseReleaseOpening(text) {
+  return BMKG_SHARED.parseReleaseOpening(text);
+}
+
+function extractNarrativeTiming(text) {
+  return BMKG_SHARED.extractNarrativeTiming(text);
+}
+
+function deriveAlertValidity(alert) {
+  return BMKG_SHARED.deriveAlertValidity(alert);
+}
+
+function parseFeedAlertItem(item) {
+  return BMKG_SHARED.parseFeedAlertItem(item);
+}
+
+function findKepriAlert(doc) {
+  return BMKG_SHARED.findKepriAlert(doc);
+}
+
+function parseCapAlertXml(xml, alert) {
+  return BMKG_SHARED.parseCapAlertXml(xml, alert);
 }
 
 //  Small Pill Notes
@@ -5115,7 +5993,7 @@ function buildPills(raw) {
     if (hasLebat) out += pill('p-rain', '🌧️ Hujan Lebat');
     if (hasPetir) out += pill('p-danger', '⚡ Petir/Kilat');
   }
-  if (hasModerateToHeavyRain) out += pill('p-rainmix', '🌦️ Hujan intensitas Sedang–Lebat');
+  if (hasModerateToHeavyRain) out += pill('p-rainmix', '🌦️ Hujan intensitas Sedang-Lebat');
   if (hasRingan) out += pill('p-lrain', '☁️💧 Hujan Ringan');
   if (lo.includes('angin kencang') || (lo.includes('angin') && lo.includes('kencang'))) out += pill('p-wind', '💨 Angin Kencang');
   if (lo.includes('gelombang')) out += pill('p-wave', '🌊 Gelombang Tinggi');
@@ -5155,171 +6033,159 @@ function renderLoading() {
     '</div>';
 }
 
-function renderWarning(title, desc, link, lastBuild) {
+function buildValidityBanner(validity) {
+  const data = validity || {};
+  const expiry = data.expiryLabel || 'Belum tersedia dari rilis BMKG';
+  const unknown = !data.expiresDate;
+  const range = data.rangeLabel ? `<span class="validity-range">Aktif: ${escHtml(data.rangeLabel)}</span>` : '';
+  return `<section class="validity-banner${unknown ? ' validity-banner--unknown' : ''}" aria-label="Masa berlaku peringatan">
+      <span class="validity-icon" aria-hidden="true">⏱</span>
+      <span>
+        <strong>Berlaku Sampai</strong>
+        <time datetime="${data.expiresDate ? escHtml(new Date(data.expiresDate).toISOString()) : ''}">${escHtml(expiry)}</time>
+        ${range}
+      </span>
+    </section>`;
+}
+
+function buildDescriptionHtml(text) {
+  const source = titleCaseNarrativeRegions(text);
+  let html = escHtml(source);
+  const markers = [];
+  const markerFor = (region, className) => {
+    const marker = `__BMKG_REGION_${markers.length}__`;
+    markers.push({ marker, region: region.trim(), className });
+    return marker;
+  };
+  const mark = (pattern, className) => {
+    html = html.replace(pattern, (full, prefix, region) => `${prefix}${markerFor(region, className)}`);
+  };
+
+  if (!/\bkhususnya\s+di\b/i.test(source)) {
+    mark(/(\bpada\b[^.!?\n]*?\b(?:WIB|WITA|WIT)\s+di\s+)([^.!?\n]+?)(?=\s+(?:dan\s+dapat\s+meluas|kondisi(?:\s+ini|\s+diperkirakan)|masyarakat|prakirawan)|[.!?]|$)/i, 'desc-region');
+  }
+  mark(/(\bdan\s+dapat\s+meluas\s+ke\s+wilayah\s+)([^.!?\n]+)/i, 'desc-region desc-region--expansion');
+  if (!/\bdan\s+dapat\s+meluas\s+ke\s+wilayah\b/i.test(source)) {
+    mark(/(\bmeluas\s+ke\s+wilayah\s+)([^.!?\n]+)/i, 'desc-region desc-region--expansion');
+  }
+  mark(/(\bkhususnya\s+di\s+)([^.!?\n]+)/i, 'desc-region');
+
+  markers.forEach(item => {
+    html = html.replace(item.marker, `<strong class="${item.className}">${item.region}</strong>`);
+  });
+  return html || '<span>Ringkasan rilis belum tersedia.</span>';
+}
+
+function buildPendingMapHtml() {
+  return `<div class="map-media-state map-media-state--pending" role="status">
+      <strong>Memeriksa infografis BMKG</strong>
+      <small>Gambar diambil dari tautan rilis CAP atau folder aset BMKG.</small>
+    </div>
+    <div class="map-overlay" aria-hidden="true"></div>
+    <span class="map-action-badge">Klik untuk detail / perbesar</span>`;
+}
+
+function buildMapImageHtml(url, title) {
+  return `<img id="mapPreviewImg" src="${safeUrl(url)}" alt="Infografis peringatan dini cuaca Kepulauan Riau" loading="eager" decoding="async" fetchpriority="high" data-map-image="true" />
+    <div class="map-overlay" aria-hidden="true"></div>
+    <span class="map-action-badge">Klik untuk detail / perbesar</span>`;
+}
+
+function showMapUnavailable() {
+  const container = document.querySelector('#dc .map-container');
+  const zoomButton = document.querySelector('#dc .map-zoom-btn');
+  if (!container) return;
+  container.removeAttribute('role');
+  container.removeAttribute('tabindex');
+  container.classList.add('map-container--unavailable');
+  container.setAttribute('aria-label', 'Infografis belum tersedia');
+  if (zoomButton) {
+    zoomButton.disabled = true;
+    zoomButton.setAttribute('aria-label', 'Infografis BMKG belum tersedia');
+    zoomButton.title = 'Infografis BMKG belum tersedia';
+  }
+  container.innerHTML = mapErrorHTML();
+}
+
+function showMapImage(url, title) {
+  const container = document.querySelector('#dc .map-container');
+  if (!container || !url) return;
+  container.classList.remove('map-container--unavailable');
+  container.innerHTML = buildMapImageHtml(url, title);
+}
+
+function renderWarning(title, desc, link, lastBuild, capData) {
+  const record = typeof title === 'object' ? { ...title } : {
+    ...(capData || {}),
+    title,
+    desc,
+    link,
+    lastBuild
+  };
+  const text = normalizeWarningText(record.desc || record.description || '');
+  const displayTitle = titleCaseNarrativeRegions(record.headline || record.title || 'Peringatan Cuaca');
+  const validity = record.validity || deriveAlertValidity({ ...record, desc: text });
+  const narrative = validity.narrative || extractNarrativeTiming(text);
+  const estimateText = narrative.estimateText || '';
+  const textWithoutEstimate = estimateText ? text.replace(estimateText, '').trim() : text;
+  const textFix = titleCaseNarrativeRegions(textWithoutEstimate);
+  const previewCandidate = buildPreviewImageUrl(record);
+
   setStatus('live', i18n.status.live + ': ' + nowHHMM());
   stopSpin();
   document.getElementById('refreshChipText').textContent = `DIPERBARUI ${nowHHMM()} WIB`;
-  const previewUrl = buildPreviewImageUrl(link);
-  infografisUrl = previewUrl;
-  zoomImgUrl = previewUrl;
-
-  // Preload previewUrl above the fold
-  if (previewUrl) {
-    const pl = document.createElement('link');
-    pl.rel = 'preload';
-    pl.as = 'image';
-    pl.href = previewUrl;
-    document.head.appendChild(pl);
-  }
-
   document.getElementById('mainCard').classList.add('w-glow');
-  const pills = buildPills(desc);
-  const clean = desc.replace(/<[^>]*>/g, '').trim();
+  infografisUrl = '';
+  zoomImgUrl = '';
 
-  // --- DYNAMIC DATE TRANSLATOR CODE ---
-  let textFix = clean || "";
-
-  if (typeof textFix === 'string' && textFix) {
-    // 1. Dictionary to translate English month names to Indonesian
-    const monthsId = {
-      'January': 'Januari',
-      'February': 'Februari',
-      'March': 'Maret',
-      'April': 'April',
-      'May': 'Mei',
-      'June': 'Juni',
-      'July': 'Juli',
-      'August': 'Agustus',
-      'September': 'September',
-      'October': 'Oktober',
-      'November': 'November',
-      'December': 'Desember'
-    };
-
-    // 2. Array for Indonesian day names
-    const daysId = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-
-    // 3. Match the date pattern (e.g., "27 May 2026") inside the description text
-    const dateMatch = textFix.match(/(\d{1,2})\s([A-Za-z]+)\s(\d{4})/);
-
-    if (dateMatch) {
-      const fullRawDate = dateMatch[0]; // Captures the exact original text like "27 May 2026"
-      const dayNum = dateMatch[1]; // Day number ("27")
-      const monthEng = dateMatch[2]; // English month name ("May")
-      const yearNum = dateMatch[3]; // Year number ("2026")
-
-      // Translate the month name using the dictionary mapping
-      const monthId = monthsId[monthEng] || monthEng;
-
-      // Automatically calculate the correct day name based on the system calendar
-      const parsedDate = new Date(`${dayNum} ${monthEng} ${yearNum}`);
-      let dayName = "";
-      if (!isNaN(parsedDate.getTime())) {
-        dayName = daysId[parsedDate.getDay()] + ", "; // Dynamically generates "Minggu, ", "Senin, ", etc.
-      }
-
-      // Combine into the new localized format: "Rabu, 27 Mei 2026"
-      const finalIndoDate = `${dayName}${dayNum} ${monthId} ${yearNum}`;
-
-      textFix = textFix.replaceAll(fullRawDate, finalIndoDate);
-    }
-  }
-
-  const displayTitle = title || 'Peringatan Cuaca';
+  const pills = buildPills(text);
   let titleHtml = escHtml(displayTitle);
-  // Paksa pecah dua baris setelah kata "disertai" agar layout mirip mode full
-  if (/disertai\s/i.test(displayTitle)) {
-    titleHtml = titleHtml.replace(/disertai\s+/i, 'disertai<br>');
-  }
+  if (/disertai\s/i.test(displayTitle)) titleHtml = titleHtml.replace(/disertai\s+/i, 'disertai<br>');
+  const timePill = validity.rangeLabel ? `<div class="time-pill" title="Rentang waktu aktif dalam WIB">
+      <span class="time-pill-ic" aria-hidden="true">🕒</span>
+      <span class="time-pill-from">${escHtml(validity.rangeLabel)}</span>
+    </div>` : '';
+  const estimateMarkup = estimateText ? `<div class="estimate-note" role="note"><span aria-hidden="true">ⓘ</span><strong>${escHtml(titleCaseNarrativeRegions(estimateText))}</strong></div>` : '';
+  const mapTriggerLabel = 'Klik untuk detail / perbesar';
+
   galleryRequestToken += 1;
-  setLightboxSlides(buildWarningFallbackSlides(previewUrl, displayTitle, textFix, lastBuild), 0);
-  hydrateWarningGallery(link, displayTitle, textFix, lastBuild, previewUrl);
-
-  // --- HIGHLIGHT AFFECTED REGION + BUILD TIME-RANGE PILL ---
-  // Escape first so we can safely inject <strong> markup into the description.
-  let descHtml = escHtml(textFix);
-
-  // --- BOLD THE AFFECTED + EXPANSION REGIONS ---
-  // Helper: wrap a captured region span in <strong>, preserving the lead text.
-  const boldRegion = (m, lead, region) =>
-    `${lead}<strong class="desc-region">${region.trim()}</strong>`;
-
-  // Case A (BMKG live format): "... pada pkl HH:MM WIB di <WILAYAH> ... Dan dapat meluas ..."
-  // Bold the primary affected area: everything between "WIB di " and "Dan dapat meluas"
-  // (or "Kondisi ini" / "Prakirawan" if there is no expansion section).
-  descHtml = descHtml.replace(
-    /(\bWIB\s+di\s+)([\s\S]+?)(?=\s*(?:Dan dapat meluas|Kondisi ini|Prakirawan|$))/i,
-    boldRegion
-  );
-
-  // Bold the expansion area: everything after "meluas ke wilayah "
-  // up to "Kondisi ini" / "Prakirawan" / end.
-  descHtml = descHtml.replace(
-    /(meluas ke wilayah\s+)([\s\S]+?)(?=\s*(?:Kondisi ini|Prakirawan|$))/i,
-    boldRegion
-  );
-
-  // Case B (fallback / simplified text): "... khususnya di <WILAYAH>."
-  descHtml = descHtml.replace(
-    /(khususnya di\s+)([^.!?\n]+)/i,
-    boldRegion
-  );
-
-  // Build a "from–to WIB" pill by scanning the text for time tokens (HH:MM / HH.MM).
-  const timeMatches = textFix.match(/\b([01]?\d|2[0-3])[.:]([0-5]\d)\b/g) || [];
-  const normTimes = timeMatches.map(t => t.replace('.', ':'));
-  let timePill = '';
-  if (normTimes.length >= 2) {
-    timePill = `<div class="time-pill" title="Perkiraan rentang waktu berlaku (WIB)">
-        <span class="time-pill-ic">🕒</span>
-        <span class="time-pill-from">${normTimes[0]}</span>
-        <span class="time-pill-sep">–</span>
-        <span class="time-pill-to">${normTimes[normTimes.length - 1]}</span>
-        <span class="time-pill-unit">WIB</span>
-      </div>`;
-  } else if (normTimes.length === 1) {
-    timePill = `<div class="time-pill" title="Perkiraan waktu (WIB)">
-        <span class="time-pill-ic">🕒</span>
-        <span class="time-pill-from">${normTimes[0]}</span>
-        <span class="time-pill-unit">WIB</span>
-      </div>`;
-  }
+  setLightboxSlides(buildWarningFallbackSlides('', displayTitle, text, record.lastBuild || lastBuild), 0);
+  hydrateWarningGallery(record, displayTitle, text, record.lastBuild || lastBuild, previewCandidate);
 
   document.getElementById('dc').innerHTML = `
+    ${buildValidityBanner(validity)}
     ${pills}
     <span class="warn-label">⚠ Peringatan Dini Aktif</span>
     <div class="warn-title" style="color:#ff453a;">${titleHtml}</div>
     ${timePill}
-    <div class="desc-text desc-scroll">${descHtml}</div>
+    <div class="desc-text desc-scroll">${buildDescriptionHtml(textFix)}</div>
+    ${estimateMarkup}
 
     <div class="map-section">
-        <div class="map-label">
-          Infografis Wilayah Terdampak
-          <span class="map-zoom-btn" role="button" tabindex="0" title="Perbesar peta">
-            ⛶ Perbesar
-          </span>
-        </div>
-        <div class="map-container" role="button" tabindex="0" aria-label="Perbesar infografis wilayah terdampak">
-          <img id="mapPreviewImg" src="${previewUrl}" alt="Infografis Cuaca Kep. Riau" loading="lazy" decoding="async" fetchpriority="low" onerror="this.parentElement.outerHTML=mapErrorHTML()" />
-          <div class="map-overlay"></div>
-        </div>
-     </div>
-
-      <a href="${safeUrl(link)}" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">
-        <span>🗺</span> Lihat Peta Radar
-      </a>
-      <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn ghost" referrerpolicy="no-referrer">
-        📡 Buka Nowcasting Real-Time
-      </a>
-
-      <div class="info-row">
-        <div class="info-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);"></div>
-        Diterbitkan: ${translateDate(lastBuild)}
+      <div class="map-label">
+        <span>Infografis wilayah terdampak</span>
+        <button type="button" class="map-zoom-btn" title="${mapTriggerLabel}" aria-label="${mapTriggerLabel}">${mapTriggerLabel}</button>
       </div>
-      <div class="disclaimer-note" role="note" aria-label="Disclaimer informasi cuaca">
-        <div class="disclaimer-note-ic">ⓘ</div>
-        <div class="disclaimer-note-text">Informasi cuaca dapat berubah-ubah; mohon periksa kondisi aktual di lokasi terkait.</div>
+      <div class="map-container" role="button" tabindex="0" aria-label="${mapTriggerLabel}" data-map-container="true">
+        ${buildPendingMapHtml()}
       </div>
+    </div>
+
+    <a href="${safeUrl(record.link, 'https://nowcasting.bmkg.go.id')}" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">
+      <span aria-hidden="true">🗺</span> Lihat detail CAP
+    </a>
+    <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn ghost" referrerpolicy="no-referrer">
+      <span aria-hidden="true">📡</span> Buka Nowcasting Real-Time
+    </a>
+
+    <div class="info-row">
+      <div class="info-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);" aria-hidden="true"></div>
+      Diterbitkan: ${escHtml(translateDate(record.lastBuild || lastBuild || record.pubDate))}
+    </div>
+    <div class="disclaimer-note" role="note" aria-label="Disclaimer informasi cuaca">
+      <div class="disclaimer-note-ic" aria-hidden="true">ⓘ</div>
+      <div class="disclaimer-note-text">Informasi cuaca dapat berubah-ubah. Periksa kondisi aktual di lokasi terkait.</div>
+    </div>
   `;
 }
 
@@ -5329,10 +6195,9 @@ function renderSafe(lastBuild) {
 
   document.getElementById('refreshChipText').textContent = `DIPERBARUI ${nowHHMM()} WIB`;
 
-  const infUrl = buildInfografisUrl();
   galleryRequestToken += 1;
-  infografisUrl = infUrl;
-  zoomImgUrl = infUrl;
+  infografisUrl = '';
+  zoomImgUrl = '';
   setLightboxSlides(buildSafeSlides(lastBuild), 0);
 
   document.getElementById('mainCard').classList.remove('w-glow');
@@ -5362,7 +6227,7 @@ function renderSafe(lastBuild) {
 function renderError(errorType) {
   errorType = errorType || 'NETWORK';
   const messages = {
-    'CORS': 'Koneksi terblokir proxy — coba refresh atau gunakan radar BMKG',
+    'CORS': 'Koneksi terblokir proxy - coba refresh atau gunakan radar BMKG',
     'TIMEOUT': 'Server BMKG merespons lambat, coba lagi beberapa saat',
     'NETWORK': 'Periksa koneksi internet Anda atau coba lagi beberapa saat'
   };
@@ -5399,20 +6264,14 @@ function renderError(errorType) {
 }
 
 function mapErrorHTML() {
-  return `<div class="map-error-state">
-      <span style="font-size:28px;">🌐</span>
-      <span>Infografis belum tersedia hari ini</span>
-      <span style="font-size:9px;opacity:0.5;">Coba lagi nanti atau buka radar real-time</span>
+  return `<div class="map-media-state map-error-state" role="status">
+      <strong>Infografis BMKG belum tersedia</strong>
+      <span>Rilis peringatan terdeteksi, tetapi gambar belum dapat diakses dari aset BMKG.</span>
       <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">
-      <span>📡</span> Buka Radar Real-Time
-    </a>
+        <span aria-hidden="true">📡</span> Buka Nowcasting BMKG
+      </a>
     </div>`;
 }
-
-/* Make mapErrorHTML globally accessible from inline onerror */
-window.mapErrorHTML = mapErrorHTML;
-window.openZoom = openZoom;
-window.closeZoom = closeZoom;
 
 function escHtml(s) {
   return String(s)
@@ -5456,7 +6315,8 @@ const lightboxState = {
   pinchStartPanX: 0,
   pinchStartPanY: 0,
   pinchStartMidX: 0,
-  pinchStartMidY: 0
+  pinchStartMidY: 0,
+  returnFocusEl: null
 };
 
 const activeLightboxPointers = new Map();
@@ -5474,33 +6334,10 @@ const slideshowBtnEl = document.getElementById('slideshowToggleBtn');
 const thumbsBtnEl = document.getElementById('thumbsToggleBtn');
 const zoomPrevBtnEl = document.getElementById('zoomPrevBtn');
 const zoomNextBtnEl = document.getElementById('zoomNextBtn');
-
-function parseAlertAssetMeta(alertLink) {
-  const match = String(alertLink || '').match(/\/([A-Z]{3}\d{11})_alert\.xml/i);
-  if (!match) return null;
-
-  const id = match[1];
-  return {
-    id,
-    station: id.slice(0, 3).toUpperCase(),
-    year: id.slice(3, 7),
-    month: id.slice(7, 9),
-    day: id.slice(9, 11)
-  };
-}
-
-function buildNowcastingImageUrl(alertLink, index) {
-  const meta = parseAlertAssetMeta(alertLink);
-  if (!meta) return '';
-  return `https://nowcasting.bmkg.go.id/infografis/${meta.station}/${meta.year}/${meta.month}/${meta.day}/${meta.id}_image${index}.jpg`;
-}
+const zoomCloseBtnEl = document.getElementById('zoomCloseBtn');
 
 function normalizeWarningText(text) {
-  return String(text || '')
-    .replace(/\r/g, '')
-    .replace(/[ \t]+\n/g, '\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  return BMKG_SHARED.normalizeWarningText(text);
 }
 
 function buildSummaryHtml(text) {
@@ -5532,7 +6369,9 @@ function buildSummarySlide(title, bodyText, metaText, previewUrl) {
 
 function buildWarningFallbackSlides(previewUrl, title, bodyText, lastBuild) {
   const metaText = lastBuild ? `Diterbitkan ${translateDate(lastBuild)}` : 'Prakirawan BMKG - Kep. Riau';
-  return [{
+  const slides = [];
+  if (previewUrl) {
+    slides.push({
       type: 'image',
       src: previewUrl,
       thumb: previewUrl,
@@ -5540,9 +6379,10 @@ function buildWarningFallbackSlides(previewUrl, title, bodyText, lastBuild) {
       label: 'Infografis wilayah terdampak',
       caption: 'Peta infografis BMKG / nowcasting',
       meta: metaText
-    },
-    buildSummarySlide(title, bodyText, metaText, previewUrl)
-  ];
+    });
+  }
+  slides.push(buildSummarySlide(title, bodyText, metaText, previewUrl));
+  return slides;
 }
 
 function buildSafeSlides(lastBuild) {
@@ -5675,7 +6515,7 @@ function renderLightboxSlide() {
                 ${slide.previewUrl ? `<img src="${slide.previewUrl}" alt="${escHtml(slide.title || 'Preview slide')}" loading="eager" />` : '<div class="zoom-thumb-fallback" style="width:100%;height:100%;font-size:18px;align-items:center;justify-content:center;">Tidak ada gambar</div>'}
               </div>
               <div class="zoom-generated-summary">
-                <div class="zoom-generated-summary-badge">Update Teks BMKG</div>
+                <div class="zoom-generated-summary-badge">Ringkasan teks rilis BMKG</div>
                 <h3>${escHtml(slide.label || 'Ringkasan teks BMKG')}</h3>
                 <div class="zoom-generated-summary-copy">${slide.summaryHtml || ''}</div>
               </div>
@@ -5694,7 +6534,7 @@ function renderLightboxSlide() {
             <img
               class="zoom-media"
               id="zoomImg"
-              src="${slide.src || ''}"
+              src="${safeUrl(slide.src)}"
               alt="${escHtml(slide.title || 'Peringatan Dini Cuaca Kep. Riau')}"
               loading="eager"
               decoding="async"
@@ -5748,7 +6588,7 @@ function renderLightboxThumbs() {
   zoomThumbStripEl.innerHTML = lightboxState.slides.map((slide, index) => {
     const isActive = index === lightboxState.currentIndex ? ' is-active' : '';
     const inner = slide.type === 'image' && slide.thumb ?
-      `<img src="${slide.thumb}" alt="Thumbnail ${index + 1}" loading="lazy" decoding="async" />` :
+      `<img src="${safeUrl(slide.thumb)}" alt="Thumbnail ${index + 1}" loading="lazy" decoding="async" />` :
       `<div class="zoom-thumb-fallback">${escHtml(slide.label || slide.title || `Slide ${index + 1}`)}</div>`;
 
     return `
@@ -5778,6 +6618,9 @@ function goToLightboxSlide(index, opts) {
 }
 
 function openZoom(urlOrIndex) {
+  if (!lightboxState.isOpen) {
+    lightboxState.returnFocusEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  }
 
   if (!lightboxState.slides.length) {
     setLightboxSlides(buildSafeSlides(''), 0);
@@ -5795,20 +6638,26 @@ function openZoom(urlOrIndex) {
   lightboxState.isOpen = true;
   document.body.classList.add('zoom-open');
   zoomModalEl.classList.add('active');
+  zoomModalEl.removeAttribute('inert');
   zoomModalEl.setAttribute('aria-hidden', 'false');
   renderLightboxSlide();
-  if (lightboxState.playing) {
-    startLightboxSlideshow();
-  }
+  if (lightboxState.playing) startLightboxSlideshow();
+  requestAnimationFrame(() => zoomCloseBtnEl && zoomCloseBtnEl.focus());
 }
 
 function closeZoom() {
+  const returnFocusEl = lightboxState.returnFocusEl;
   lightboxState.isOpen = false;
   document.body.classList.remove('zoom-open');
   zoomModalEl.classList.remove('active');
   zoomModalEl.setAttribute('aria-hidden', 'true');
+  zoomModalEl.setAttribute('inert', '');
   stopLightboxSlideshow();
   resetLightboxZoom(true);
+  if (returnFocusEl && document.contains(returnFocusEl)) {
+    requestAnimationFrame(() => returnFocusEl.focus());
+  }
+  lightboxState.returnFocusEl = null;
 }
 
 function toggleLightboxThumbs() {
@@ -5914,55 +6763,58 @@ function toggleLightboxZoom() {
   }
 }
 
-function hydrateWarningGallery(alertLink, title, bodyText, lastBuild, fallbackUrl) {
-  const meta = parseAlertAssetMeta(alertLink);
-  if (!meta) return;
+async function resolveFirstImage(candidates) {
+  const list = uniqueValues(candidates).slice(0, 72);
+  const batchSize = 12;
+  for (let start = 0; start < list.length; start += batchSize) {
+    const batch = list.slice(start, start + batchSize);
+    const checks = await Promise.all(batch.map(url => preloadImage(url, 2400)));
+    const found = checks.findIndex(Boolean);
+    if (found >= 0) return batch[found];
+  }
+  return '';
+}
 
+async function hydrateWarningGallery(alertOrLink, title, bodyText, lastBuild, fallbackUrl) {
+  const record = typeof alertOrLink === 'object' ? { ...alertOrLink, web: alertOrLink.web || fallbackUrl || '' } : { link: alertOrLink, web: fallbackUrl };
+  const indexes = [0, 1, 2, 3];
   const token = ++galleryRequestToken;
-  const candidates = [0, 1, 2, 3];
+  const results = await Promise.all(indexes.map(async index => {
+    const candidates = buildNowcastingImageCandidates(record.link, index, record.web);
+    const url = await resolveFirstImage(candidates);
+    return url ? { index, url } : null;
+  }));
 
-  Promise.all(candidates.map(async index => {
-      const url = buildNowcastingImageUrl(alertLink, index);
-      if (!url) return null;
-      const ok = await preloadImage(url);
-      return ok ? {
-        index,
-        url
-      } : null;
-    }))
-    .then(results => {
-      if (token !== galleryRequestToken) return;
+  if (token !== galleryRequestToken) return;
+  const realSlides = results
+    .filter(Boolean)
+    .sort((a, b) => a.index - b.index)
+    .map(item => ({
+      type: 'image',
+      src: item.url,
+      thumb: item.url,
+      title: title || 'Peringatan Dini Cuaca Kep. Riau',
+      label: item.index === 0 ? 'Infografis BMKG' : `Slide infografis ${item.index + 1}`,
+      caption: item.index === 0 ? 'Peta infografis wilayah terdampak' : 'Slide tambahan dari aset BMKG',
+      meta: lastBuild ? `Diterbitkan ${translateDate(lastBuild)}` : 'Prakirawan BMKG - Kep. Riau'
+    }));
 
-      const metaText = lastBuild ? `Diterbitkan ${translateDate(lastBuild)}` : 'Prakirawan BMKG - Kep. Riau';
-      const realSlides = results
-        .filter(Boolean)
-        .sort((a, b) => a.index - b.index)
-        .map(item => ({
-          type: 'image',
-          src: item.url,
-          thumb: item.url,
-          title: title || 'Peringatan Dini Cuaca Kep. Riau',
-          label: item.index === 0 ? 'Infografis BMKG' : `Slide BMKG ${item.index + 1}`,
-          caption: item.index === 0 ? 'Peta infografis wilayah terdampak' : 'Deskripsi lengkap peringatan dini BMKG',
-          meta: metaText
-        }));
+  if (!realSlides.length) {
+    infografisUrl = '';
+    zoomImgUrl = '';
+    setLightboxSlides(buildWarningFallbackSlides('', title, bodyText, lastBuild), 0);
+    showMapUnavailable();
+    return;
+  }
 
-      let mergedSlides = realSlides;
-      if (!mergedSlides.length) {
-        mergedSlides = buildWarningFallbackSlides(fallbackUrl, title, bodyText, lastBuild);
-      } else if (mergedSlides.length === 1) {
-        mergedSlides = [...mergedSlides, buildSummarySlide(title, bodyText, metaText, fallbackUrl || mergedSlides[0].src)];
-      }
-
-      setLightboxSlides(mergedSlides, Math.min(lightboxState.currentIndex, mergedSlides.length - 1));
-      const mapPreview = document.getElementById('mapPreviewImg');
-      if (mapPreview && mergedSlides[0] && mergedSlides[0].src) {
-        mapPreview.src = mergedSlides[0].src;
-      }
-    })
-    .catch(() => {
-      /* Silent fallback */
-    });
+  infografisUrl = realSlides[0].src;
+  zoomImgUrl = realSlides[0].src;
+  let mergedSlides = realSlides;
+  if (mergedSlides.length === 1) {
+    mergedSlides = [...mergedSlides, buildSummarySlide(title, bodyText, realSlides[0].meta, realSlides[0].src)];
+  }
+  setLightboxSlides(mergedSlides, Math.min(lightboxState.currentIndex, mergedSlides.length - 1));
+  showMapImage(realSlides[0].src, title);
 }
 
 zoomToggleBtnEl.addEventListener('click', toggleLightboxZoom);
@@ -6104,8 +6956,28 @@ zoomStageEl.addEventListener('pointerleave', function(e) {
   if (e.buttons === 0) finishLightboxDrag(e);
 });
 
+function trapZoomFocus(event) {
+  if (event.key !== 'Tab' || !lightboxState.isOpen) return;
+  const focusable = Array.from(zoomModalEl.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'))
+    .filter(element => element.offsetParent !== null);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
 window.addEventListener('keydown', function(e) {
   if (!lightboxState.isOpen) return;
+  if (e.key === 'Tab') {
+    trapZoomFocus(e);
+    return;
+  }
 
   if (e.key === 'Escape') {
     closeZoom();
@@ -6130,7 +7002,7 @@ window.addEventListener('resize', function() {
 });
 
 /* ─────────────────────────────────────────────────────────
-          EASTER EGG — iOS 26 Liquid Glass Burst
+          EASTER EGG - iOS 26 Liquid Glass Burst
   ───────────────────────────────────────────────────────── */
 function triggerLiquidGlass(el) {
   if (!DESKTOP_INTERACTION_MOTION) return;
@@ -6223,6 +7095,13 @@ function triggerMainCardClickAnimation() {
   }, 820);
 }
 
+function openAvailableGallery() {
+  const url = normalizeHttpUrl(zoomImgUrl || infografisUrl);
+  if (!url) return false;
+  openZoom(url);
+  return true;
+}
+
 // Attach easter egg to ALL future .cta-btn clicks
 // Also centralizes small dynamic actions so inline handlers are not needed.
 document.addEventListener('click', function(e) {
@@ -6244,18 +7123,23 @@ document.addEventListener('click', function(e) {
   }
 
   const zoomTrigger = e.target.closest('.map-zoom-btn, .map-container');
-  if (zoomTrigger && document.getElementById('dc')?.contains(zoomTrigger)) {
+  if (!btn && zoomTrigger && document.getElementById('dc')?.contains(zoomTrigger)) {
     e.preventDefault();
-    openZoom(zoomImgUrl || infografisUrl || buildInfografisUrl());
+    openAvailableGallery();
   }
 });
+
+document.addEventListener('error', function(e) {
+  const image = e.target;
+  if (image && image.id === 'mapPreviewImg') showMapUnavailable();
+}, true);
 
 document.addEventListener('keydown', function(e) {
   if (e.key !== 'Enter' && e.key !== ' ') return;
   const zoomTrigger = e.target.closest?.('.map-zoom-btn, .map-container');
-  if (zoomTrigger && document.getElementById('dc')?.contains(zoomTrigger)) {
+  if (!e.target.closest?.('.cta-btn') && zoomTrigger && document.getElementById('dc')?.contains(zoomTrigger)) {
     e.preventDefault();
-    openZoom(zoomImgUrl || infografisUrl || buildInfografisUrl());
+    openAvailableGallery();
   }
 });
 
@@ -6266,46 +7150,37 @@ let lastErrorType = 'NETWORK';
 let lastFetchTime = null;
 let countdownSeconds = 300; // 5 minutes countdown
 
-function tryLoadCachedData(isOffline) {
+async function tryLoadCachedData(isOffline) {
   try {
     const cachedXml = localStorage.getItem('bmkgLastSuccessData');
     const cachedTime = localStorage.getItem('bmkgLastSuccessTime');
-    if (cachedXml) {
-      console.warn('Gagal memperbarui data. Menampilkan data cache dari:', cachedTime);
-      const doc = new DOMParser().parseFromString(cachedXml, 'text/xml');
-      const lastBuild = doc.querySelector('lastBuildDate')?.textContent?.trim() || '';
-      const items = doc.querySelectorAll('item');
-      let found = null;
-      items.forEach(function(item) {
-        const titleEl = item.querySelector('title');
-        if (titleEl && titleEl.textContent.includes('Kep. Riau') && !found) {
-          const descEl = item.querySelector('description');
-          const linkEl = item.querySelector('link');
-          found = {
-            title: titleEl.textContent.trim(),
-            desc: descEl ? (descEl.textContent || '') : '',
-            link: linkEl ? (linkEl.textContent || '#') : '#'
-          };
-        }
-      });
-      
-      const cachedDateStr = cachedTime ? new Date(cachedTime).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}) : '';
-      const statusLabel = isOffline ? `MODE OFFLINE · CACHE ${cachedDateStr} WIB` : `DATA CACHE · ${cachedDateStr} WIB`;
-      
-      if (found) {
-        renderWarning(found.title, found.desc, found.link, lastBuild);
-      } else {
-        renderSafe(lastBuild);
-      }
-      
-      document.getElementById('refreshChipText').textContent = statusLabel.toUpperCase();
-      setStatus('standby', i18n.status.standby);
-      // Keep the 5-minute countdown alive so the app retries on its own
-      startLiveTimers();
-      return true;
-    }
-  } catch (_) {}
-  return false;
+    const cachedRecordRaw = localStorage.getItem('bmkgLastAlertRecord');
+    const cachedRecord = cachedRecordRaw ? JSON.parse(cachedRecordRaw) : null;
+    if (!cachedXml && !cachedRecord) return false;
+
+    const doc = cachedXml ? new DOMParser().parseFromString(cachedXml, 'text/xml') : null;
+    const lastBuild = doc ? getFirstElementText(doc, 'lastBuildDate') : '';
+    let found = findKepriAlert(doc);
+    if (!found && cachedRecord) found = cachedRecord;
+    if (!found) return false;
+
+    const merged = {
+      ...found,
+      ...(cachedRecord && (!found.link || cachedRecord.link === found.link) ? cachedRecord : {}),
+      lastBuild: lastBuild || cachedRecord?.lastBuild || cachedTime || ''
+    };
+    const alert = isOffline ? merged : await enrichAlertWithCap(merged);
+    renderWarning(alert);
+
+    const cachedDateStr = cachedTime ? new Date(cachedTime).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+    const statusLabel = isOffline ? `MODE OFFLINE · CACHE ${cachedDateStr} WIB` : `DATA CACHE · ${cachedDateStr} WIB`;
+    document.getElementById('refreshChipText').textContent = statusLabel.toUpperCase();
+    setStatus('standby', i18n.status.standby);
+    startLiveTimers();
+    return true;
+  } catch (_) {
+    return false;
+  }
 }
 
 function startLiveTimers() {
@@ -6434,120 +7309,81 @@ window.addEventListener('online', function () {
 
 async function initSync(attempt) {
   attempt = attempt || 0;
-  startSpin(); 
-  
-  // WebSocket availability logging
-  const hasWS = 'WebSocket' in window;
-  console.log(`[System] WebSocket Support: ${hasWS ? 'Available ✅' : 'Unavailable ❌'}`);
-  
+  startSpin();
+
   if (attempt === 0) {
     renderLoading();
-    // Offline detection
     if (!navigator.onLine) {
-      const loaded = tryLoadCachedData(true);
+      const loaded = await tryLoadCachedData(true);
       if (loaded) return;
     }
   }
 
   if (attempt >= PROXIES.length) {
-    const loaded = tryLoadCachedData(false);
+    const loaded = await tryLoadCachedData(false);
     if (loaded) return;
     renderError(lastErrorType);
-    // Without this the countdown never starts and the dashboard never retries
     startLiveTimers();
     return;
   }
 
   const proxy = PROXIES[attempt];
   if (proxy.direct && window.location.protocol === 'file:') {
-    console.log(`[Fetch] Memutus jalur Direct karena dijalankan secara lokal (file://). Berpindah ke proxy selanjutnya.`);
-    initSync(attempt + 1);
+    await initSync(attempt + 1);
     return;
   }
   const target = proxy.direct ? RSS : proxy.url + encodeURIComponent(RSS);
-  
-  // Console logging proxy in use
-  console.log(`[Fetch] Menggunakan proxy ${attempt + 1}/${PROXIES.length}: ${proxy.direct ? 'Direct Link (No Proxy)' : proxy.url}`);
 
   if (attempt > 0) {
     const statusText = `Mencari alternatif... (Percobaan ${attempt + 1}/${PROXIES.length})`;
     setStatus('loading', `Percobaan ${attempt + 1}/${PROXIES.length}`);
     document.getElementById('refreshChipText').textContent = statusText.toUpperCase();
     const loadingTextEl = document.querySelector('.loading-text');
-    if (loadingTextEl) {
-      loadingTextEl.textContent = i18n.messages.syncDetail(attempt + 1, PROXIES.length);
-    }
+    if (loadingTextEl) loadingTextEl.textContent = i18n.messages.syncDetail(attempt + 1, PROXIES.length);
   }
 
   try {
     const res = await fetchWithTimeout(target, FETCH_TIMEOUT_MS);
-    if (!res.ok) {
-      throw new Error('HTTP ' + res.status);
-    }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
 
     let xml = '';
     if (proxy.json) {
-      const j = await res.json();
-      xml = (j && j.contents) ? j.contents : '';
+      const json = await res.json();
+      xml = json && json.contents ? json.contents : '';
     } else {
       xml = await res.text();
     }
-
-    if (!xml || xml.trim().length < 80 || xml.includes('<html') || xml.includes('<!DOCTYPE')) {
-      throw new Error('invalid response or HTML received');
-    }
+    if (!isUsableXml(xml)) throw new Error('Respons XML tidak valid');
 
     const doc = new DOMParser().parseFromString(xml, 'text/xml');
-    const parseErr = doc.querySelector('parsererror');
-    if (parseErr) throw new Error('XML parse error');
-    const lastBuild = doc.querySelector('lastBuildDate')?.textContent?.trim() || '';
-    const items = doc.querySelectorAll('item');
-    let found = null;
+    if (getElementsByLocalName(doc, 'parsererror').length) throw new Error('XML parse error');
+    const lastBuild = getFirstElementText(doc, 'lastBuildDate');
+    const found = findKepriAlert(doc);
+    const alert = found ? await enrichAlertWithCap({ ...found, lastBuild }) : null;
 
-    items.forEach(function(item) {
-      const titleEl = item.querySelector('title');
-      if (!titleEl) return;
-      const t = titleEl.textContent || '';
-      if (t.includes('Kep. Riau') && !found) {
-        const descEl = item.querySelector('description');
-        const linkEl = item.querySelector('link');
-        found = {
-          title: t.trim(),
-          desc: descEl ? (descEl.textContent || '') : '',
-          link: linkEl ? (linkEl.textContent || '#') : '#'
-        };
-      }
-    });
-
-    // Caching XML response
     try {
       localStorage.setItem('bmkgLastSuccessData', xml);
       localStorage.setItem('bmkgLastSuccessTime', new Date().toISOString());
+      if (alert) localStorage.setItem('bmkgLastAlertRecord', JSON.stringify(alert));
     } catch (_) {}
 
-    if (found) {
-      renderWarning(found.title, found.desc, found.link, lastBuild);
+    if (alert) {
+      renderWarning(alert);
     } else {
       renderSafe(lastBuild);
     }
-
-    // Start countdown timers
     startLiveTimers();
-
   } catch (err) {
     console.debug(`Proxy ${attempt} dilewati:`, err && err.message);
-    
-    // Determine error type
     const errMsg = (err && err.message) ? err.message.toLowerCase() : '';
-    if (err.name === 'AbortError' || errMsg.includes('timeout')) {
+    if (err?.name === 'AbortError' || errMsg.includes('timeout')) {
       lastErrorType = 'TIMEOUT';
     } else if (errMsg.includes('cors') || errMsg.includes('allow-origin') || errMsg.includes('blocked') || errMsg.includes('failed to fetch')) {
       lastErrorType = 'CORS';
     } else {
       lastErrorType = 'NETWORK';
     }
-    
-    initSync(attempt + 1);
+    await initSync(attempt + 1);
   }
 }
 
@@ -6697,7 +7533,7 @@ initSync(0);
 // Auto-refresh is managed dynamically by the countdown timers in startLiveTimers()
 
 /* ═════════════════════════════════════════════
-"KEMBALI KE ATAS" — Liquid-glass pill controller
+"KEMBALI KE ATAS" - Liquid-glass pill controller
 ════════════════════════════════════════════════ */
 (function () {
   var btn = document.getElementById("backToTopBtn");
@@ -6727,17 +7563,17 @@ initSync(0);
     if (reduceMotion) { window.scrollTo(0, 0); return; }
 
     // Duration scales with distance, capped: snappy on short pages,
-    // never sluggish on long ones. ~400–700ms is the sweet spot.
+    // never sluggish on long ones. ~400-700ms is the sweet spot.
     var duration = Math.min(700, Math.max(380, startY * 0.55));
     var t0 = 0;
-    // Cancel on user input (wheel/touch) — feels native
+    // Cancel on user input (wheel/touch) - feels native
     window.addEventListener("wheel",     stop, { passive: true, once: true });
     window.addEventListener("touchstart",stop, { passive: true, once: true });
     function step(ts) {
       if (cancel) return;
       if (!t0) t0 = ts;
       var p = Math.min(1, (ts - t0) / duration);
-      // easeOutCubic — strong start, gentle landing
+      // easeOutCubic - strong start, gentle landing
       var eased = 1 - Math.pow(1 - p, 3);
       window.scrollTo(0, startY * (1 - eased));
       if (p < 1) animId = requestAnimationFrame(step);
@@ -6750,26 +7586,30 @@ initSync(0);
       </script>
 
     <script nomodule>
-      /* LEGACY / LOW-END NOMODULE FALLBACK
-         ES5 only. Old browsers ignore type="module" and run this compact
-         renderer instead, so the page still loads on old Android/WebView. */
       (function () {
         try {
           var html = document.documentElement;
           if (html.className.indexOf('perf-lite') < 0) html.className += (html.className ? ' ' : '') + 'perf-lite';
           if (html.className.indexOf('legacy-lite') < 0) html.className += ' legacy-lite';
+
           var RSS = 'https://www.bmkg.go.id/alerts/nowcast/id/rss.xml';
           var PROXIES = [
-            RSS,
-            'https://api.allorigins.win/raw?url=' + encodeURIComponent(RSS),
-            'https://corsproxy.io/?' + encodeURIComponent(RSS)
+            { url: RSS, json: false },
+            { url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent(RSS), json: false },
+            { url: 'https://allorigins.hexlet.app/get?url=' + encodeURIComponent(RSS), json: true },
+            { url: 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS), json: true },
+            { url: 'https://corsproxy.io/?' + encodeURIComponent(RSS), json: false }
           ];
+
           function byId(id) { return document.getElementById(id); }
           function esc(s) {
             return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
               .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
           }
-          function setText(id, value) { var el = byId(id); if (el) el.innerHTML = esc(value); }
+          function setText(id, value) {
+            var el = byId(id);
+            if (el) el.textContent = value;
+          }
           function setStatus(text, ok) {
             setText('stxt', text);
             var dot = byId('sdot');
@@ -6782,14 +7622,128 @@ initSync(0);
             var d = new Date();
             return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
           }
-          function renderBasic(title, desc, link, active) {
+          function highlightedDescription(text) {
+            var source = BMKGShared.normalizeWarningText(text);
+            var value = esc(BMKGShared.titleCaseNarrativeRegions(source));
+            var markers = [];
+            function mark(pattern, className) {
+              value = value.replace(pattern, function (_, lead, list) {
+                var token = '__BMKG_REGION_' + markers.length + '__';
+                markers.push('<strong class="' + className + '">' + list + '</strong>');
+                return lead + token;
+              });
+            }
+            mark(/(\bdan\s+dapat\s+meluas\s+ke\s+wilayah\s+)([^.!?\n]+)/i, 'desc-region desc-region--expansion');
+            if (!/\bdan\s+dapat\s+meluas\s+ke\s+wilayah\b/i.test(source)) {
+              mark(/(\bmeluas\s+ke\s+wilayah\s+)([^.!?\n]+)/i, 'desc-region desc-region--expansion');
+            }
+            mark(/(\bkhususnya\s+di\s+)([^.!?\n]+)/i, 'desc-region');
+            markers.forEach(function (html, index) {
+              value = value.replace('__BMKG_REGION_' + index + '__', html);
+            });
+            return value;
+          }
+          function renderMap(record, url) {
+            if (!url) {
+              return '<div class="map-media-state map-media-state--pending" role="status"><strong>Memeriksa infografis BMKG</strong><small>Gambar diambil dari tautan rilis CAP atau folder aset BMKG.</small></div><div class="map-overlay" aria-hidden="true"></div>';
+            }
+            return '<img id="legacyMapImage" src="' + esc(url) + '" alt="Infografis peringatan dini cuaca Kepulauan Riau" loading="eager" decoding="async"><div class="map-overlay" aria-hidden="true"></div><span class="map-action-badge">Klik untuk detail / perbesar</span>';
+          }
+          var legacyGalleryToken = 0;
+          function checkLegacyImage(url, done) {
+            var image = new Image();
+            var finished = false;
+            var timer = setTimeout(function () { finish(false); }, 1800);
+            function finish(ok) {
+              if (finished) return;
+              finished = true;
+              clearTimeout(timer);
+              done(ok);
+            }
+            image.onload = function () { finish(true); };
+            image.onerror = function () { finish(false); };
+            image.referrerPolicy = 'no-referrer';
+            image.src = url;
+          }
+          function resolveLegacyImage(record, done) {
+            var candidates = BMKGShared.buildNowcastingImageCandidates(record.link, 0, record.web).slice(0, 72);
+            var cursor = 0;
+            var batchSize = 10;
+            var settled = false;
+            function finish(url) {
+              if (settled) return;
+              settled = true;
+              done(url || '');
+            }
+            function runBatch() {
+              var batch = candidates.slice(cursor, cursor + batchSize);
+              var remaining = batch.length;
+              var i;
+              if (!batch.length) { finish(''); return; }
+              cursor += batch.length;
+              for (i = 0; i < batch.length; i += 1) {
+                (function (url) {
+                  checkLegacyImage(url, function (ok) {
+                    if (settled) return;
+                    if (ok) { finish(url); return; }
+                    remaining -= 1;
+                    if (remaining === 0) runBatch();
+                  });
+                })(batch[i]);
+              }
+            }
+            runBatch();
+          }
+          function markLegacyMapUnavailable() {
+            var container = document.querySelector('#dc .map-container');
+            var zoomButton = document.querySelector('#dc .map-zoom-btn');
+            if (!container) return;
+            container.removeAttribute('role');
+            container.removeAttribute('tabindex');
+            container.onclick = null;
+            container.onkeydown = null;
+            container.className += ' map-container--unavailable';
+            container.innerHTML = '<div class="map-media-state map-error-state" role="status"><strong>Infografis BMKG belum tersedia</strong><span>Rilis terdeteksi, tetapi gambar belum dapat diakses dari aset BMKG.</span></div>';
+            if (zoomButton) {
+              zoomButton.disabled = true;
+              zoomButton.setAttribute('aria-label', 'Infografis BMKG belum tersedia');
+            }
+          }
+          function attachLegacyMap(record, url, token) {
+            var container = document.querySelector('#dc .map-container');
+            var zoomButton = document.querySelector('#dc .map-zoom-btn');
+            if (token !== legacyGalleryToken || !container) return;
+            if (!url) { markLegacyMapUnavailable(); return; }
+            container.classList.remove('map-container--unavailable');
+            container.setAttribute('role', 'button');
+            container.setAttribute('tabindex', '0');
+            container.setAttribute('aria-label', 'Klik untuk detail / perbesar');
+            container.innerHTML = renderMap(record, url);
+            container.onclick = function () { window.open(url, '_blank', 'noopener,noreferrer'); };
+            container.onkeydown = function (event) {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                window.open(url, '_blank', 'noopener,noreferrer');
+              }
+            };
+            var image = byId('legacyMapImage');
+            if (image) image.onerror = markLegacyMapUnavailable;
+            if (zoomButton) {
+              zoomButton.disabled = false;
+              zoomButton.addEventListener('click', function () { window.open(url, '_blank', 'noopener,noreferrer'); });
+            }
+          }
+          function renderBasic(record, active) {
             var dc = byId('dc');
             var card = byId('mainCard');
+            var token;
             if (!dc) return;
+            record = record || {};
             if (card) card.className = active ? 'glass-card w-glow' : 'glass-card';
             setStatus(active ? ('LIVE: ' + nowHHMM()) : 'TIDAK ADA', true);
             setText('refreshChipText', 'MODE RINGAN · DIPERBARUI ' + nowHHMM() + ' WIB');
             if (!active) {
+              legacyGalleryToken += 1;
               dc.innerHTML = '<div class="pills-row"><span class="wpill p-safe">✅ Kondisi Aman</span></div>' +
                 '<span class="warn-label">Status Wilayah</span>' +
                 '<div class="warn-title">Kondusif</div>' +
@@ -6797,65 +7751,180 @@ initSync(0);
                 '<a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">📡 Buka Radar Real-Time</a>';
               return;
             }
-            dc.innerHTML = '<div class="pills-row"><span class="wpill p-warn">⚠️ Peringatan Aktif</span></div>' +
+            var desc = BMKGShared.normalizeWarningText(record.desc || record.description || 'Ada peringatan dini cuaca untuk wilayah Kepulauan Riau. Mohon pantau informasi resmi BMKG.');
+            var validity = record.validity || BMKGShared.deriveAlertValidity(record);
+            var narrative = validity.narrative || BMKGShared.extractNarrativeTiming(desc);
+            var estimate = narrative.estimateText || '';
+            var descBody = estimate ? desc.replace(estimate, '').trim() : desc;
+            var expiry = validity.expiryLabel;
+            var range = validity.rangeLabel;
+            var displayTitle = BMKGShared.titleCaseNarrativeRegions(record.headline || record.title || 'Peringatan Cuaca');
+            var title = esc(displayTitle);
+            dc.innerHTML = '<section class="validity-banner" aria-label="Masa berlaku peringatan"><span class="validity-icon" aria-hidden="true">⏱</span><span><strong>Berlaku Sampai</strong><time>' + esc(expiry) + '</time>' + (range ? '<span class="validity-range">Aktif: ' + esc(range) + '</span>' : '') + '</span></section>' +
+              '<div class="pills-row"><span class="wpill p-warn">⚠️ Peringatan Aktif</span></div>' +
               '<span class="warn-label">Mode Ringan · Peringatan Dini Aktif</span>' +
-              '<div class="warn-title">' + esc(title || 'Peringatan Cuaca') + '</div>' +
-              '<div class="desc-text">' + esc(desc || 'Ada peringatan dini cuaca untuk wilayah Kepulauan Riau. Mohon pantau informasi resmi BMKG.') + '</div>' +
-              '<a href="' + esc(link || 'https://nowcasting.bmkg.go.id') + '" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">🗺 Lihat Peta Radar</a>' +
+              '<div class="warn-title">' + title + '</div>' +
+              (range ? '<div class="time-pill"><span class="time-pill-ic" aria-hidden="true">🕒</span><span class="time-pill-from">' + esc(range) + '</span></div>' : '') +
+              '<div class="desc-text">' + highlightedDescription(descBody) + '</div>' +
+              (estimate ? '<div class="estimate-note" role="note"><span aria-hidden="true">ⓘ</span><strong>' + esc(BMKGShared.titleCaseNarrativeRegions(estimate)) + '</strong></div>' : '') +
+              '<div class="map-section"><div class="map-label"><span>Infografis wilayah terdampak</span><button type="button" class="map-zoom-btn" disabled aria-label="Memeriksa infografis BMKG">Buka gambar</button></div><div class="map-container" data-map-container="true">' + renderMap(record, '') + '</div></div>' +
+              '<a href="' + esc(record.link || 'https://nowcasting.bmkg.go.id') + '" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">🗺 Lihat detail CAP</a>' +
               '<a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn ghost" referrerpolicy="no-referrer">📡 Buka Nowcasting Real-Time</a>';
+            token = ++legacyGalleryToken;
+            resolveLegacyImage(record, function (url) { attachLegacyMap(record, url, token); });
           }
+          function readFeed(xml) {
+            var doc = new DOMParser().parseFromString(xml, 'text/xml');
+            return BMKGShared.findKepriAlert(doc);
+          }
+          function readCap(xml, record) {
+            return BMKGShared.parseCapAlertXml(xml, record) || record;
+          }
+          function setupLegacyModals() {
+            var credit = byId('thankyou-modal');
+            var creditTrigger = byId('trigger-credit-modal');
+            var creditClose = byId('close-credit-modal');
+            var maps = byId('maps-selector-modal');
+            var mapsTrigger = byId('trigger-maps-menu');
+            var mapsClose = byId('close-maps-menu');
+            var lastFocus = { credit: null, maps: null };
+            var selector = 'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+            if (maps && maps.parentNode !== document.body) document.body.appendChild(maps);
+            if (credit && credit.parentNode !== document.body) document.body.appendChild(credit);
+            function visible(modal) { return !!(modal && modal.style.display && modal.style.display !== 'none'); }
+            function focusables(modal) {
+              var nodes = modal ? modal.querySelectorAll(selector) : [];
+              var result = [];
+              var i;
+              for (i = 0; i < nodes.length; i += 1) {
+                if (!nodes[i].disabled && nodes[i].offsetParent !== null) result.push(nodes[i]);
+              }
+              return result;
+            }
+            function trap(event, modal) {
+              var items = focusables(modal);
+              var first;
+              var last;
+              if (event.key !== 'Tab' || !items.length) return;
+              first = items[0];
+              last = items[items.length - 1];
+              if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+              } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+              }
+            }
+            function syncLock() { document.body.className = document.body.className.replace(/\bmodal-open\b/g, '').replace(/\s{2,}/g, ' ').trim(); if (visible(credit) || visible(maps)) document.body.className += ' modal-open'; }
+            function openModal(modal, closeButton, key) {
+              if (!modal) return;
+              lastFocus[key] = document.activeElement;
+              modal.style.display = key === 'maps' ? 'flex' : 'block';
+              modal.setAttribute('aria-hidden', 'false');
+              syncLock();
+              setTimeout(function () { if (closeButton) closeButton.focus(); }, 0);
+            }
+            function closeModal(modal, trigger, key) {
+              if (!modal) return;
+              modal.style.display = 'none';
+              modal.setAttribute('aria-hidden', 'true');
+              syncLock();
+              if (lastFocus[key] && document.contains(lastFocus[key])) lastFocus[key].focus();
+              else if (trigger) trigger.focus();
+              lastFocus[key] = null;
+            }
+            if (creditTrigger && credit) {
+              creditTrigger.addEventListener('click', function () { openModal(credit, creditClose, 'credit'); });
+              creditTrigger.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openModal(credit, creditClose, 'credit'); }
+              });
+            }
+            if (creditClose) creditClose.addEventListener('click', function () { closeModal(credit, creditTrigger, 'credit'); });
+            if (mapsTrigger && maps) mapsTrigger.addEventListener('click', function (event) { event.preventDefault(); openModal(maps, mapsClose, 'maps'); });
+            if (mapsClose) mapsClose.addEventListener('click', function () { closeModal(maps, mapsTrigger, 'maps'); });
+            window.addEventListener('click', function (event) {
+              if (event.target === credit) closeModal(credit, creditTrigger, 'credit');
+              if (event.target === maps) closeModal(maps, mapsTrigger, 'maps');
+            });
+            window.addEventListener('keydown', function (event) {
+              if (visible(maps)) trap(event, maps);
+              else if (visible(credit)) trap(event, credit);
+              if (event.key === 'Escape') {
+                if (visible(maps)) closeModal(maps, mapsTrigger, 'maps');
+                if (visible(credit)) closeModal(credit, creditTrigger, 'credit');
+              }
+            });
+          }
+          setupLegacyModals();
           function renderError() {
             setStatus('MODE RINGAN', false);
             setText('refreshChipText', 'MODE RINGAN · DATA BELUM TERAMBIL');
             var dc = byId('dc');
-            if (dc) dc.innerHTML = '<span class="warn-label">Mode Ringan</span>' +
-              '<div class="warn-title">Pantau BMKG</div>' +
-              '<div class="desc-text">Perangkat/browser ini terlalu lama memuat data otomatis. Silakan buka radar resmi BMKG melalui tombol berikut.</div>' +
-              '<a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">📡 Buka Nowcasting BMKG</a>';
+            if (dc) dc.innerHTML = '<span class="warn-label">Mode Ringan</span><div class="warn-title">Pantau BMKG</div><div class="desc-text">Browser ini tidak dapat memuat data otomatis. Silakan buka layanan resmi BMKG melalui tombol berikut.</div><a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">📡 Buka Nowcasting BMKG</a>';
           }
           function xhr(url, done) {
-            var x = new XMLHttpRequest();
-            var timer = setTimeout(function () { try { x.abort(); } catch (e) {} done(new Error('timeout')); }, 1000);
+            var x = new XMLHttpRequest(), finished = false;
+            var timer = setTimeout(function () { if (finished) return; finished = true; try { x.abort(); } catch (e) {} done(new Error('timeout')); }, 4500);
             x.onreadystatechange = function () {
-              if (x.readyState !== 4) return;
+              if (x.readyState !== 4 || finished) return;
+              finished = true;
               clearTimeout(timer);
-              if (x.status >= 200 && x.status < 300 && x.responseText) done(null, x.responseText);
-              else done(new Error('http'));
+              if (x.status >= 200 && x.status < 300 && x.responseText) done(null, x.responseText); else done(new Error('http'));
             };
-            try { x.open('GET', url, true); x.send(null); } catch (e) { clearTimeout(timer); done(e); }
+            try { x.open('GET', url, true); x.send(null); } catch (e) { clearTimeout(timer); if (!finished) { finished = true; done(e); } }
+          }
+          function unwrapProxyContents(value, proxy) {
+            if (!proxy || !proxy.json) return value;
+            try {
+              return JSON.parse(value).contents || '';
+            } catch (e) {
+              return '';
+            }
+          }
+          function loadCap(record, done) {
+            if (!record || !record.link) { done(record); return; }
+            var capProxies = [
+              { url: record.link, json: false },
+              { url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent(record.link), json: false },
+              { url: 'https://allorigins.hexlet.app/get?url=' + encodeURIComponent(record.link), json: true },
+              { url: 'https://api.allorigins.win/get?url=' + encodeURIComponent(record.link), json: true },
+              { url: 'https://corsproxy.io/?' + encodeURIComponent(record.link), json: false }
+            ];
+            var next = function (index) {
+              var proxy;
+              if (index >= capProxies.length) { done(record); return; }
+              proxy = capProxies[index];
+              if (index === 0 && window.location.protocol === 'file:') { next(index + 1); return; }
+              xhr(proxy.url, function (err, responseText) {
+                var xml = unwrapProxyContents(responseText, proxy);
+                if (err || !xml || /^\s*[\[{]/.test(xml) || /<html[\s>]/i.test(xml)) { next(index + 1); return; }
+                try { done(readCap(xml, record)); } catch (e) { next(index + 1); }
+              });
+            };
+            next(0);
           }
           function parseAndRender(xml) {
-            var doc = new DOMParser().parseFromString(xml, 'text/xml');
-            var items = doc.getElementsByTagName('item');
-            var found = null, i;
-            for (i = 0; i < items.length; i++) {
-              var tEl = items[i].getElementsByTagName('title')[0];
-              var title = tEl && (tEl.textContent || tEl.innerText || '');
-              if (title.indexOf('Kep. Riau') >= 0) {
-                var dEl = items[i].getElementsByTagName('description')[0];
-                var lEl = items[i].getElementsByTagName('link')[0];
-                found = {
-                  title: title,
-                  desc: dEl ? (dEl.textContent || dEl.innerText || '') : '',
-                  link: lEl ? (lEl.textContent || lEl.innerText || '') : 'https://nowcasting.bmkg.go.id'
-                };
-                break;
-              }
-            }
-            if (found) renderBasic(found.title, found.desc.replace(/<[^>]*>/g, ''), found.link, true);
-            else renderBasic('', '', '', false);
+            var found = readFeed(xml);
+            if (!found) { renderBasic({}, false); return; }
+            loadCap(found, function (record) { renderBasic(record, true); });
           }
-          function tryFetch(i) {
-            if (i >= PROXIES.length) { renderError(); return; }
-            xhr(PROXIES[i], function (err, xml) {
-              if (err || !xml || xml.indexOf('<html') >= 0) { tryFetch(i + 1); return; }
-              try { parseAndRender(xml); } catch (e) { tryFetch(i + 1); }
+          function tryFetch(index) {
+            var proxy;
+            if (index >= PROXIES.length) { renderError(); return; }
+            proxy = PROXIES[index];
+            xhr(proxy.url, function (err, responseText) {
+              var xml = unwrapProxyContents(responseText, proxy);
+              if (err || !xml || /^\s*[\[{]/.test(xml) || /<html[\s>]/i.test(xml)) { tryFetch(index + 1); return; }
+              try { parseAndRender(xml); } catch (e) { tryFetch(index + 1); }
             });
           }
           setStatus('MODE RINGAN...', true);
           setText('refreshChipText', 'MODE RINGAN · MENYINKRONKAN DATA...');
           tryFetch(0);
-        } catch (e) {}
+        } catch (e) {
+          // The static error state is intentionally kept minimal for old WebViews.
+        }
       })();
     </script>
 
@@ -6878,8 +7947,6 @@ initSync(0);
           setTimeout(loadAnalytics, 3000);
         }
       })();
-    </script>
-
-  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0bf6bbc7fd181b9',t:'MTc4MTUwMzkyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    </script></body>
 
 </html>

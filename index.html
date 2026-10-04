@@ -5464,7 +5464,10 @@ function mapErrorHTML(reason, checkedUrl) {
 /* Make mapErrorHTML globally accessible from inline onerror */
 document.addEventListener('click', function(e) {
   const t = e.target.closest ? e.target.closest('[data-action="retry-infografis"]') : null;
-  if (t && CURRENT_CTX) resolveInfografis(CURRENT_CTX);
+  if (t && CURRENT_CTX) {
+    console.log('[Infografis] coba muat ulang manual');
+    resolveInfografis(CURRENT_CTX);
+  }
 });
 window.mapErrorHTML = mapErrorHTML;
 window.openZoom = openZoom;
@@ -5846,6 +5849,7 @@ function buildInfografisCandidateGroups(alertLink, webUrl) {
   const today = localDateParts(new Date());
   const station = meta ? meta.station : 'CKR';
   const flatDate = meta ? `${meta.year}-${meta.month}-${meta.day}` : today.flat;
+  // kalau besok BMKG pindah host lagi, tambah polanya di sini
   const API_IMAGE_BASE = 'https://api-apps.bmkg.go.id/api/warningcuaca/image';
   if (meta) {
     pushGroup('api', [0, 1, 2].map(i =>
@@ -5905,7 +5909,8 @@ async function fetchCapDetail(link, attempt) {
     const expires = (xml.match(/<expires>([^<]+)<\/expires/) || [])[1] || '';
     const web = (xml.match(/<web>([^<]+)<\/web/) || [])[1] || '';
     return { onset, expires, web };
-  } catch (_) {
+  } catch (e) {
+    console.debug('[CAP] proxy ' + (attempt + 1) + ' dilewati: ' + (e && e.message));
     return fetchCapDetail(link, attempt + 1);
   }
 }
@@ -6374,10 +6379,11 @@ function toggleLightboxZoom() {
 }
 
 function mapOkInner(url) {
-  return `<div class="map-container" id="mapContainerBox" role="button" tabindex="0" aria-label="Perbesar infografis wilayah terdampak">
-          <img id="mapPreviewImg" src="${escHtml(url)}" alt="Infografis Cuaca Kep. Riau" loading="lazy" decoding="async" referrerpolicy="no-referrer" />
-          <div class="map-overlay"></div>
-        </div>`;
+  // disusun pakai concat biar sama dengan gaya renderLoading di atas
+  return '<div class="map-container" id="mapContainerBox" role="button" tabindex="0" aria-label="Perbesar infografis wilayah terdampak">' +
+    '<img id="mapPreviewImg" src="' + escHtml(url) + '" alt="Infografis Cuaca Kep. Riau" loading="lazy" decoding="async" referrerpolicy="no-referrer" />' +
+    '<div class="map-overlay"></div>' +
+    '</div>';
 }
 async function resolveInfografis(ctx) {
   const token = ++galleryRequestToken;
@@ -6403,7 +6409,8 @@ async function resolveInfografis(ctx) {
     if (slot0) slot0.innerHTML = mapErrorHTML('offline', '');
     return;
   }
-  const groups = buildInfografisCandidateGroups(ctx.link, ctx.cap && ctx.cap.web ? ctx.cap.web : '');
+  const webDariCap = ctx.cap && ctx.cap.web ? ctx.cap.web : '';
+  const groups = buildInfografisCandidateGroups(ctx.link, webDariCap);
   let found = null;
   for (const group of groups) {
     if (token !== galleryRequestToken) return;
@@ -6412,6 +6419,7 @@ async function resolveInfografis(ctx) {
     ));
     if (token !== galleryRequestToken) return;
     const okUrls = results.filter(Boolean);
+    console.log('[Infografis] grup ' + group.kind + ': ' + okUrls.length + ' dari ' + group.urls.length + ' berkas termuat');
     if (okUrls.length) { found = { kind: group.kind, urls: okUrls }; break; }
   }
   if (token !== galleryRequestToken) return;
@@ -6419,6 +6427,7 @@ async function resolveInfografis(ctx) {
     infografisUrl = ''; zoomImgUrl = '';
     const apiGroup = groups.find(g => g.kind === 'api');
     const checked = (apiGroup && apiGroup.urls[0]) || (ctx.cap && ctx.cap.web) || (groups[0] && groups[0].urls[0]) || '';
+    console.log('[Infografis] tidak ada berkas cocok. Tautan pertama yang diperiksa: ' + checked);
     const slot1 = document.getElementById('mapSlot');
     if (slot1) slot1.innerHTML = mapErrorHTML('absent', checked);
     setLightboxSlides([buildSummarySlide(ctx.title, ctx.displayText, ctx.lastBuild ? `Diterbitkan ${translateDate(ctx.lastBuild)}` : 'Prakirawan BMKG - Kep. Riau', '')], 0);
@@ -6963,6 +6972,7 @@ async function initSync(attempt) {
   attempt = attempt || 0;
   startSpin();
   if (DEMO_MODE && attempt === 0) {
+    console.log('[Demo] mode contoh aktif (?demo=' + DEMO_MODE + '), jaringan dilewati');
     renderLoading();
     const demoLink = 'https://www.bmkg.go.id/alerts/nowcast/id/CKR20261004001_alert.xml';
     const demoDesc = 'Hujan lebat disertai petir akan terjadi pada 04 October 2026, 12:36 WIB di sebagian wilayah Kep. Riau, khususnya di BUNGURAN BARAT, BUNGURAN BATUBI, BUNGURAN TENGAH, BUNGURAN TIMUR LAUT, BUNGURAN UTARA, LINGGA, LINGGA UTARA, SENAYANG. Kondisi ini berpotensi menimbulkan dampak berupa jarak pandang berkurang, angin kencang, dan banjir lokal. Masyarakat dihimbau untuk tetap waspada, mengurangi aktivitas di luar ruangan, serta mengambil langkah-langkah pencegahan yang diperlukan guna menjaga keselamatan. Kondisi diperkirakan dapat berlangsung hingga 04 October 2026, 15:10 WIB.';

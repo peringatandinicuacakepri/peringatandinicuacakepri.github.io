@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#0b1923" />
   <meta name="color-scheme" content="dark" />
   <!-- Open Graph / Facebook -->
-  <meta property="og:title" content="Peringatan Dini Cuaca BMKG — Kep. Riau" />
+  <meta property="og:title" content="Peringatan Dini Cuaca BMKG - Kep. Riau" />
   <meta property="og:description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
   <meta property="og:image" content="https://peringatandinicuacakepri.github.io/og-image.png" />
   <meta property="og:type" content="website" />
@@ -72,7 +72,7 @@
             var isLite = document.documentElement.classList.contains('perf-lite');
             btn.setAttribute('aria-pressed', isLite ? 'true' : 'false');
             btn.setAttribute('aria-label', isLite ? 'Mode ringan aktif' : 'Mode ringan nonaktif');
-            btn.setAttribute('title', isLite ? 'Mode ringan aktif — klik untuk kembali ke mode penuh' : 'Mode ringan nonaktif — klik untuk mode HP low-end');
+            btn.setAttribute('title', isLite ? 'Mode ringan aktif - klik untuk kembali ke mode penuh' : 'Mode ringan nonaktif - klik untuk mode HP low-end');
             btn.innerHTML = '<span class="lite-toggle-dot" aria-hidden="true"></span><span class="lite-toggle-text">' + (isLite ? 'Mode Ringan: Aktif' : 'Mode Ringan: Nonaktif') + '</span>';
             if (isLite) {
               if (btn.classList.contains('is-active') === false) btn.classList.add('is-active');
@@ -87,7 +87,7 @@
   </script>
 
   <title>
-    Peringatan Dini Cuaca BMKG — Kep. Riau
+    Peringatan Dini Cuaca BMKG - Kep. Riau
   </title>
 
   <meta name="description" content="Pantau peringatan dini cuaca Kepulauan Riau langsung dari BMKG" />
@@ -2704,7 +2704,43 @@ body::after {
   z-index: -1;
 }
 
-  </style>
+  /* Milik fork ini: spinner selagi peta dicari, plus tautan bukti pada
+   panel infografis kosong. Selain dua itu, CSS asli yang bicara. */
+.map-state {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
+}
+.map-spinner {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: #9af5ea;
+  animation: mapSpin 0.9s linear infinite;
+}
+@keyframes mapSpin { to { transform: rotate(360deg); } }
+.map-state-text { max-width: 30ch; text-align: center; }
+.map-error-state .map-error-url {
+  font-size: 10.5px; font-weight: 600; line-height: 1.5;
+  color: rgba(255, 255, 255, 0.74);
+  max-width: 52ch; word-break: break-all;
+  margin-top: 2px;
+}
+.map-error-state .map-error-url a {
+  color: #9af5ea;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.map-error-state .map-error-actions {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 4px;
+}
+.map-error-state .map-error-actions .cta-btn {
+  width: auto; min-height: 40px; padding: 9px 16px; font-size: 12px; margin-top: 0;
+}
+.time-pill-date { font-size: 10px; opacity: 0.85; }
+</style>
   <style id="liquid-glass-unified">
     :root {
       --phi: 1.618;
@@ -5027,7 +5063,7 @@ function nowHHMM() {
 }
 
 function translateDate(dateStr) {
-  if (!dateStr) return '—';
+  if (!dateStr) return '-';
   const raw = String(dateStr).trim();
   const monthIndex = {
     Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Mei: 4, Jun: 5,
@@ -5159,22 +5195,11 @@ function renderWarning(title, desc, link, lastBuild) {
   setStatus('live', i18n.status.live + ': ' + nowHHMM());
   stopSpin();
   document.getElementById('refreshChipText').textContent = `DIPERBARUI ${nowHHMM()} WIB`;
-  const previewUrl = buildPreviewImageUrl(link);
-  infografisUrl = previewUrl;
-  zoomImgUrl = previewUrl;
-
-  // Preload previewUrl above the fold
-  if (previewUrl) {
-    const pl = document.createElement('link');
-    pl.rel = 'preload';
-    pl.as = 'image';
-    pl.href = previewUrl;
-    document.head.appendChild(pl);
-  }
+  const previewUrl = '';
 
   document.getElementById('mainCard').classList.add('w-glow');
   const pills = buildPills(desc);
-  const clean = desc.replace(/<[^>]*>/g, '').trim();
+  const clean = titleCaseRegionText(desc.replace(/<[^>]*>/g, '').trim());
 
   // --- DYNAMIC DATE TRANSLATOR CODE ---
   let textFix = clean || "";
@@ -5231,9 +5256,10 @@ function renderWarning(title, desc, link, lastBuild) {
   if (/disertai\s/i.test(displayTitle)) {
     titleHtml = titleHtml.replace(/disertai\s+/i, 'disertai<br>');
   }
+  CURRENT_CTX = { title: displayTitle, displayText: textFix, link, lastBuild, cap: CURRENT_CAP };
   galleryRequestToken += 1;
-  setLightboxSlides(buildWarningFallbackSlides(previewUrl, displayTitle, textFix, lastBuild), 0);
-  hydrateWarningGallery(link, displayTitle, textFix, lastBuild, previewUrl);
+  setLightboxSlides([buildSummarySlide(displayTitle, textFix, lastBuild ? `Diterbitkan ${translateDate(lastBuild)}` : 'Prakirawan BMKG - Kep. Riau', '')], 0);
+  resolveInfografis(CURRENT_CTX);
 
   // --- HIGHLIGHT AFFECTED REGION + BUILD TIME-RANGE PILL ---
   // Escape first so we can safely inject <strong> markup into the description.
@@ -5242,7 +5268,7 @@ function renderWarning(title, desc, link, lastBuild) {
   // --- BOLD THE AFFECTED + EXPANSION REGIONS ---
   // Helper: wrap a captured region span in <strong>, preserving the lead text.
   const boldRegion = (m, lead, region) =>
-    `${lead}<strong class="desc-region">${region.trim()}</strong>`;
+    `${lead}<strong class="desc-region">${region.trim().replace(/[,;.:\s]+$/, '')}</strong>`;
 
   // Case A (BMKG live format): "... pada pkl HH:MM WIB di <WILAYAH> ... Dan dapat meluas ..."
   // Bold the primary affected area: everything between "WIB di " and "Dan dapat meluas"
@@ -5265,24 +5291,26 @@ function renderWarning(title, desc, link, lastBuild) {
     boldRegion
   );
 
-  // Build a "from–to WIB" pill by scanning the text for time tokens (HH:MM / HH.MM).
-  const timeMatches = textFix.match(/\b([01]?\d|2[0-3])[.:]([0-5]\d)\b/g) || [];
-  const normTimes = timeMatches.map(t => t.replace('.', ':'));
+  // Build a "from-to WIB" pill: utamakan onset/expires CAP, lalu scan teks.
+  const isoHM = (iso) => {
+    const dd = new Date(iso);
+    if (Number.isNaN(dd.getTime())) return null;
+    const u = wibCalendarKey(dd, 'WIB');
+    return String(u.getHours()).padStart(2, '0') + ':' + String(u.getMinutes()).padStart(2, '0');
+  };
+  let normTimes = [];
+  if (CURRENT_CAP && CURRENT_CAP.onset && CURRENT_CAP.expires) {
+    normTimes = [isoHM(CURRENT_CAP.onset), isoHM(CURRENT_CAP.expires)].filter(Boolean);
+  }
+  if (!normTimes.length) {
+    const timeMatches = textFix.match(/\b([01]?\d|2[0-3])[.:]([0-5]\d)\b/g) || [];
+    normTimes = timeMatches.map(t => t.replace('.', ':'));
+  }
   let timePill = '';
   if (normTimes.length >= 2) {
-    timePill = `<div class="time-pill" title="Perkiraan rentang waktu berlaku (WIB)">
-        <span class="time-pill-ic">🕒</span>
-        <span class="time-pill-from">${normTimes[0]}</span>
-        <span class="time-pill-sep">–</span>
-        <span class="time-pill-to">${normTimes[normTimes.length - 1]}</span>
-        <span class="time-pill-unit">WIB</span>
-      </div>`;
+    timePill = buildTimePillHtml(normTimes[0], normTimes[normTimes.length - 1], 'WIB', PILL_OPTS || {});
   } else if (normTimes.length === 1) {
-    timePill = `<div class="time-pill" title="Perkiraan waktu (WIB)">
-        <span class="time-pill-ic">🕒</span>
-        <span class="time-pill-from">${normTimes[0]}</span>
-        <span class="time-pill-unit">WIB</span>
-      </div>`;
+    timePill = buildTimePillHtml(normTimes[0], normTimes[0], 'WIB', PILL_OPTS || {});
   }
 
   document.getElementById('dc').innerHTML = `
@@ -5299,9 +5327,12 @@ function renderWarning(title, desc, link, lastBuild) {
             ⛶ Perbesar
           </span>
         </div>
-        <div class="map-container" role="button" tabindex="0" aria-label="Perbesar infografis wilayah terdampak">
-          <img id="mapPreviewImg" src="${previewUrl}" alt="Infografis Cuaca Kep. Riau" loading="lazy" decoding="async" fetchpriority="low" onerror="this.parentElement.outerHTML=mapErrorHTML()" />
+        <div id="mapSlot">
+        <div class="map-container" id="mapContainerBox" role="button" tabindex="0" aria-label="Perbesar infografis wilayah terdampak">
+          <div class="map-state" id="mapStateBox"><div class="map-spinner" aria-hidden="true"></div><span class="map-state-text">Mencari infografis di server BMKG...</span></div>
+          <img id="mapPreviewImg" alt="Infografis Cuaca Kep. Riau" loading="lazy" decoding="async" referrerpolicy="no-referrer" style="display:none;" />
           <div class="map-overlay"></div>
+        </div>
         </div>
      </div>
 
@@ -5323,7 +5354,7 @@ function renderWarning(title, desc, link, lastBuild) {
   `;
 }
 
-function renderSafe(lastBuild) {
+function renderSafe(lastBuild, note) {
   setStatus('safe', i18n.status.safe);
   stopSpin();
 
@@ -5343,7 +5374,8 @@ function renderSafe(lastBuild) {
     </div> 
     <span class="warn-label">Status Wilayah</span> 
     <div class="warn-title" style="color:var(--accent);">Kondusif</div> 
-    <div class="desc-text desc-text--oneline">${i18n.messages.noWarning}</div> 
+    <div class="desc-text desc-text--oneline">${i18n.messages.noWarning}</div>
+    ${note ? `<div class="disclaimer-note" role="note" aria-label="Catatan masa berlaku peringatan"><div class="disclaimer-note-ic">ⓘ</div><div class="disclaimer-note-text">${escHtml(note)}</div></div>` : ''} 
     
     <div class="map-section" style="margin-bottom: 18px;">
       <div class="map-error-state" style="aspect-ratio: auto; padding: 24px 10px; background: rgba(0, 229, 255, 0.02); border: 1px dashed rgba(0, 229, 255, 0.15);">
@@ -5362,7 +5394,7 @@ function renderSafe(lastBuild) {
 function renderError(errorType) {
   errorType = errorType || 'NETWORK';
   const messages = {
-    'CORS': 'Koneksi terblokir proxy — coba refresh atau gunakan radar BMKG',
+    'CORS': 'Koneksi terblokir proxy, coba refresh atau gunakan radar BMKG',
     'TIMEOUT': 'Server BMKG merespons lambat, coba lagi beberapa saat',
     'NETWORK': 'Periksa koneksi internet Anda atau coba lagi beberapa saat'
   };
@@ -5398,18 +5430,42 @@ function renderError(errorType) {
   `;
 }
 
-function mapErrorHTML() {
+function mapErrorHTML(reason, checkedUrl) {
+  const offline = reason === 'offline';
+  const msg = offline
+    ? 'Perangkat sedang offline, jadi gambar tidak ikut dimuat. Teks peringatan di atas diambil dari data BMKG yang tersimpan.'
+    : 'BMKG belum mengunggah infografis untuk rilis ini. Tautan resmi CAP, API gambar, dan pola folder baru/lama sudah dicek satu per satu. Teks peringatan di atas tetap asli dari BMKG.';
+  let urlLine = '';
+  const u = String(checkedUrl || '');
+  if (u && /^https?:\/\//i.test(u)) {
+    let path = u;
+    try {
+      const uu = new URL(u);
+      const q = uu.searchParams.get('path');
+      path = q ? q : uu.pathname.replace(/^\/infografis\//, '');
+    } catch (_) {}
+    urlLine = `<span class="map-error-url">Tautan yang dicek: <a href="${escHtml(u)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${escHtml(path)}</a></span>`;
+  }
   return `<div class="map-error-state">
-      <span style="font-size:28px;">🌐</span>
-      <span>Infografis belum tersedia hari ini</span>
-      <span style="font-size:9px;opacity:0.5;">Coba lagi nanti atau buka radar real-time</span>
-      <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn primary" referrerpolicy="no-referrer">
-      <span>📡</span> Buka Radar Real-Time
-    </a>
+      <span style="font-size:28px;">🛰️</span>
+      <span>Infografis belum tersedia</span>
+      <span style="font-size:10px;opacity:0.62;max-width:46ch;text-align:center;line-height:1.5;">${msg}</span>
+      ${urlLine}
+      <span class="map-error-actions">
+        <button type="button" class="cta-btn primary" data-action="retry-infografis">
+          <span>↺</span> Coba Muat Ulang
+        </button>
+        <a href="https://nowcasting.bmkg.go.id" target="_blank" rel="noopener noreferrer" class="cta-btn ghost" referrerpolicy="no-referrer">
+          <span>📡</span> Radar Real-Time BMKG
+        </a>
+      </span>
     </div>`;
 }
-
 /* Make mapErrorHTML globally accessible from inline onerror */
+document.addEventListener('click', function(e) {
+  const t = e.target.closest ? e.target.closest('[data-action="retry-infografis"]') : null;
+  if (t && CURRENT_CTX) resolveInfografis(CURRENT_CTX);
+});
 window.mapErrorHTML = mapErrorHTML;
 window.openZoom = openZoom;
 window.closeZoom = closeZoom;
@@ -5475,6 +5531,409 @@ const thumbsBtnEl = document.getElementById('thumbsToggleBtn');
 const zoomPrevBtnEl = document.getElementById('zoomPrevBtn');
 const zoomNextBtnEl = document.getElementById('zoomNextBtn');
 
+/* Bagian fork: parser tanggal bahasa Inggris, opsi pill lintas hari,
+   daftar kandidat URL infografis, dan nama wilayah huruf awal kapital.
+   Kode asli di bawahnya tidak diubah. */
+const EN_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+const ID_MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+const ID_DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+function parseLocalAlertDate(dateLabel, timeStr, tz) {
+  const dm = String(dateLabel || '').match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
+  const tm = String(timeStr || '').match(/(\d{1,2})[.:](\d{2})/);
+  if (!dm || !tm) return null;
+  const mi = monthIndexOf(dm[2]);
+  if (mi == null) return null;
+  return new Date(Date.UTC(Number(dm[3]), mi, Number(dm[1]),
+    Number(tm[1]) - tzOffsetHours(tz), Number(tm[2])));
+}
+
+function normalizeTimeToken(t) {
+  const m = String(t || '').match(/(\d{1,2})[.:](\d{2})/);
+  if (!m) return String(t || '');
+  return `${m[1].padStart(2, '0')}:${m[2]}`;
+}
+
+function looksLikeRegionList(raw) {
+  if (!raw) return false;
+  const s = String(raw).toLowerCase();
+  if (/\b(kondisi|masyarakat|diperkirakan|berlangsung|berpotensi|dihimbau|himbau|wib|wita|wit|pkl|tgl)\b/.test(s)) return false;
+  return String(raw).length <= 600;
+}
+
+function splitRegionList(raw) {
+  return String(raw || '')
+    .split(/[,;]/)
+    .map(s => s.trim().replace(/\.+$/, '').replace(/\s+/g, ' '))
+    .filter(Boolean)
+    .map(titleCasePhrase);
+}
+
+function localizeDatesInText(text) {
+  const pattern = new RegExp('\\b(\\d{1,2})\\s+(' + EN_MONTHS.join('|') + ')\\s+(\\d{4})\\b', 'gi');
+  return String(text || '').replace(pattern, (full, d, mon, y) => {
+    const mi = monthIndexOf(mon);
+    if (mi == null) return full;
+    if (ID_MONTHS[mi].toLowerCase() === String(mon).toLowerCase()) return full;
+    return `${d} ${ID_MONTHS[mi]} ${y}`;
+  });
+}
+
+const MONTH_LOOKUP = (function () {
+  const map = {};
+  EN_MONTHS.forEach((m, i) => {
+    map[m.toLowerCase()] = i;
+    map[m.slice(0, 3).toLowerCase()] = i;
+  });
+  ID_MONTHS.forEach((m, i) => {
+    map[m.toLowerCase()] = i;
+    map[m.slice(0, 3).toLowerCase()] = i;
+  });
+  return map;
+})();
+
+function monthIndexOf(name) {
+  const key = String(name || '').toLowerCase();
+  if (key in MONTH_LOOKUP) return MONTH_LOOKUP[key];
+  const short = key.slice(0, 3);
+  return short in MONTH_LOOKUP ? MONTH_LOOKUP[short] : null;
+}
+
+function titleCasePhrase(part) {
+  return String(part || '')
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+const TZ_OFFSETS = { WIB: 7, WITA: 8, WIT: 9 };
+
+function tzOffsetHours(tz) {
+  const key = String(tz || 'WIB').toUpperCase();
+  return key in TZ_OFFSETS ? TZ_OFFSETS[key] : 7;
+}
+
+function extractTimeRange(parsed) {
+  let from = parsed.start ? parsed.start.time : '';
+  let to = parsed.end ? parsed.end.time : '';
+  if (!from || !to) {
+    const times = (parsed.flat.match(/\b([01]?\d|2[0-3])[.:]([0-5]\d)\b/g) || [])
+      .map(normalizeTimeToken);
+    if (!from && times.length) from = times[0];
+    if (!to && times.length >= 2) to = times[times.length - 1];
+    if (!to && times.length === 1) to = times[0];
+  }
+  if (from && to && from === to) to = '';
+  return { from, to };
+}
+
+function buildDescHtml(parsed) {
+  let html = escHtml(parsed.displayText);
+
+  const boldRegion = (raw) => {
+    if (!raw) return;
+    const needle = escHtml(raw.replace(/\s+/g, ' ').trim());
+    const idx = html.indexOf(needle);
+    if (idx === -1) return;
+    html = html.slice(0, idx)
+      + `<strong class="desc-region">${titleCaseRegionList(raw)}</strong>`
+      + html.slice(idx + needle.length);
+  };
+  boldRegion(parsed.mainRegionsRaw);
+  boldRegion(parsed.expansionRegionsRaw);
+
+  return html;
+}
+
+function titleCaseRegionList(rawList) {
+  return splitRegionList(rawList).join(', ');
+}
+
+function parseNowcastText(rawText) {
+  const stripped = String(rawText || '').replace(/<[^>]*>/g, ' ');
+  const flatRaw = normalizeWarningText(stripped).replace(/\s+/g, ' ').trim();
+  const displayText = localizeDatesInText(flatRaw);
+
+  const parsed = {
+    flat: flatRaw,
+    displayText,
+    province: null,
+    tz: 'WIB',
+    updateHeader: null,
+    start: null,
+    end: null,
+    mainRegionsRaw: null,
+    expansionRegionsRaw: null,
+    mainRegions: [],
+    expansionRegions: []
+  };
+
+  /* Format B: header "UPDATE Peringatan Dini Cuaca Wilayah ... tgl ... pkl ... WIB" */
+  const hdr = flatRaw.match(/UPDATE\s+Peringatan\s+Dini\s+Cuaca\s+Wilayah\s+(.+?)\s+tgl\.?\s+(\d{1,2}\s+[A-Za-z]+\s+\d{4})\s+pkl\.?\s*(\d{1,2}[.:]\d{2})\s*(WIB|WITA|WIT)?/i);
+  if (hdr) {
+    parsed.updateHeader = {
+      province: hdr[1].trim(),
+      dateLabel: hdr[2].trim(),
+      time: normalizeTimeToken(hdr[3])
+    };
+    parsed.province = hdr[1].trim();
+    if (hdr[4]) parsed.tz = hdr[4].toUpperCase();
+  }
+
+  /* Format A: provinsi disebut sebelum daftar wilayah */
+  if (!parsed.province) {
+    const prov = flatRaw.match(/di\s+sebagian\s+wilayah\s+([^,]+?)\s*,\s*khususnya\s+di/i);
+    if (prov) parsed.province = prov[1].trim();
+  }
+
+  /* Waktu mulai berlaku: "pada <tgl>, <jam> WIB" atau "pada pkl <jam> WIB" */
+  const startA = flatRaw.match(/pada\s+(\d{1,2}\s+[A-Za-z]+\s+\d{4})\s*,?\s*(\d{1,2}[.:]\d{2})\s*(WIB|WITA|WIT)/i);
+  const startB = flatRaw.match(/pada\s+pkl\.?\s*(\d{1,2}[.:]\d{2})\s*(WIB|WITA|WIT)?\s+di\b/i);
+  if (startA) {
+    parsed.start = { dateLabel: startA[1], time: normalizeTimeToken(startA[2]) };
+    parsed.tz = startA[3].toUpperCase();
+  } else if (startB) {
+    parsed.start = {
+      dateLabel: parsed.updateHeader ? parsed.updateHeader.dateLabel : null,
+      time: normalizeTimeToken(startB[1])
+    };
+    if (startB[2]) parsed.tz = startB[2].toUpperCase();
+  }
+
+  /* Waktu berakhir: "berlangsung hingga <tgl>, <jam> WIB" atau "hingga pkl <jam> WIB" */
+  const endA = flatRaw.match(/berlangsung\s+hingga\s+(\d{1,2}\s+[A-Za-z]+\s+\d{4})\s*,?\s*(\d{1,2}[.:]\d{2})\s*(WIB|WITA|WIT)/i);
+  const endB = flatRaw.match(/berlangsung\s+hingga\s+pkl\.?\s*(\d{1,2}[.:]\d{2})\s*(WIB|WITA|WIT)?/i);
+  if (endA) {
+    parsed.end = { dateLabel: endA[1], time: normalizeTimeToken(endA[2]) };
+    parsed.tz = endA[3].toUpperCase();
+  } else if (endB) {
+    /* Format B: tanggal akhir tidak disebut; disimpulkan di bawah. */
+    parsed.end = { dateLabel: null, time: normalizeTimeToken(endB[1]) };
+    if (endB[2]) parsed.tz = endB[2].toUpperCase();
+  }
+
+  /* Wilayah utama terdampak */
+  const mainB = flatRaw.match(/pada\s+pkl\.?\s*\d{1,2}[.:]\d{2}\s*(?:WIB|WITA|WIT)?\s+di\s+([\s\S]+?)(?=\s*(?:[Dd]an\s+)?(?:dapat\s+|berpotensi\s+)?meluas\s+ke\s+wilayah|\s*Kondisi\s+ini|\s*Prakirawan|$)/);
+  const mainA = flatRaw.match(/khususnya\s+di\s+([^.]+)\./i);
+  if (mainB && looksLikeRegionList(mainB[1])) {
+    parsed.mainRegionsRaw = mainB[1].trim().replace(/\.+$/, '');
+  } else if (mainA && looksLikeRegionList(mainA[1])) {
+    parsed.mainRegionsRaw = mainA[1].trim().replace(/\.+$/, '');
+  }
+
+  /* Wilayah potensi meluas */
+  const exp = flatRaw.match(/(?:[Dd]an\s+)?(?:dapat\s+|berpotensi\s+)?meluas\s+ke\s+wilayah\s+([\s\S]+?)(?=\s*Kondisi\s+ini|\s*Prakirawan|$)/);
+  if (exp && looksLikeRegionList(exp[1])) {
+    parsed.expansionRegionsRaw = exp[1].trim().replace(/\.+$/, '');
+  }
+
+  parsed.mainRegions = splitRegionList(parsed.mainRegionsRaw);
+  parsed.expansionRegions = splitRegionList(parsed.expansionRegionsRaw);
+
+  /* Konversi label tanggal + jam menjadi Date absolut (zona rilis) */
+  if (parsed.start && parsed.start.dateLabel) {
+    parsed.start.date = parseLocalAlertDate(parsed.start.dateLabel, parsed.start.time, parsed.tz);
+  }
+  if (parsed.end) {
+    if (parsed.end.dateLabel) {
+      parsed.end.date = parseLocalAlertDate(parsed.end.dateLabel, parsed.end.time, parsed.tz);
+    }
+    if (!parsed.end.date) {
+      /* Format B tanpa tanggal akhir: pakai tanggal header/mulai sebagai dasar. */
+      const baseLabel = (parsed.updateHeader && parsed.updateHeader.dateLabel) ||
+        (parsed.start && parsed.start.dateLabel);
+      if (baseLabel) {
+        parsed.end.date = parseLocalAlertDate(baseLabel, parsed.end.time, parsed.tz);
+        parsed.end.dateLabel = baseLabel;
+        parsed.end.dateLabelInferred = true;
+      }
+    }
+    /* Bila tanggal akhir hasil simpulan jatuh sebelum waktu mulai,
+       artinya peringatan melewati tengah malam: geser satu hari. */
+    if (parsed.end.date && parsed.end.dateLabelInferred &&
+        parsed.start && parsed.start.date && parsed.end.date < parsed.start.date) {
+      parsed.end.date = new Date(parsed.end.date.getTime() + 86400000);
+    }
+  }
+
+  return parsed;
+}
+
+function wibCalendarKey(d, tz) {
+  const off = tz === 'WIT' ? 9 : tz === 'WITA' ? 8 : 7;
+  return new Date(d.getTime() + (off * 60 + d.getTimezoneOffset()) * 60000);
+}
+function shortDateLabel(d, tz) {
+  const u = wibCalendarKey(d, tz);
+  return `${u.getDate()} ${ID_MONTHS[u.getMonth()].slice(0, 3)}`;
+}
+function formatWibDateTime(d, tz) {
+  const u = wibCalendarKey(d, tz);
+  const hh = String(u.getHours()).padStart(2, '0');
+  const mm = String(u.getMinutes()).padStart(2, '0');
+  return `${ID_DAYS[u.getDay()]}, ${u.getDate()} ${ID_MONTHS[u.getMonth()]} ${u.getFullYear()} ${hh}:${mm} ${tz}`;
+}
+function asDateObject(x) {
+  if (!x) return null;
+  if (x instanceof Date) return x;
+  if (x.date instanceof Date) return x.date;
+  return null;
+}
+function buildValidityLabel(p) {
+  const e = p ? asDateObject(p.end) : null;
+  return e ? formatWibDateTime(e, p.tz) : '';
+}
+function buildPillOpts(startD, endD, tz) {
+  const opts = {};
+  startD = asDateObject(startD);
+  endD = asDateObject(endD);
+  if (!startD || !endD) return opts;
+  const a = wibCalendarKey(startD, tz);
+  const b = wibCalendarKey(endD, tz);
+  const sameDay = a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  if (!sameDay) opts.toSuffix = shortDateLabel(endD, tz);
+  opts.fullUntil = formatWibDateTime(endD, tz);
+  opts.title = `Berlaku sampai ${opts.fullUntil}`;
+  return opts;
+}
+function buildTimePillHtml(from, to, tz, opts) {
+  opts = opts || {};
+  const suffix = opts.toSuffix ? ` <span class="time-pill-date">(${opts.toSuffix})</span>` : '';
+  const title = opts.title || 'Perkiraan rentang waktu berlaku (' + tz + ')';
+  return `<div class="time-pill" title="${escHtml(title)}" aria-label="${escHtml('Peringatan berlaku ' + from + ' sampai ' + (opts.fullUntil || (to + ' ' + tz)))}">
+        <span class="time-pill-ic">🕒</span>
+        <span class="time-pill-from">${from}</span>
+        <span class="time-pill-sep">–</span>
+        <span class="time-pill-to">${to}${suffix}</span>
+        <span class="time-pill-unit">${tz}</span>
+      </div>`;
+}
+function titleCaseRegionText(text) {
+  const tc = (s) => s.trim().replace(/[,;.:\s]+$/, '').toLowerCase().replace(/[a-zA-Z0-9]+/g, w =>
+    w.charAt(0).toUpperCase() + w.slice(1));
+  return String(text || '')
+    .replace(/(\bWIB\s+di\s+)([^.!?\n]+?)(?=[.!?]?\s*(?:Dan dapat meluas|Kondisi ini|Prakirawan)|$)/i, (mm, lead, region) => lead + tc(region))
+    .replace(/khususnya di ([^.!?\n]+)([.!?]?)/i, (mm, region, punct) => 'khususnya di ' + tc(region) + punct)
+    .replace(/meluas ke wilayah\s+([^!?\n]+?)(?=[.!?]?\s*(?:Kondisi ini|Prakirawan)|$)([.!?]?)/i, (mm, region, punct) => 'meluas ke wilayah ' + tc(region) + punct);
+}
+function withImageExtensions(basename) {
+  return [`${basename}.jpg`, `${basename}.jpeg`, `${basename}.png`];
+}
+function localDateParts(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return { y, m, d, flat: `${y}-${m}-${d}` };
+}
+function isTextVariantUrl(url) {
+  return /(?:infografis_text\.(?:jpe?g|png)|_image1\.(?:jpe?g|png))$/i.test(String(url || ''));
+}
+function buildInfografisCandidateGroups(alertLink, webUrl) {
+  const groups = [];
+  const seen = new Set();
+  const pushGroup = (kind, urls) => {
+    const clean = [];
+    urls.forEach(u => {
+      if (u && !seen.has(u)) { seen.add(u); clean.push(u); }
+    });
+    if (clean.length) groups.push({ kind, urls: clean });
+  };
+  const meta = parseAlertAssetMeta(alertLink);
+  const today = localDateParts(new Date());
+  const station = meta ? meta.station : 'CKR';
+  const flatDate = meta ? `${meta.year}-${meta.month}-${meta.day}` : today.flat;
+  const API_IMAGE_BASE = 'https://api-apps.bmkg.go.id/api/warningcuaca/image';
+  if (meta) {
+    pushGroup('api', [0, 1, 2].map(i =>
+      `${API_IMAGE_BASE}?path=${station}-${flatDate}-${meta.id}_image${i}.jpg`));
+  }
+  if (webUrl && /^https?:\/\//i.test(webUrl)) {
+    const base = webUrl.replace(/\.(jpe?g|png|webp)$/i, '');
+    pushGroup('web', [webUrl].concat(withImageExtensions(base).filter(u => u !== webUrl)));
+  }
+  const INFOGRAFIS_BASE = 'https://nowcasting.bmkg.go.id/infografis';
+  const flatBase = `${INFOGRAFIS_BASE}/${station}/${flatDate}`;
+  const hierBase = `${INFOGRAFIS_BASE}/${station}/${meta ? meta.year : today.y}/${meta ? meta.month : today.m}/${meta ? meta.day : today.d}`;
+  if (meta) {
+    pushGroup('alert', [0, 1, 2].map(i => `${flatBase}/${meta.id}_image${i}.jpg`));
+    pushGroup('alert', [0, 1, 2].map(i => `${hierBase}/${meta.id}_image${i}.jpg`));
+  }
+  pushGroup('daily', [
+    `${flatBase}/infografis.jpg`, `${flatBase}/infografis_text.jpg`,
+    `${hierBase}/infografis.jpg`, `${hierBase}/infografis_text.jpg`
+  ]);
+  if (station !== 'CKR' || flatDate !== today.flat) {
+    const dFlat = `${INFOGRAFIS_BASE}/CKR/${today.flat}`;
+    const dHier = `${INFOGRAFIS_BASE}/CKR/${today.y}/${today.m}/${today.d}`;
+    pushGroup('today', [`${dFlat}/infografis.jpg`, `${dHier}/infografis.jpg`]);
+  }
+  return groups;
+}
+const IMAGE_PROBE_TIMEOUT_MS = 6000;
+function preloadImageTimeout(url, timeoutMs) {
+  return new Promise(resolve => {
+    let done = false;
+    const img = new Image();
+    const timer = setTimeout(() => finish(false), timeoutMs || IMAGE_PROBE_TIMEOUT_MS);
+    function finish(ok) {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(ok);
+    }
+    img.onload = () => finish(true);
+    img.onerror = () => finish(false);
+    img.referrerPolicy = 'no-referrer';
+    img.src = url;
+  });
+}
+async function fetchCapDetail(link, attempt) {
+  attempt = attempt || 0;
+  if (!link || link === '#' || attempt >= PROXIES.length) return null;
+  const proxy = PROXIES[attempt];
+  const target = proxy.direct ? link : proxy.url + encodeURIComponent(link);
+  try {
+    const res = await fetchWithTimeout(target, FETCH_TIMEOUT_MS);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const xml = proxy.json ? ((await res.json()).contents || '') : await res.text();
+    if (!xml || xml.includes('<html')) throw new Error('invalid');
+    const onset = (xml.match(/<onset>([^<]+)<\/onset/) || [])[1] || '';
+    const expires = (xml.match(/<expires>([^<]+)<\/expires/) || [])[1] || '';
+    const web = (xml.match(/<web>([^<]+)<\/web/) || [])[1] || '';
+    return { onset, expires, web };
+  } catch (_) {
+    return fetchCapDetail(link, attempt + 1);
+  }
+}
+let PILL_OPTS = null;
+const DEMO_MODE = (() => {
+  try {
+    return new URLSearchParams(window.location.search).get('demo') || '';
+  } catch (_) { return ''; }
+})();
+function demoSimulationImage(ctx) {
+  try {
+    const c = document.createElement('canvas');
+    c.width = 1200; c.height = 820;
+    const g = c.getContext('2d');
+    if (!g) return '';
+    g.fillStyle = '#0b2a5e'; g.fillRect(0, 0, 1200, 820);
+    g.fillStyle = '#c8f542'; g.fillRect(60, 40, 620, 90);
+    g.fillStyle = '#08307a'; g.fillRect(60, 150, 680, 620);
+    g.fillStyle = '#ffffff'; g.font = 'bold 34px sans-serif';
+    g.fillText('PERINGATAN DINI CUACA (SIMULASI)', 90, 100);
+    g.fillStyle = '#9af5ea'; g.font = 'bold 26px sans-serif';
+    g.fillText('MODE DEMO - BUKAN SIARAN BMKG', 90, 220);
+    g.fillStyle = '#ffffff'; g.font = '22px sans-serif';
+    g.fillText(ctx && ctx.title ? ctx.title : 'Peringatan Dini Cuaca Kep. Riau', 90, 270);
+    g.fillText('Gambar contoh untuk mengetes tampilan, bukan keluaran BMKG.', 90, 310);
+    return c.toDataURL('image/png');
+  } catch (_) { return ''; }
+}
 function parseAlertAssetMeta(alertLink) {
   const match = String(alertLink || '').match(/\/([A-Z]{3}\d{11})_alert\.xml/i);
   if (!match) return null;
@@ -5912,6 +6371,72 @@ function toggleLightboxZoom() {
     applyLightboxTransform();
     renderLightboxControls();
   }
+}
+
+function mapOkInner(url) {
+  return `<div class="map-container" id="mapContainerBox" role="button" tabindex="0" aria-label="Perbesar infografis wilayah terdampak">
+          <img id="mapPreviewImg" src="${escHtml(url)}" alt="Infografis Cuaca Kep. Riau" loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+          <div class="map-overlay"></div>
+        </div>`;
+}
+async function resolveInfografis(ctx) {
+  const token = ++galleryRequestToken;
+  if (!ctx) return;
+  if (DEMO_MODE) {
+    const sim = demoSimulationImage(ctx);
+    if (sim) {
+      infografisUrl = sim; zoomImgUrl = sim;
+      const slotD = document.getElementById('mapSlot');
+      if (slotD) slotD.innerHTML = mapOkInner(sim);
+      setLightboxSlides([{
+        type: 'image', src: sim, thumb: sim,
+        title: ctx.title || 'Peringatan Dini Cuaca Kep. Riau',
+        label: 'Infografis simulasi (mode demo)',
+        caption: 'Gambar contoh untuk mengetes tampilan, bukan berkas BMKG',
+        meta: 'MODE DEMO - DATA CONTOH, BUKAN SIARAN BMKG'
+      }], 0);
+    }
+    return;
+  }
+  if (!navigator.onLine) {
+    const slot0 = document.getElementById('mapSlot');
+    if (slot0) slot0.innerHTML = mapErrorHTML('offline', '');
+    return;
+  }
+  const groups = buildInfografisCandidateGroups(ctx.link, ctx.cap && ctx.cap.web ? ctx.cap.web : '');
+  let found = null;
+  for (const group of groups) {
+    if (token !== galleryRequestToken) return;
+    const results = await Promise.all(group.urls.map(u =>
+      preloadImageTimeout(u, IMAGE_PROBE_TIMEOUT_MS).then(ok => (ok ? u : null)).catch(() => null)
+    ));
+    if (token !== galleryRequestToken) return;
+    const okUrls = results.filter(Boolean);
+    if (okUrls.length) { found = { kind: group.kind, urls: okUrls }; break; }
+  }
+  if (token !== galleryRequestToken) return;
+  if (!found) {
+    infografisUrl = ''; zoomImgUrl = '';
+    const apiGroup = groups.find(g => g.kind === 'api');
+    const checked = (apiGroup && apiGroup.urls[0]) || (ctx.cap && ctx.cap.web) || (groups[0] && groups[0].urls[0]) || '';
+    const slot1 = document.getElementById('mapSlot');
+    if (slot1) slot1.innerHTML = mapErrorHTML('absent', checked);
+    setLightboxSlides([buildSummarySlide(ctx.title, ctx.displayText, ctx.lastBuild ? `Diterbitkan ${translateDate(ctx.lastBuild)}` : 'Prakirawan BMKG - Kep. Riau', '')], 0);
+    return;
+  }
+  const primary = found.urls[0];
+  infografisUrl = primary; zoomImgUrl = primary;
+  const slot = document.getElementById('mapSlot');
+  if (slot) slot.innerHTML = mapOkInner(primary);
+  const metaText = ctx.lastBuild ? `Diterbitkan ${translateDate(ctx.lastBuild)}` : 'Prakirawan BMKG - Kep. Riau';
+  const slides = found.urls.map((u, i) => ({
+    type: 'image', src: u, thumb: u,
+    title: ctx.title || 'Peringatan Dini Cuaca Kep. Riau',
+    label: isTextVariantUrl(u) ? 'Teks peringatan BMKG' : (i === 0 ? 'Infografis BMKG' : `Slide BMKG ${i + 1}`),
+    caption: isTextVariantUrl(u) ? 'Rincian teks peringatan dini cuaca dari BMKG' : 'Peta infografis wilayah terdampak',
+    meta: metaText
+  }));
+  setLightboxSlides(slides, Math.min(lightboxState.currentIndex, slides.length - 1));
 }
 
 function hydrateWarningGallery(alertLink, title, bodyText, lastBuild, fallbackUrl) {
@@ -6432,9 +6957,25 @@ window.addEventListener('online', function () {
   });
 })();
 
+var CURRENT_CAP = null;
+var CURRENT_CTX = null;
 async function initSync(attempt) {
   attempt = attempt || 0;
-  startSpin(); 
+  startSpin();
+  if (DEMO_MODE && attempt === 0) {
+    renderLoading();
+    const demoLink = 'https://www.bmkg.go.id/alerts/nowcast/id/CKR20261004001_alert.xml';
+    const demoDesc = 'Hujan lebat disertai petir akan terjadi pada 04 October 2026, 12:36 WIB di sebagian wilayah Kep. Riau, khususnya di BUNGURAN BARAT, BUNGURAN BATUBI, BUNGURAN TENGAH, BUNGURAN TIMUR LAUT, BUNGURAN UTARA, LINGGA, LINGGA UTARA, SENAYANG. Kondisi ini berpotensi menimbulkan dampak berupa jarak pandang berkurang, angin kencang, dan banjir lokal. Masyarakat dihimbau untuk tetap waspada, mengurangi aktivitas di luar ruangan, serta mengambil langkah-langkah pencegahan yang diperlukan guna menjaga keselamatan. Kondisi diperkirakan dapat berlangsung hingga 04 October 2026, 15:10 WIB.';
+    document.getElementById('refreshChipText').textContent = 'MODE DEMO - DATA CONTOH';
+    CURRENT_CAP = { onset: '2026-10-04T12:36:00+07:00', expires: '2026-10-04T15:10:00+07:00', web: '' };
+    const ppd = parseNowcastText(demoDesc);
+    PILL_OPTS = buildPillOpts(ppd.start, ppd.end, ppd.tz || 'WIB');
+    CURRENT_CTX = { title: 'Hujan Lebat disertai Petir di Kep. Riau', displayText: demoDesc, link: demoLink, lastBuild: new Date().toUTCString(), cap: CURRENT_CAP };
+    renderWarning(CURRENT_CTX.title, demoDesc, demoLink, CURRENT_CTX.lastBuild);
+    document.getElementById('refreshChipText').textContent = 'MODE DEMO - DATA CONTOH';
+    startLiveTimers();
+    return;
+  }
   
   // WebSocket availability logging
   const hasWS = 'WebSocket' in window;
@@ -6526,6 +7067,21 @@ async function initSync(attempt) {
     } catch (_) {}
 
     if (found) {
+      const cap = await fetchCapDetail(found.link);
+      CURRENT_CAP = cap;
+      if (cap && cap.expires) {
+        const exp = new Date(cap.expires);
+        if (!Number.isNaN(exp.getTime()) && (exp.getTime() + 15 * 60000) < Date.now()) {
+          const pp0 = parseNowcastText(found.desc);
+          const until = pp0.end ? buildValidityLabel(pp0) : translateDate(cap.expires);
+          renderSafe(lastBuild, `Peringatan terakhir berakhir pada ${until}. Sampai ada rilis baru, wilayah ditampilkan kondusif.`);
+          startLiveTimers();
+          return;
+        }
+      }
+      const pp = parseNowcastText(found.desc);
+      PILL_OPTS = buildPillOpts(pp.start, pp.end, pp.tz || 'WIB');
+      CURRENT_CTX = { title: found.title, displayText: found.desc, link: found.link, lastBuild, cap };
       renderWarning(found.title, found.desc, found.link, lastBuild);
     } else {
       renderSafe(lastBuild);
@@ -6550,6 +7106,15 @@ async function initSync(attempt) {
     initSync(attempt + 1);
   }
 }
+
+window.__BMKG__ = {
+  parse: parseNowcastText,
+  validity: buildValidityLabel,
+  candidates: buildInfografisCandidateGroups,
+  normalize: normalizeWarningText,
+  pillOpts: buildPillOpts,
+  pillHtml: buildTimePillHtml
+};
 
 // --- LIQUID GLASS MODAL CONTROLLER INTERACTION ---
 // Function to handle the opening and closing of the credit acknowledgement modal.
